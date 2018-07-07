@@ -1,5 +1,5 @@
 import .EarthConstants: GRAVITY_ACCEL
-import .AirConstants: R_AIR, GAMMA
+import .AirConstants: R_AIR, GAMMA_AIR
 
 
 G0 = GRAVITY_ACCEL
@@ -19,7 +19,7 @@ function atmosphere_isa(height::Real)
         p0 = 22632.1  # Pa
         h0 = 11000    # m 
 
-        p = p0 * exp(-G0 * (height - h0) / (R_AIR * T0))
+        p = p0 * exp(-G0 * (height - h0) / (R_AIR * T))
 
     elseif 20000 <= height < 32000  # Stratosphere 1
         alpha = 0.001    # K/m
@@ -45,7 +45,7 @@ function atmosphere_isa(height::Real)
         h0 = 47000    # m
         h0 = 47000    # m 
 
-        p = p0 * exp(-G0 * (height - h0) / (R_AIR * T0))
+        p = p0 * exp(-G0 * (height - h0) / (R_AIR * T))
 
     elseif 51000 <= height < 71000  # Mesosphere 1
         alpha = -0.0028  # K/m
@@ -70,7 +70,7 @@ function atmosphere_isa(height::Real)
     end
 
     rho = p / (R_AIR * T)
-    a   = sqrt(GAMMA * R_AIR * T)
+    a   = sqrt(GAMMA_AIR * R_AIR * T)
 
     return T, p, rho, a
 end
