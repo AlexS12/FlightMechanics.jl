@@ -6,4 +6,4 @@ else
 end
 
 # write your own tests here
-@testset "atmosphere" begin include("./test/atmosphere.jl") end
+@testset "atmosphere" begin include("atmosphere.jl") end
