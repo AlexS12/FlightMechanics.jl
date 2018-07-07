@@ -56,7 +56,7 @@ function atmosphere_isa(height::Real)
         T = T0 + alpha * (height - h0)
         p = p0 * (T0 / T) ^ (G0 / (R_AIR * alpha))
 
-    elseif 71000 <= height < 84500  # Mesosphere 2
+    elseif 71000 <= height <= 84500  # Mesosphere 2
         alpha = -0.002   # K/m
         T0 = 214.65      # K
         p0 = 3.95642     # Pa
