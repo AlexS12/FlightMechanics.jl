@@ -1,5 +1,6 @@
 module FlightMechanics
 
-# package code goes here
+include("constants.jl")
+include("atmosphere.jl")
 
 end # module
