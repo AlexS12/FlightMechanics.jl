@@ -128,3 +128,5 @@ a = rv_arr[4, :]
 @test isapprox(T, [267.850, 245.450, 187.650])
 @test isapprox(rho, [7.6687e-4, 2.8832e-4, 7.3914e-6], rtol=1e-4)
 @test isapprox(a, [328.09, 314.07, 274.61], rtol=1e-5)
+
+@test_throws DomainError atmosphere_isa(84500.1)

@@ -66,7 +66,7 @@ function atmosphere_isa(height::Real)
         p = p0 * (T0 / T) ^ (G0 / (R_AIR * alpha))
 
     else
-        error("Height value out of range (0 m - 84500 m)")
+        throw(DomainError())
     end
 
     rho = p / (R_AIR * T)
