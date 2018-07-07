@@ -54,56 +54,28 @@ a = rv_arr[4, :]
 @test isapprox(a, [296.50, 297.78, 301.00, 303.13], rtol=1e-5)
 
 # Test 32-47 Km
-h = [32200,
-36000,
-42000,
-47000
-]  # m
+h = [32200, 36000, 42000, 47000]  # m
 rv = atmosphere_isa.(h)
 rv_arr = reinterpret(Float64, rv, (4, size(h, 1)))
 T = rv_arr[1, :]
 p = rv_arr[2, :]
 rho = rv_arr[3, :]
 a = rv_arr[4, :]
-@test isapprox(T, [229.210,
-239.850,
-256.650,
-270.650
-])
-@test isapprox(rho, [0.012805,
-0.0070344,
-0.0028780,
-0.0014275
-], rtol=1e-4)
-@test isapprox(a, [303.50,
-310.47,
-321.16,
-329.80
-], rtol=1e-5)
+@test isapprox(T, [229.210, 239.850, 256.650, 270.650])
+@test isapprox(rho, [0.012805, 0.0070344, 0.0028780, 0.0014275], rtol=1e-4)
+@test isapprox(a, [303.50, 310.47, 321.16, 329.80], rtol=1e-5)
 
 # Test 47-51 Km
-h = [47200,
-49000,
-51000
-]  # m
+h = [47200, 49000, 51000]  # m
 rv = atmosphere_isa.(h)
 rv_arr = reinterpret(Float64, rv, (4, size(h, 1)))
 T = rv_arr[1, :]
 p = rv_arr[2, :]
 rho = rv_arr[3, :]
 a = rv_arr[4, :]
-@test isapprox(T, [270.650,
-270.650,
-270.650
-])
-@test isapprox(rho, [0.0013919,
-0.0011090,
-0.00086160
-], rtol=1e-4)
-@test isapprox(a, [329.80,
-329.80,
-329.80
-], rtol=1e-5)
+@test isapprox(T, [270.650, 270.650, 270.650])
+@test isapprox(rho, [0.0013919, 0.0011090, 0.00086160], rtol=1e-4)
+@test isapprox(a, [329.80, 329.80, 329.80], rtol=1e-5)
 
 # Test 51-71 Km
 h = [51500, 60000, 71000]  # m
@@ -130,3 +102,4 @@ a = rv_arr[4, :]
 @test isapprox(a, [328.09, 314.07, 274.61], rtol=1e-5)
 
 @test_throws DomainError atmosphere_isa(84500.1)
+@test_throws DomainError atmosphere_isa(-0.1)
