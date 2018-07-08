@@ -33,3 +33,6 @@ after_success:
   - julia -e 'cd(Pkg.dir("FlightMechanics")); Pkg.add("Coverage"); using Coverage; Coveralls.submit(Coveralls.process_folder())'
   # push coverage results to Codecov
   - julia -e 'cd(Pkg.dir("FlightMechanics")); Pkg.add("Coverage"); using Coverage; Codecov.submit(Codecov.process_folder())'
+  # Documenter
+  - julia -e 'Pkg.add("Documenter")'
+  - julia -e 'cd(Pkg.dir("FlightMechanics")); include(joinpath("docs", "make.jl"))'

@@ -3,3 +3,6 @@
 *.jl.mem
 
 .vscode/
+
+docs/build/
+docs/site/
