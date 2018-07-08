@@ -8,8 +8,11 @@ FlightMechanics
    
 .. |codecov| image:: https://codecov.io/gh/AlexS12/FlightMechanics.jl/branch/master/graph/badge.svg
   :target: https://codecov.io/gh/AlexS12/FlightMechanics.jl
+  
+.. |docs| image:: https://img.shields.io/badge/docs-latest-brightgreen.svg?style=flat-square
+   :target: https://alexs12.github.io/FlightMechanics.jl/latest/
    
-|license| |travisci| |codecov| 
+|license| |docs| |travisci| |codecov| 
 
 Flight Mechanics utils :airplane:
 ---------------------------------
