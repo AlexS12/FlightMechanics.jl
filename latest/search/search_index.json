@@ -1,0 +1,39 @@
+{
+    "docs": [
+        {
+            "location": "/", 
+            "text": "Flight Mechanics\n\n\n\n\nFlightMechanics.jl API REFERENCE\n\n\n\n\nFlight Mechanics\n\n\nFlightMechanics.jl API REFERENCE\n\n\nFunctions\n\n\nIndex\n\n\n\n\n\n\n\n\n\n\nFunctions\n\n\n\n\nAtmosphere ISA (atmosphere.jl)\n\n\n#\n\n\nFlightMechanics.atmosphere_isa\n \n \nMethod\n.\n\n\natmosphere_isa(height::Real)\n\n\n\n\nCalculate temperature, pressure, density and sound velocity for the given geopotential height according to International Standard Atmosphere 1976.\n\n\nNotes\n\n\nImplementation based on:\n\n\n.. [1] U.S. Standard Atmosphere, 1976, U.S. Government Printing Office,         Washington, D.C., 1976\n\n\nFrom: https://en.wikipedia.org/wiki/U.S._Standard_Atmosphere\n\n\n\n\n\n\n\n\nLayer\n\n\nh (m)\n\n\np (Pa)\n\n\nT (K)\n\n\n$\u03b1$ (K/m)\n\n\n\n\n\n\n\n\n\n\n0\n\n\n0\n\n\n101325\n\n\n288.15\n\n\n-0.0065\n\n\n\n\n\n\n1\n\n\n11000\n\n\n22632.1\n\n\n216.65\n\n\n0\n\n\n\n\n\n\n2\n\n\n20000\n\n\n5474.89\n\n\n216.65\n\n\n0.001\n\n\n\n\n\n\n3\n\n\n32000\n\n\n868.019\n\n\n228.65\n\n\n0.0028\n\n\n\n\n\n\n4\n\n\n47000\n\n\n110.906\n\n\n270.65\n\n\n0\n\n\n\n\n\n\n5\n\n\n51000\n\n\n66.9389\n\n\n270.65\n\n\n-0.0028\n\n\n\n\n\n\n6\n\n\n71000\n\n\n3.95642\n\n\n214.65\n\n\n-0.002\n\n\n\n\n\n\n\n\nsource\n\n\n\n\nCoordinates Systems (coordinates.jl)\n\n\n#\n\n\nFlightMechanics.body2hor\n \n \nMethod\n.\n\n\nbody2hor(xb, yb, zb, psi, theta, phi)\n\n\n\n\nTransform body coordinates to local horizon.\n\n\nArguments\n\n\n\n\nxb, yb, zb\n: body coordinates.\n\n\npsi, theta, phi\n: Euler angles. Yaw, pitch, roll (rad).\n\n\n\n\nsource\n\n\n#\n\n\nFlightMechanics.hor2body\n \n \nMethod\n.\n\n\nhor2body(xh, yh, zh, psi, theta, phi)\n\n\n\n\nTransform local horizon coordinates to body.\n\n\nArguments\n\n\n\n\nxh, yh, zh\n: local horizon coordinates.\n\n\npsi, theta, phi\n: Euler angles. Yaw, pitch, roll (rad).\n\n\n\n\nsource\n\n\n\n\nIndex\n\n\n\n\nFlightMechanics.atmosphere_isa\n\n\nFlightMechanics.body2hor\n\n\nFlightMechanics.hor2body", 
+            "title": "Home"
+        }, 
+        {
+            "location": "/#flight-mechanics", 
+            "text": "", 
+            "title": "Flight Mechanics"
+        }, 
+        {
+            "location": "/#flightmechanicsjl-api-reference", 
+            "text": "Flight Mechanics  FlightMechanics.jl API REFERENCE  Functions  Index", 
+            "title": "FlightMechanics.jl API REFERENCE"
+        }, 
+        {
+            "location": "/#functions", 
+            "text": "", 
+            "title": "Functions"
+        }, 
+        {
+            "location": "/#atmosphere-isa-atmospherejl", 
+            "text": "#  FlightMechanics.atmosphere_isa     Method .  atmosphere_isa(height::Real)  Calculate temperature, pressure, density and sound velocity for the given geopotential height according to International Standard Atmosphere 1976.  Notes  Implementation based on:  .. [1] U.S. Standard Atmosphere, 1976, U.S. Government Printing Office,         Washington, D.C., 1976  From: https://en.wikipedia.org/wiki/U.S._Standard_Atmosphere     Layer  h (m)  p (Pa)  T (K)  $\u03b1$ (K/m)      0  0  101325  288.15  -0.0065    1  11000  22632.1  216.65  0    2  20000  5474.89  216.65  0.001    3  32000  868.019  228.65  0.0028    4  47000  110.906  270.65  0    5  51000  66.9389  270.65  -0.0028    6  71000  3.95642  214.65  -0.002     source", 
+            "title": "Atmosphere ISA (atmosphere.jl)"
+        }, 
+        {
+            "location": "/#coordinates-systems-coordinatesjl", 
+            "text": "#  FlightMechanics.body2hor     Method .  body2hor(xb, yb, zb, psi, theta, phi)  Transform body coordinates to local horizon.  Arguments   xb, yb, zb : body coordinates.  psi, theta, phi : Euler angles. Yaw, pitch, roll (rad).   source  #  FlightMechanics.hor2body     Method .  hor2body(xh, yh, zh, psi, theta, phi)  Transform local horizon coordinates to body.  Arguments   xh, yh, zh : local horizon coordinates.  psi, theta, phi : Euler angles. Yaw, pitch, roll (rad).   source", 
+            "title": "Coordinates Systems (coordinates.jl)"
+        }, 
+        {
+            "location": "/#index", 
+            "text": "FlightMechanics.atmosphere_isa  FlightMechanics.body2hor  FlightMechanics.hor2body", 
+            "title": "Index"
+        }
+    ]
+}

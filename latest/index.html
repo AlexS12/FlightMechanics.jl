@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Flight Mechanics Utils">
+  <meta name="author" content="Alex Saez">
+  <link rel="shortcut icon" href="./img/favicon.ico">
+  <title>Home - FlightMechanics.jl</title>
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="./css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="./css/theme_extra.css" type="text/css" />
+  <link rel="stylesheet" href="./css/highlight.css">
+  <link href="./assets/Documenter.css" rel="stylesheet">
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Home";
+    var mkdocs_page_input_path = "index.md";
+    var mkdocs_page_url = "/";
+  </script>
+  
+  <script src="./js/jquery-2.1.1.min.js"></script>
+  <script src="./js/modernizr-2.8.3.min.js"></script>
+  <script type="text/javascript" src="./js/highlight.pack.js"></script> 
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+      <div class="wy-side-nav-search">
+        <a href="." class="icon icon-home"> FlightMechanics.jl</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="./search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+	<ul class="current">
+	  
+          
+            <li class="toctree-l1 current">
+		
+    <a class="current" href=".">Home</a>
+    <ul class="subnav">
+            
+    <li class="toctree-l2"><a href="#flight-mechanics">Flight Mechanics</a></li>
+    
+
+    <li class="toctree-l2"><a href="#flightmechanicsjl-api-reference">FlightMechanics.jl API REFERENCE</a></li>
+    
+        <ul>
+        
+            <li><a class="toctree-l3" href="#functions">Functions</a></li>
+        
+            <li><a class="toctree-l3" href="#index">Index</a></li>
+        
+        </ul>
+    
+
+    </ul>
+	    </li>
+          
+        </ul>
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href=".">FlightMechanics.jl</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".">Docs</a> &raquo;</li>
+    
+      
+    
+    <li>Home</li>
+    <li class="wy-breadcrumbs-aside">
+      
+        <a href="https://github.com/AlexS12/FlightMechanics.jl/edit/master/docs/index.md"
+          class="icon icon-github"> Edit on GitHub</a>
+      
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <p><a id='Flight-Mechanics-1'></a></p>
+<h1 id="flight-mechanics">Flight Mechanics</h1>
+<p><a id='FlightMechanics.jl-API-REFERENCE-1'></a></p>
+<h1 id="flightmechanicsjl-api-reference">FlightMechanics.jl API REFERENCE</h1>
+<ul>
+<li><a href=".#Flight-Mechanics-1">Flight Mechanics</a></li>
+<li><a href=".#FlightMechanics.jl-API-REFERENCE-1">FlightMechanics.jl API REFERENCE</a><ul>
+<li><a href=".#Functions-1">Functions</a></li>
+<li><a href=".#Index-1">Index</a></li>
+</ul>
+</li>
+</ul>
+<p><a id='Functions-1'></a></p>
+<h2 id="functions">Functions</h2>
+<p><a id='Atmosphere-ISA-(atmosphere.jl)-1'></a></p>
+<h3 id="atmosphere-isa-atmospherejl">Atmosphere ISA (atmosphere.jl)</h3>
+<p><a id='FlightMechanics.atmosphere_isa-Tuple{Real}' href='#FlightMechanics.atmosphere_isa-Tuple{Real}'>#</a>
+<strong><code>FlightMechanics.atmosphere_isa</code></strong> &mdash; <em>Method</em>.</p>
+<pre><code>atmosphere_isa(height::Real)
+</code></pre>
+
+<p>Calculate temperature, pressure, density and sound velocity for the given geopotential height according to International Standard Atmosphere 1976.</p>
+<p><strong>Notes</strong></p>
+<p>Implementation based on:</p>
+<p>.. [1] U.S. Standard Atmosphere, 1976, U.S. Government Printing Office,         Washington, D.C., 1976</p>
+<p>From: https://en.wikipedia.org/wiki/U.S._Standard_Atmosphere</p>
+<table>
+<thead>
+<tr>
+<th align="right">Layer</th>
+<th align="right">h (m)</th>
+<th align="right">p (Pa)</th>
+<th align="right">T (K)</th>
+<th align="right">$α$ (K/m)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">101325</td>
+<td align="right">288.15</td>
+<td align="right">-0.0065</td>
+</tr>
+<tr>
+<td align="right">1</td>
+<td align="right">11000</td>
+<td align="right">22632.1</td>
+<td align="right">216.65</td>
+<td align="right">0</td>
+</tr>
+<tr>
+<td align="right">2</td>
+<td align="right">20000</td>
+<td align="right">5474.89</td>
+<td align="right">216.65</td>
+<td align="right">0.001</td>
+</tr>
+<tr>
+<td align="right">3</td>
+<td align="right">32000</td>
+<td align="right">868.019</td>
+<td align="right">228.65</td>
+<td align="right">0.0028</td>
+</tr>
+<tr>
+<td align="right">4</td>
+<td align="right">47000</td>
+<td align="right">110.906</td>
+<td align="right">270.65</td>
+<td align="right">0</td>
+</tr>
+<tr>
+<td align="right">5</td>
+<td align="right">51000</td>
+<td align="right">66.9389</td>
+<td align="right">270.65</td>
+<td align="right">-0.0028</td>
+</tr>
+<tr>
+<td align="right">6</td>
+<td align="right">71000</td>
+<td align="right">3.95642</td>
+<td align="right">214.65</td>
+<td align="right">-0.002</td>
+</tr>
+</tbody>
+</table>
+<p><a target='_blank' href='https://github.com/AlexS12/FlightMechanics.jl/blob/9b29ca1991f95e9fa906ee5d8b99b015f3282658/src/atmosphere.jl#L7-L31' class='documenter-source'>source</a><br></p>
+<p><a id='Coordinates-Systems-(coordinates.jl)-1'></a></p>
+<h3 id="coordinates-systems-coordinatesjl">Coordinates Systems (coordinates.jl)</h3>
+<p><a id='FlightMechanics.body2hor-NTuple{6,Any}' href='#FlightMechanics.body2hor-NTuple{6,Any}'>#</a>
+<strong><code>FlightMechanics.body2hor</code></strong> &mdash; <em>Method</em>.</p>
+<pre><code>body2hor(xb, yb, zb, psi, theta, phi)
+</code></pre>
+
+<p>Transform body coordinates to local horizon.</p>
+<p><strong>Arguments</strong></p>
+<ul>
+<li><code>xb, yb, zb</code>: body coordinates.</li>
+<li><code>psi, theta, phi</code>: Euler angles. Yaw, pitch, roll (rad).</li>
+</ul>
+<p><a target='_blank' href='https://github.com/AlexS12/FlightMechanics.jl/blob/9b29ca1991f95e9fa906ee5d8b99b015f3282658/src/coordinates.jl#L1-L9' class='documenter-source'>source</a><br></p>
+<p><a id='FlightMechanics.hor2body-NTuple{6,Any}' href='#FlightMechanics.hor2body-NTuple{6,Any}'>#</a>
+<strong><code>FlightMechanics.hor2body</code></strong> &mdash; <em>Method</em>.</p>
+<pre><code>hor2body(xh, yh, zh, psi, theta, phi)
+</code></pre>
+
+<p>Transform local horizon coordinates to body.</p>
+<p><strong>Arguments</strong></p>
+<ul>
+<li><code>xh, yh, zh</code>: local horizon coordinates.</li>
+<li><code>psi, theta, phi</code>: Euler angles. Yaw, pitch, roll (rad).</li>
+</ul>
+<p><a target='_blank' href='https://github.com/AlexS12/FlightMechanics.jl/blob/9b29ca1991f95e9fa906ee5d8b99b015f3282658/src/coordinates.jl#L32-L40' class='documenter-source'>source</a><br></p>
+<p><a id='Index-1'></a></p>
+<h2 id="index">Index</h2>
+<ul>
+<li><a href=".#FlightMechanics.atmosphere_isa-Tuple{Real}"><code>FlightMechanics.atmosphere_isa</code></a></li>
+<li><a href=".#FlightMechanics.body2hor-NTuple{6,Any}"><code>FlightMechanics.body2hor</code></a></li>
+<li><a href=".#FlightMechanics.hor2body-NTuple{6,Any}"><code>FlightMechanics.hor2body</code></a></li>
+</ul>
+              
+            </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" style="cursor: pointer">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+          <a href="https://github.com/AlexS12/FlightMechanics.jl/" class="fa fa-github" style="float: left; color: #fcfcfc"> GitHub</a>
+      
+      
+      
+    </span>
+</div>
+    <script>var base_url = '.';</script>
+    <script src="./js/theme.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS_HTML"></script>
+      <script src="./assets/mathjaxhelper.js"></script>
+      <script src="./search/require.js"></script>
+      <script src="./search/search.js"></script>
+
+</body>
+</html>
+
+<!--
+MkDocs version : 0.17.5
+Build Date UTC : 2018-07-08 09:12:07
+-->
