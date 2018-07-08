@@ -4,6 +4,31 @@ import .AirConstants: R_AIR, GAMMA_AIR
 
 G0 = GRAVITY_ACCEL
 
+"""
+    atmosphere_isa(height::Real)
+
+Calculate temperature, pressure, density and sound velocity for the
+given geopotential height according to International Standard Atmosphere 1976.
+
+# Notes
+
+Implementation based on:
+
+.. [1] U.S. Standard Atmosphere, 1976, U.S. Government Printing Office,
+        Washington, D.C., 1976
+        
+From: https://en.wikipedia.org/wiki/U.S._Standard_Atmosphere
+
+| Layer | h (m) | p (Pa)  | T (K)  | ``α`` (K/m) |
+|-------|-------|---------|--------|-------------|
+| 0     | 0     | 101325  | 288.15 | -0.0065     |
+| 1     | 11000 | 22632.1 | 216.65 | 0           |
+| 2     | 20000 | 5474.89 | 216.65 | 0.001       |
+| 3     | 32000 | 868.019 | 228.65 | 0.0028      |
+| 4     | 47000 | 110.906 | 270.65 | 0           |
+| 5     | 51000 | 66.9389 | 270.65 | -0.0028     |
+| 6     | 71000 | 3.95642 | 214.65 | -0.002      |
+"""
 function atmosphere_isa(height::Real)
 
     if 0 <= height < 11000  # Troposphere

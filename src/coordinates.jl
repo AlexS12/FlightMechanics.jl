@@ -1,3 +1,12 @@
+"""
+    body2hor(xb, yb, zb, psi, theta, phi)
+
+Transform body coordinates to local horizon.
+
+# Arguments
+* `xb, yb, zb`: body coordinates.
+* `psi, theta, phi`: Euler angles. Yaw, pitch, roll (rad).
+"""
 function body2hor(xb, yb, zb, psi, theta, phi)
 
     s_psi, c_psi = sin(psi), cos(psi)
@@ -20,6 +29,15 @@ function body2hor(xb, yb, zb, psi, theta, phi)
 end
 
 
+"""
+    hor2body(xh, yh, zh, psi, theta, phi)
+
+Transform local horizon coordinates to body.
+
+# Arguments
+* `xh, yh, zh`: local horizon coordinates.
+* `psi, theta, phi`: Euler angles. Yaw, pitch, roll (rad).
+"""
 function hor2body(xh, yh, zh, psi, theta, phi)
 
     s_psi, c_psi = sin(psi), cos(psi)
