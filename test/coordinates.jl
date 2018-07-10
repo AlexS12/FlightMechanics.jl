@@ -37,4 +37,3 @@ ones_ = [1.0, 1.0, 1.0]
 @test ones_ ≈ body2wind(ones_..., 0., 0.)
 @test ones_ ≈ body2wind(0, 1, 2*0.70710678118654757, 45*pi/180., 0.)
 @test ones_ ≈ body2wind(0, 2*0.70710678118654757, 1, 0., 45*pi/180.)
-
