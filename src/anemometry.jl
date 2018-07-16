@@ -1,9 +1,10 @@
-import .AirConstants: GAMMA_AIR, P0, RHO0
+import .AirConstants: GAMMA_AIR, P0, RHO0, T0
 
 
 γ = GAMMA_AIR
 p0 = P0
 ρ0 = RHO0
+a0 = A0
 
 
 """
@@ -25,7 +26,7 @@ end
 
 
 """
-    qc2cas(qc::Real)
+    qc2tas(qc::Real)
 
 Calculate true airspeed from ASI (Air Speed indicator), differential
 pressure between impact pressure and static pressure (qc = p_t - p_s), rho
@@ -92,24 +93,42 @@ end
 
 
 function cas2eas(cas, ρ, p)
-    
+    tas = cas2tas(cas, ρ, p)
+    eas = tas2eas(tas, ρ)
     return eas
 end
 
 
 function eas2cas(eas, ρ, p)
-
+    tas = eas2tas(eas, ρ)
+    cas = tas2cas(tas, ρ, p)
     return cas
 end
 
 
 function cas2tas(cas, ρ, p)
+    
+    a = sqrt(γ * p / ρ)
+
+    temp = (cas*cas * (γ - 1.0)/(2.0 * a0*a0) + 1.0) ^ (γ / (γ - 1.0))
+    temp = (temp - 1.0) * (p0 / p)
+    temp = (temp + 1.0) ^ ((γ - 1.0) / γ) - 1.0
+
+    tas = sqrt(2.0 * a*a / (gamma - 1.0) * temp)
 
     return tas
 end
 
 
 function tas2cas(tas, ρ, p)
+    
+    a = sqrt(γ * p / ρ)
+
+    temp = (tas*tas * (γ - 1.0)/(2.0 * a*a) + 1.0) ^ (γ / (γ - 1.0))
+    temp = (temp - 1.0) * (p / p0) 
+    temp = (temp + 1.0) ^ ((γ - 1.0) / γ) - 1.0
+    
+    cas = sqrt(2.0 * a0*a0 / (γ - 1) * temp)
 
     return cas
 end
@@ -148,7 +167,6 @@ end
 function sutherland_visconsity(temp)
     # TODO: move this to constants
     visc_0 = 1.176e-5  # kg(m/s)
-    T0 = 273.1  # K
     b = 0.4042  # non-dimensional
     return visc_0 * (temp / T0)^(3 / 2) * ((1 + b)/((temp / T0) + b))
 end
