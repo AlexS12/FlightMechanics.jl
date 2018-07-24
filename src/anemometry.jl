@@ -8,7 +8,7 @@ a0 = A0
 
 
 """
-    qc2cas(qc::Real)
+    qc2cas(qc)
 
 Calculate calibrated airspeed from ASI (Air Speed indicator), differential
 pressure between impact pressure and static pressure.
@@ -19,14 +19,14 @@ Implementation from:
 .. [1] Ward, D. T. (1993). Introduction to flight test engineering. Elsevier
     Science Ltd. (page 13, formula 2.13)
 """
-function qc2cas(qc::Real)
+function qc2cas(qc)
     cas = sqrt((2*γ*p0) / ((γ-1) * ρ0) * ((qc/p0 + 1) ^(γ / (γ-1)) - 1))
     return cas
 end
 
 
 """
-    qc2tas(qc::Real)
+    qc2tas(qc)
 
 Calculate true airspeed from ASI (Air Speed indicator), differential
 pressure between impact pressure and static pressure (qc = p_t - p_s), rho
@@ -37,14 +37,14 @@ Implementation from:
 .. [1] Ward, D. T. (1993). Introduction to flight test engineering. Elsevier
     Science Ltd. (page 12, based on formula 2.11)
 """
-function qc2tas(qc::Real, ρ::Real, p::Real)
+function qc2tas(qc, ρ, p)
     tas2 = (2*γ*p) / ((γ-1) * ρ0) * ((qc/p + 1) ^(γ / (γ-1)) - 1) * ρ0/ρ
     tas = sqrt(tas2)
     return tas
 end
 
 """
-    qc2eas(qc::Real, p::Real)
+    qc2eas(qc, p)
 
 Calculate equivalent airspeed from ASI (Air Speed indicator), differential
 pressure between impact pressure and static pressure (qc = p_t - p_s) and p.
@@ -54,16 +54,17 @@ Implementation from:
 .. [1] Ward, D. T. (1993). Introduction to flight test engineering. Elsevier
     Science Ltd.
 """
-function qc2eas(qc::Real, p::Real)
+function qc2eas(qc, p)
     eas = sqrt((2*γ*p) / ((γ-1) * ρ0) * ((qc/p + 1) ^(γ / (γ-1)) - 1))
     return eas
 end
 
 
 """
-    tas2eas(qc::Real, ρ::Real)
+    tas2eas(tas, ρ)
 
-Calculate true airspeed from equivalent airspeed
+Calculate equivalent airspeed from true airspeed and density at current 
+altitude (ρ).
 
 Implementation from:
 
@@ -77,9 +78,10 @@ end
 
 
 """
-    eas2tas(qc::Real, ρ::Real)
+    eas2tas(qc, ρ)
 
-Calculate equivalent airspeed from true airspeed
+Calculate true airspeed from equivalent airspeed and density at current 
+altitude (ρ).
 
 Implementation from:
 
@@ -92,6 +94,12 @@ function eas2tas(eas, ρ)
 end
 
 
+"""
+    cas2eas(cas, ρ, p)
+
+Calculate equivalent airspeed from calibrated airspeed, density (ρ) and
+pressure (p) at the current altitude.
+"""
 function cas2eas(cas, ρ, p)
     tas = cas2tas(cas, ρ, p)
     eas = tas2eas(tas, ρ)
@@ -99,6 +107,12 @@ function cas2eas(cas, ρ, p)
 end
 
 
+"""
+    eas2cas(eas, ρ, p)
+
+Calculate calibrated airspeed from equivalent airspeed, density (ρ) and
+pressure (p) at the current altitude.
+"""
 function eas2cas(eas, ρ, p)
     tas = eas2tas(eas, ρ)
     cas = tas2cas(tas, ρ, p)
@@ -106,6 +120,12 @@ function eas2cas(eas, ρ, p)
 end
 
 
+"""
+    cas2tas(cas, ρ, p)
+
+Calculate true airspeed from calibrated airspeed, density (ρ) and pressure (p)
+at the current altitude.
+"""
 function cas2tas(cas, ρ, p)
     
     a = sqrt(γ * p / ρ)
@@ -120,6 +140,12 @@ function cas2tas(cas, ρ, p)
 end
 
 
+"""
+    cas2tas(cas, ρ, p)
+
+Calculate true airspeed from calibrated airspeed, density (ρ) and pressure (p)
+at the current altitude.
+"""
 function tas2cas(tas, ρ, p)
     
     a = sqrt(γ * p / ρ)
@@ -134,6 +160,17 @@ function tas2cas(tas, ρ, p)
 end
 
 
+"""
+    tas_alpha_beta_from_uvw(u, v, w)
+
+Calculate true air speed (TAS), angle of attack (α) and angle of side-slip (β)
+from aerodynamic velocity expressed in body axis.
+
+Implementation from:
+
+.. [1] Etkin, B. (2005). Dynamics of atmospheric flight. Dover Publications 
+    (page 114, formulas 4.3,2 and 4.3,3)
+"""
 function tas_alpha_beta_from_uvw(u, v, w)
     
     tas = sqrt(u*u + v*v + w*w)
@@ -143,30 +180,43 @@ function tas_alpha_beta_from_uvw(u, v, w)
 end
 
 
+"""
+    incompressible_qinf(tas, ρ)
+
+Calculate incompressible dynamic pressure from true airspeed (tas) and density
+(ρ) at current altitude.
+
+.. [1] Ward, D. T. (1993). Introduction to flight test engineering. Elsevier
+    Science Ltd. (page 13, formula 2.14)
+"""
 function incompressible_qinf(tas, ρ)
     return 0.5 * ρ * tas*tas
 end
 
 
-function stagnation_pressure(tas, p, a)
+"""
+    compressible_qinf(tas, p, a)
+
+Calculate compressible dynamic pressure from true airspeed (tas), static 
+pressure (p) and sound velocity at current altitude.
+
+Two different models are used depending on the Mach number:
+
+- Subsonic case: Bernouilli's equation compressible form.
+- Supersonic case: to be implemented.
+
+.. [1] Ward, D. T. (1993). Introduction to flight test engineering. Elsevier
+    Science Ltd. (page 12)
+"""
+function compressible_qinf(tas, p, a)
 
     M = tas / a
 
     if M < 1
-        ps = p * (1 + (γ - 1) / 2 * M^2) ^ (γ / (γ - 1))
+        pt = p * (1 + (γ - 1) / 2 * M*M) ^ (γ / (γ - 1))
     else
-        
-        ps = ((γ + 1)^2 * M^2) / (4 * γ * M^2 - 2 * (γ - 1))
-        ps = ps ^ (γ / (γ - 1))
-        ps = ps * (1 - γ + 2 * γ * M^2) / (γ + 1) * p
+        # TODO: implementation for M > 1
+        error("Not Implemented yet")
     end
-    return ps
-end
-
-
-function sutherland_visconsity(temp)
-    # TODO: move this to constants
-    visc_0 = 1.176e-5  # kg(m/s)
-    b = 0.4042  # non-dimensional
-    return visc_0 * (temp / T0)^(3 / 2) * ((1 + b)/((temp / T0) + b))
+    return pt
 end
