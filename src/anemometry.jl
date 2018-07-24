@@ -1,4 +1,4 @@
-import .AirConstants: GAMMA_AIR, P0, RHO0, T0
+import .AirConstants: GAMMA_AIR, P0, RHO0, T0, A0
 
 
 γ = GAMMA_AIR
@@ -176,7 +176,7 @@ function tas_alpha_beta_from_uvw(u, v, w)
     tas = sqrt(u*u + v*v + w*w)
     alpha = atan(w / u)
     beta = asin(v / TAS)
-    return tas, alpha, beta
+    return [tas, alpha, beta]
 end
 
 
