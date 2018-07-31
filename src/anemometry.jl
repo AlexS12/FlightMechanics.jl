@@ -134,7 +134,7 @@ function cas2tas(cas, ρ, p)
     temp = (temp - 1.0) * (p0 / p)
     temp = (temp + 1.0) ^ ((γ - 1.0) / γ) - 1.0
 
-    tas = sqrt(2.0 * a*a / (gamma - 1.0) * temp)
+    tas = sqrt(2.0 * a*a / (γ - 1.0) * temp)
 
     return tas
 end
