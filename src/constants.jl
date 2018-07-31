@@ -32,4 +32,6 @@ const LB2KG = 0.453592  # Pounds (lb) to kilograms (kg)
 const FT2M = 0.3048  # Feet (ft) to meters (m)
 const SLUG2KG = 14.5939  # Slug to kilograms (kg)
 const SLUGFT2_2_KGM2 = 1.35581795  # Slug*feet^2 to kilograms*meters^2 (kg*m^2)
+const KT2MS = 0.514444  # knots (kt) to meters/second (m/s)
+const MS2KT = 1.94384  # meters/second (m/s) to knots (kt)
 end
