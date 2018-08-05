@@ -27,7 +27,15 @@ Flight Mechanics utils :airplane:
 This package is intended to provide utils for Flight Mechanics computations.
 
 * International Standard Atmosphere
-* Conversion between different coordinate systems: body, horizon
+* Conversion between different coordinate systems:
+  * body
+  * horizon
+  * wind
+* Anemometry: 
+  * conversion between tas, cas, eas.
+  * velocity calculation from airspeed indicator (ASI) pressure difference
+  * dynamic pressure calculation (compressible and incompressible cases)
+  * tas, alpha, beta from body velocity
 
 Install :rocket:
 ----------------
