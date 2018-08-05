@@ -1,5 +1,9 @@
-import FlightMechanics: atmosphere_isa, tas2eas, tas2cas, cas2eas, cas2tas, eas2cas, eas2tas
 import FlightMechanics.ConversionConstants: KT2MS
+import FlightMechanics: atmosphere_isa
+import FlightMechanics: tas2eas, tas2cas, cas2eas, cas2tas, eas2cas, eas2tas
+import FlightMechanics: qc2cas, qc2tas, qc2eas
+import FlightMechanics: incompressible_qinf, compressible_qinf
+
 
 @static if VERSION < v"0.7.0-DEV.2005"
     using Base.Test
@@ -8,7 +12,7 @@ else
 end
 
 
-# TESTS based on values from
+# TESTS for TAS CAS EAS based on values from
 # http://www.hochwarth.com/misc/AviationCalculator.html
 
 # --- height = 0 m ---
@@ -77,3 +81,48 @@ cas = eas2cas(eas, rho, p)
 tas = eas2tas(eas, rho)
 @test isapprox(cas, expected_cas, atol=1e-4)
 @test isapprox(tas, expected_tas, atol=1e-4)
+
+
+# --- Velocities from qc ---
+# Values from http://www.aerospaceweb.org/design/scripts/atmosphere/
+# geometric altitude = 8010.0807  # m  --> geopotential = 8000.0  # m
+# velocity = 100  # m/s
+h = 8000.0  # m
+T, p, rho, a = atmosphere_isa(h)
+tas = 100  # m/s
+
+qinf = 38295.5172  # Pa (Total Head)
+qc = qinf - p
+exp_cas = 66.0304  # m/s
+exp_tas = 100  # m/s
+exp_eas = 65.4758  # m/s
+
+eas = qc2eas(qc, p)
+tas_ = qc2tas(qc, rho, p)
+cas = qc2cas(qc)
+
+@test isapprox(cas, exp_cas)
+@test isapprox(eas, exp_eas)
+@test isapprox(cas, exp_tas)
+
+
+# --- Dynamic pressure ---
+# Values from http://www.aerospaceweb.org/design/scripts/atmosphere/
+# geometric altitude = 8010.0807  # m  --> geopotential = 8000.0  # m
+# velocity = 100  # m/s
+h = 8000.0  # m
+T, p, rho, a = atmosphere_isa(h)
+tas = 100  # m/s
+
+exp_qinf_inc = 2625.8356  # Pa (True Dynamic Pressure)
+qinf_inc = incompressible_qinf(tas, rho)
+@test isapprox(qinf_inc, exp_qinf_inc, atol=0.0001)
+
+M = tas / a
+exp_qinf_comp = 38295.5172  # Pa (Total Head)
+qinf_comp = compressible_qinf(M, p)
+@test isapprox(qinf_comp, exp_qinf_comp, atol=0.01)
+
+
+# --- tas, alpha, beta from body ---
+# tas_alpha_beta_from_uvw
