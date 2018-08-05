@@ -20,7 +20,7 @@ Implementation from:
     Science Ltd. (page 13, formula 2.13)
 """
 function qc2cas(qc)
-    cas = sqrt((2*γ*p0) / ((γ-1) * ρ0) * ((qc/p0 + 1) ^(γ / (γ-1)) - 1))
+    cas = sqrt((2*γ*p0) / ((γ - 1) * ρ0) * ((qc / p0 + 1) ^ ((γ - 1) / γ) - 1))
     return cas
 end
 
@@ -38,7 +38,7 @@ Implementation from:
     Science Ltd. (page 12, based on formula 2.11)
 """
 function qc2tas(qc, ρ, p)
-    tas2 = (2*γ*p) / ((γ-1) * ρ0) * ((qc/p + 1) ^(γ / (γ-1)) - 1) * ρ0/ρ
+    tas2 = (2*γ*p) / ((γ - 1) * ρ0) * ((qc/p + 1) ^ ((γ - 1) / γ) - 1) * ρ0/ρ
     tas = sqrt(tas2)
     return tas
 end
@@ -55,7 +55,7 @@ Implementation from:
     Science Ltd.
 """
 function qc2eas(qc, p)
-    eas = sqrt((2*γ*p) / ((γ-1) * ρ0) * ((qc/p + 1) ^(γ / (γ-1)) - 1))
+    eas = sqrt((2*γ*p) / ((γ - 1) * ρ0) * ((qc/p + 1) ^ ((γ - 1) / γ) - 1))
     return eas
 end
 
