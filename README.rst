@@ -12,7 +12,12 @@ FlightMechanics
 .. |docs| image:: https://img.shields.io/badge/docs-latest-brightgreen.svg?style=flat-square
    :target: https://alexs12.github.io/FlightMechanics.jl/latest/
    
+.. |logo| image:: https://github.com/AlexS12/FlightMechanics.jl/blob/master/docs/src/logo.png
+   :target: https://github.com/AlexS12/FlightMechanics.jl/blob/master/docs/src/logo.png
+   
 |license| |docs| |travisci| |codecov| 
+
+|logo|
 
 Flight Mechanics utils :airplane:
 ---------------------------------
