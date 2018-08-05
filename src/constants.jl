@@ -6,7 +6,7 @@ const R_AIR = 287.05287  # Specific gas constant for dry air (J/(Kg·K))
 
 # Air at sea level conditions h=0 (m)
 const RHO0 = 1.225  # Density at sea level (kg/m3)
-const P0 = 101325  # Pressure at sea level (Pa)
+const P0 = 101325.0  # Pressure at sea level (Pa)
 const T0 = 288.15  # Temperature at sea level (K)
 const A0 = 340.293990543  # Sound speed at sea level (m/s)
 end
@@ -32,4 +32,6 @@ const LB2KG = 0.453592  # Pounds (lb) to kilograms (kg)
 const FT2M = 0.3048  # Feet (ft) to meters (m)
 const SLUG2KG = 14.5939  # Slug to kilograms (kg)
 const SLUGFT2_2_KGM2 = 1.35581795  # Slug*feet^2 to kilograms*meters^2 (kg*m^2)
+const KT2MS = 0.514444  # knots (kt) to meters/second (m/s)
+const MS2KT = 1.94384  # meters/second (m/s) to knots (kt)
 end

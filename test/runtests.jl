@@ -8,3 +8,4 @@ end
 # write your own tests here
 @testset "atmosphere" begin include("atmosphere.jl") end
 @testset "coordinates" begin include("coordinates.jl") end
+@testset "anemometry" begin include("anemometry.jl") end
