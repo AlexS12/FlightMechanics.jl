@@ -3,6 +3,7 @@ import FlightMechanics: atmosphere_isa
 import FlightMechanics: tas2eas, tas2cas, cas2eas, cas2tas, eas2cas, eas2tas
 import FlightMechanics: qc2cas, qc2tas, qc2eas
 import FlightMechanics: incompressible_qinf, compressible_qinf
+import FlightMechanics: tas_alpha_beta_from_uvw
 
 
 @static if VERSION < v"0.7.0-DEV.2005"
@@ -125,4 +126,14 @@ qinf_comp = compressible_qinf(M, p)
 
 
 # --- tas, alpha, beta from body ---
-# tas_alpha_beta_from_uvw
+u, v, w = 100, 0, 0  # m/s
+rv = tas_alpha_beta_from_uvw(u, v, w)
+@test isapprox(rv, [100, 0, 0])
+
+u, v, w = 10, 0, 10  # m/s
+rv = tas_alpha_beta_from_uvw(u, v, w)
+@test isapprox(rv, [sqrt(200), atan(1), 0])
+
+u, v, w = 10, 10, 0  # m/s
+rv = tas_alpha_beta_from_uvw(u, v, w)
+@test isapprox(rv, [sqrt(200), 0, asin(10/sqrt(200))])
