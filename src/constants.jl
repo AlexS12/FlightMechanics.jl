@@ -6,7 +6,7 @@ const R_AIR = 287.05287  # Specific gas constant for dry air (J/(Kg·K))
 
 # Air at sea level conditions h=0 (m)
 const RHO0 = 1.225  # Density at sea level (kg/m3)
-const P0 = 101325  # Pressure at sea level (Pa)
+const P0 = 101325.0  # Pressure at sea level (Pa)
 const T0 = 288.15  # Temperature at sea level (K)
 const A0 = 340.293990543  # Sound speed at sea level (m/s)
 end
