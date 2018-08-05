@@ -197,8 +197,8 @@ end
 """
     compressible_qinf(tas, p, a)
 
-Calculate compressible dynamic pressure from true airspeed (tas), static 
-pressure (p) and sound velocity at current altitude.
+Calculate compressible dynamic pressure from Mach number and static 
+pressure (p)
 
 Two different models are used depending on the Mach number:
 
@@ -208,9 +208,7 @@ Two different models are used depending on the Mach number:
 .. [1] Ward, D. T. (1993). Introduction to flight test engineering. Elsevier
     Science Ltd. (page 12)
 """
-function compressible_qinf(tas, p, a)
-
-    M = tas / a
+function compressible_qinf(M, p)
 
     if M < 1
         pt = p * (1 + (γ - 1) / 2 * M*M) ^ (γ / (γ - 1))
