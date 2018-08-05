@@ -175,7 +175,7 @@ function tas_alpha_beta_from_uvw(u, v, w)
     
     tas = sqrt(u*u + v*v + w*w)
     alpha = atan(w / u)
-    beta = asin(v / TAS)
+    beta = asin(v / tas)
     return [tas, alpha, beta]
 end
 
