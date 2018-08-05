@@ -26,12 +26,16 @@ Flight Mechanics utils :airplane:
 
 This package is intended to provide utils for Flight Mechanics computations.
 
-* International Standard Atmosphere
+* International Standard Atmosphere: get pressure, temperature, density, sound velocity for a given altitude.
+
 * Conversion between different coordinate systems:
+
   * body
   * horizon
   * wind
-* Anemometry: 
+  
+* Anemometry:
+
   * conversion between tas, cas, eas.
   * velocity calculation from airspeed indicator (ASI) pressure difference
   * dynamic pressure calculation (compressible and incompressible cases)
