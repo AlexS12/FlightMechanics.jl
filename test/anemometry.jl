@@ -101,9 +101,9 @@ eas = qc2eas(qc, p)
 tas_ = qc2tas(qc, rho, p)
 cas = qc2cas(qc)
 
-@test isapprox(cas, exp_cas)
-@test isapprox(eas, exp_eas)
-@test isapprox(cas, exp_tas)
+@test isapprox(cas, exp_cas, atol=1e-3)
+@test isapprox(eas, exp_eas, atol=1e-3)
+@test isapprox(tas_, exp_tas, atol=1e-3)
 
 
 # --- Dynamic pressure ---
