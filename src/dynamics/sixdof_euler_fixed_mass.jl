@@ -23,9 +23,13 @@ function six_dof_euler_fixed_mass(state, mass, inertia, forces, moments)
     w_dot = Fz / m + q * u - p * v
 
     # Angular momentum equations
-    p_dot = (L*Iz + N*Jxz - q*r*(Iz*Iz - Iz*Iy + Jxz*Jxz) + p*q * Jxz*(Ix + Iz - Iy)) / (Ix*Iz - Jxz*Jxz)
+    Jxz2 = Jxz*Jxz
+    den = (Ix*Iz - Jxz2)
+    temp = (Ix + Iz - Iy)
+
+    p_dot = (L*Iz + N*Jxz - q*r*(Iz*Iz - Iz*Iy + Jxz2) + p*q * Jxz * temp) / den
     q_dot = (M + (Iz - Ix) * p*r - Jxz * (p*p - r*r)) / Iy
-    r_dot = (L*Jxz + N*Ix + p*q * (Ix*Ix - Ix*Iy + Jxz*Jxz) - q*r * Jxz * (Iz + Ix - Iy)) / (Ix*Iz - Jxz*Jxz)
+    r_dot = (L*Jxz + N*Ix + p*q * (Ix*Ix - Ix*Iy + Jxz2) - q*r * Jxz * temp) / den
 
     # Angular Kinematic equations
     ψ_dot = (q * sϕ + r * cϕ) / cθ
