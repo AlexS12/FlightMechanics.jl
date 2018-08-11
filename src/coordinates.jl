@@ -1,25 +1,25 @@
 """
-    body2hor(xb, yb, zb, chi, theta, phi)
+    body2hor(xb, yb, zb, psi, theta, phi)
 
 Transform body coordinates to local horizon.
 
 # Arguments
 * `xb, yb, zb`: body coordinates.
-* `chi, theta, phi`: Euler angles. Yaw, pitch, roll (rad).
+* `psi, theta, phi`: Euler angles. Yaw, pitch, roll (rad).
 """
-function body2hor(xb, yb, zb, chi, theta, phi)
+function body2hor(xb, yb, zb, psi, theta, phi)
 
-    s_chi, c_chi = sin(chi), cos(chi)
+    s_psi, c_psi = sin(psi), cos(psi)
     s_theta, c_theta = sin(theta), cos(theta)
     s_phi, c_phi = sin(phi), cos(phi)
 
-    xh = (c_theta * c_chi)                         * xb +
-         (s_phi * s_theta * c_chi - c_phi * s_chi) * yb +
-         (c_phi * s_theta * c_chi + s_phi * s_chi) * zb
+    xh = (c_theta * c_psi)                         * xb +
+         (s_phi * s_theta * c_psi - c_phi * s_psi) * yb +
+         (c_phi * s_theta * c_psi + s_phi * s_psi) * zb
 
-    yh = (c_theta * s_chi)                         * xb +
-         (s_phi * s_theta * s_chi + c_phi * c_chi) * yb +
-         (c_phi * s_theta * s_chi - s_phi * c_chi) * zb
+    yh = (c_theta * s_psi)                         * xb +
+         (s_phi * s_theta * s_psi + c_phi * c_psi) * yb +
+         (c_phi * s_theta * s_psi - s_phi * c_psi) * zb
 
     zh = -s_theta         * xb +
           s_phi * c_theta * yb +
@@ -30,30 +30,30 @@ end
 
 
 """
-    hor2body(xh, yh, zh, chi, theta, phi)
+    hor2body(xh, yh, zh, psi, theta, phi)
 
 Transform local horizon coordinates to body.
 
 # Arguments
 * `xh, yh, zh`: local horizon coordinates.
-* `chi, theta, phi`: Euler angles. Yaw, pitch, roll (rad).
+* `psi, theta, phi`: Euler angles. Yaw, pitch, roll (rad).
 """
-function hor2body(xh, yh, zh, chi, theta, phi)
+function hor2body(xh, yh, zh, psi, theta, phi)
 
-    s_chi, c_chi = sin(chi), cos(chi)
+    s_psi, c_psi = sin(psi), cos(psi)
     s_theta, c_theta = sin(theta), cos(theta)
     s_phi, c_phi = sin(phi), cos(phi)
 
-    xb =  c_theta * c_chi * xh +
-          c_theta * s_chi * yh -
+    xb =  c_theta * c_psi * xh +
+          c_theta * s_psi * yh -
           s_theta         * zh
 
-    yb = (s_phi * s_theta * c_chi - c_chi * s_chi) * xh +
-         (s_phi * s_theta * s_chi + c_phi * c_chi) * yh +
+    yb = (s_phi * s_theta * c_psi - c_psi * s_psi) * xh +
+         (s_phi * s_theta * s_psi + c_phi * c_psi) * yh +
          (s_phi * c_theta)                         * zh
 
-    zb = (c_phi * s_theta * c_chi + s_phi * s_chi) * xh +
-         (c_phi * s_theta * s_chi - s_phi * c_chi) * yh +
+    zb = (c_phi * s_theta * c_psi + s_phi * s_psi) * xh +
+         (c_phi * s_theta * s_psi - s_phi * c_psi) * yh +
          (c_phi * c_theta)                         * zh
 
     return [xb, yb, zb]
