@@ -250,5 +250,80 @@ function hor2ecef(xh, yh, zh, lat, lon)
     yecef = -slat*slon * xh + clon * yh - clat*slon * zh
     zecef =  slat*clon * xh + slon * yh + clat*clon * zh
 
-    return [xecef, yecef, zecef]  
+    return [xecef, yecef, zecef]
+end
+
+
+"""
+    body2ecef(xb, yb, zb, lat, lon, psi, theta, phi)
+
+Transform body coordinates to ECEF coordinates.
+
+# Arguments
+* `xb, yb, zb`: body coordinates.
+* `lat`: geodetic latitude (rad).
+* `lon`: longitude (rad).
+* `psi, theta, phi`: Euler angles. Yaw, pitch, roll (rad).
+
+"""
+function body2ecef(xb, yb, zb, lat, lon, psi, theta, phi)
+    xh, yh, zh = body2hor(xb, yb, zb, psi, theta, phi)
+    xecef, yecef, zecef = hor2ecef(xh, yh, zh, lat, lon)
+    return [xecef, yecef, zecef]
+end
+
+
+"""
+    ecef2body(xecef, yecef, zecef, lat, lon, psi, theta, phi)
+
+Transform ECEF coordinates to body coordinates.
+
+# Arguments
+* `xecef, yecef, zecef`: ECEF (Earth Centered Earth Fixed) coordinates.
+* `lat`: geodetic latitude (rad).
+* `lon`: longitude (rad).
+* `psi, theta, phi`: Euler angles. Yaw, pitch, roll (rad).
+
+"""
+function ecef2body(xecef, yecef, zecef, lat, lon, psi, theta, phi)
+    xh, yh, zh = ecef2hor(xecef, yecef, zecef, lat, lon)
+    xb, yb, zb = hor2body(xh, yh, zh, psi, theta, phi)
+    return [xb, yb, zb]
+end
+
+
+"""
+    body2ecef(xb, yb, zb, lat, lon, q0, q1, q2, q3)
+
+Transform body coordinates to ECEF coordinates.
+
+# Arguments
+* `xb, yb, zb`: body coordinates.
+* `lat`: geodetic latitude (rad).
+* `lon`: longitude (rad).
+* `q0, q1, q2, q3`: quaternions.
+
+"""
+function body2ecef(xb, yb, zb, lat, lon, q0, q1, q2, q3)
+    xh, yh, zh = body2hor(xb, yb, zb, q0, q1, q2, q3)
+    xecef, yecef, zecef = hor2ecef(xh, yh, zh, lat, lon)
+    return [xecef, yecef, zecef]
+end
+
+
+"""
+    ecef2body(xecef, yecef, zecef, lat, lon, q0, q1, q2, q3)
+
+Transform ECEF coordinates to body coordinates.
+
+# Arguments
+* `xecef, yecef, zecef`: ECEF (Earth Centered Earth Fixed) coordinates.
+* `lat`: geodetic latitude (rad).
+* `lon`: longitude (rad).
+* `q0, q1, q2, q3`: quaternions.
+"""
+function ecef2body(xecef, yecef, zecef, lat, lon, q0, q1, q2, q3)
+    xh, yh, zh = ecef2hor(xecef, yecef, zecef, lat, lon)
+    xb, yb, zb = hor2body(xh, yh, zh, q0, q1, q2, q3)
+    return [xb, yb, zb]
 end
