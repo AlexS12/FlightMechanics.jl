@@ -92,7 +92,7 @@ end
 
 
 """
-hor2wind(xh, yh, zh, chi, gamma, mu)
+    hor2wind(xh, yh, zh, chi, gamma, mu)
 
 Transform local horizon coordinates to wind.
 
@@ -145,7 +145,7 @@ end
 
 
 """
-wind2body(xw, yw, zw, alpha, beta)
+    wind2body(xw, yw, zw, alpha, beta)
 
 Transform body coordinates to wind.
 
@@ -163,4 +163,50 @@ function wind2body(xw, yw, zw, alpha, beta)
     zb = s_alpha*c_beta * xw - s_alpha*s_beta * yw + c_alpha * zw
 
     return [xb, yb, zb]
+end
+
+
+"""
+    ecef2hor(xecef, yecef, zecef, lat, lon)
+
+Transform ECEF (Earth Fixed Earth Centered) coordinates to local horizon
+coordinates using geodetic latitude and longitude.
+
+# Arguments
+ * `xecef, yecef, zecef`: ECEF coordinates.
+ * `lat`: geodetic latitude (rad).
+ * `lon`: longitude (rad).
+"""
+function ecef2hor(xecef, yecef, zecef, lat, lon)
+    slat, clat = cos(lat), sin(lat)
+    slon, clon = cos(lon), sin(lon)
+
+    xh =  clat * xecef - slat*slon * yecef + slat*clon * zecef
+    yh =                 clon      * yecef + slon      * zecef
+    zh = -slat * xecef - clat*slon * yecef + clat*clon * zecef
+
+    return [xh, yh, zh]
+end
+
+
+"""
+    hor2ecef(xh, yh, zh, lat, lon)
+
+Transform local horizon coordinates to ECEF (Earth Centered Earth Fixed) 
+coordinates using geodetic latitude and longitude.
+
+# Arguments
+* `xh, yh, zh`: local horizon coordinates.
+* `lat`: geodetic latitude (rad).
+* `lon`: longitude (rad).
+"""
+function hor2ecef(xh, yh, zh, lat, lon)
+    slat, clat = cos(lat), sin(lat)
+    slon, clon = cos(lon), sin(lon)
+
+    xecef =  clat      * xh +           - slat      * zh
+    yecef = -slat*slon * xh + clon * yh - clat*slon * zh
+    zecef =  slat*clon * xh + slon * yh + clat*clon * zh
+
+    return [xecef, yecef, zecef]  
 end
