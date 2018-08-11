@@ -241,6 +241,12 @@ coordinates using geodetic latitude and longitude.
 * `xh, yh, zh`: local horizon coordinates.
 * `lat`: geodetic latitude (rad).
 * `lon`: longitude (rad).
+
+Implementation from:
+
+.. [1] Stevens, B. L., Lewis, F. L., (1992). Aircraft control and simulation:
+ dynamics, controls design, and autonomous systems. John Wiley & Sons.
+ (page 36, formula 1.4-9)
 """
 function hor2ecef(xh, yh, zh, lat, lon)
     slat, clat = cos(lat), sin(lat)
@@ -265,6 +271,11 @@ Transform body coordinates to ECEF coordinates.
 * `lon`: longitude (rad).
 * `psi, theta, phi`: Euler angles. Yaw, pitch, roll (rad).
 
+Implementation from:
+
+.. [1] Stevens, B. L., Lewis, F. L., (1992). Aircraft control and simulation:
+ dynamics, controls design, and autonomous systems. John Wiley & Sons.
+ (page 36, formula 1.4-9)
 """
 function body2ecef(xb, yb, zb, lat, lon, psi, theta, phi)
     xh, yh, zh = body2hor(xb, yb, zb, psi, theta, phi)
@@ -283,7 +294,6 @@ Transform ECEF coordinates to body coordinates.
 * `lat`: geodetic latitude (rad).
 * `lon`: longitude (rad).
 * `psi, theta, phi`: Euler angles. Yaw, pitch, roll (rad).
-
 """
 function ecef2body(xecef, yecef, zecef, lat, lon, psi, theta, phi)
     xh, yh, zh = ecef2hor(xecef, yecef, zecef, lat, lon)
@@ -302,7 +312,6 @@ Transform body coordinates to ECEF coordinates.
 * `lat`: geodetic latitude (rad).
 * `lon`: longitude (rad).
 * `q0, q1, q2, q3`: quaternions.
-
 """
 function body2ecef(xb, yb, zb, lat, lon, q0, q1, q2, q3)
     xh, yh, zh = body2hor(xb, yb, zb, q0, q1, q2, q3)
