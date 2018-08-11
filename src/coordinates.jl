@@ -1,3 +1,6 @@
+import .EarthConstants: WGS84
+
+
 """
     body2hor(xb, yb, zb, psi, theta, phi)
 
@@ -385,4 +388,92 @@ function quaternion2euler(q0, q1, q2, q3)
     phi = atan2(2 * (q2*q3 + q0 * q1), q0*q0 - q1*q1 - q2*q2 + q3*q3)
 
     return [psi, theta, phi]
+end
+
+
+"""
+    llh2ecef(lat, lon, height; ellipsoid=WGS84)
+
+Transform geodetic latitude, longitude and ellipsoidal height to ECEF for the
+given ellipsoid (default ellipsoid is WGS84)
+
+Implementation from:
+.. [1] Rogers, R. M. (2007). Applied mathematics in integrated navigation
+ systems. American Institute of Aeronautics and Astronautics.
+ (Page 75, equations 4.20, 4.21, 4.22)
+"""
+function llh2ecef(lat, lon, height; ellipsoid=WGS84)
+    f = ellipsoid.f
+    a = ellipsoid.a
+    e2 = ellipsoid.e2
+
+    var = a / sqrt(1.0 - e2 * sin(lat)*sin(lat))
+
+    px = (var + height) * cos(lat)*cos(lon)
+    py = (var + height) * cos(lat)*sin(lon)
+    pz = (var * (1.0 - e2) + height)* sin(lat)
+
+    return [px, py, pz]
+end
+
+
+"""
+    ecef2llh(xecef, yecef, zecef; ellipsoid=WGS84)
+
+Transform ECEF coordinates to geodetic latitude, longitude and ellipsoidal 
+height for the given ellipsoid (default ellipsoid is WGS84)
+
+Implementation from:
+.. [1] Bowring, B. R. (1976). Transformation from spatial to geographical 
+ coordinates. Survey review, 23(181), 323-327.
+.. [2] Bowring, B. R. (1985). The accuracy of geodetic latitude and height
+ equations. Survey Review, 28(218), 202-206.
+
+Notes
+-----
+* [1] is used for longitude and latitude, [2] is used for latitude.
+* The calculation is presented in a direct form (non-iterative).
+* According to [1] <<For earth bound points (-5000m to 10000 m) the maximnum 
+error is not more than 0·000 000 030">> for the latitude.
+* Model becomes unstable if latitude is close to 90º
+"""
+function ecef2llh(xecef, yecef, zecef; ellipsoid=WGS84)
+
+    x, y, z = xecef, yecef, zecef
+    e = sqrt(ellipsoid.e);
+    e2 = ellipsoid.e2
+    ϵ2 = ellipsoid.ϵ2
+    a = ellipsoid.a
+    b = ellipsoid.b
+
+    p = sqrt(x*x + y*y)
+    R = sqrt(p*p + z*z)
+    θ = atan2(z, p)
+
+    lon = atan2(y, x)
+
+    # u -> geographical latitude
+    # Bowring, B. R. (1976). Transformation from spatial to geographical 
+    # coordinates. Survey review, 23(181), 323-327.
+    #u = atan(a/b * z/x)
+
+    # Bowring, B. R. (1985). The accuracy of geodetic latitude and height
+    # equations. Survey Review, 28(218), 202-206.
+    u = atan( b*z / (a*p) * (1 + ϵ2 * b / R) )
+
+    # Bowring, B. R. (1976). Transformation from spatial to geographical 
+    # coordinates. Survey review, 23(181), 323-327.
+    #lat = atan((z + ϵ2 * b * sin(u)^3) / (x - e2 * a * cos(u)^3))
+
+    # Bowring, B. R. (1985). The accuracy of geodetic latitude and height
+    # equations. Survey Review, 28(218), 202-206.
+    lat = atan( (z + ϵ2 * b * sin(u)^3) / (p - e2 * a * cos(u)^3) )
+    
+    # Bowring, B. R. (1985). The accuracy of geodetic latitude and height
+    # equations. Survey Review, 28(218), 202-206.
+    v = a / sqrt(1.0 - e2*sin(lat)^2)
+    # height = p*cos(lat) + z*sin(lat) - a*a / v
+    # equivalent to
+    height = R * cos(lat - θ) - a*a / v
+    return [lat, lon, height]
 end

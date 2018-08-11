@@ -22,6 +22,28 @@ const STD_GRAV_PARAMETER = 3.986004418e14  # (m³/s²)
 const EARTH_MASS = 5.9722e24  # Mass of the Earth (kg)
 const GRAV_CONSTANT = 6.67384e11  # Gravitational constant (N·m²/kg²)
 const EARTH_MEAN_RADIUS = 6371000  # Mean radius of the Earth (m)
+
+# Ellipsoids
+struct Ellipsoid 
+    a :: Real  # semi-major axis
+    finv :: Real  # inverse of flattening
+    f :: Real  # flattening
+    b :: Real  # semi-minor axis
+    e2 :: Real  # eccentricity squared
+    ϵ2 :: Real  # second eccentricity squared
+end
+
+
+function create_ellipsoid(a::Real, finv::Real)
+    f = 1.0 / finv
+    b = a * (1.0 - f)
+    e2 = 1.0 - (1.0 - f) ^ 2.0
+    ϵ2 = a*a / (b*b) - 1.0
+    return Ellipsoid(a, finv, f, b, e2, ϵ2)
+end
+
+WGS84 = create_ellipsoid(6378137.0, 298.257223563)
+
 end 
 
 
