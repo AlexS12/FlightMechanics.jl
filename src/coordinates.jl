@@ -30,6 +30,48 @@ end
 
 
 """
+    body2hor(xb, yb, zb, q0, q1, q2, q3)
+
+Transform body coordinates to local horizon.
+
+# Arguments
+* `xb, yb, zb`: body coordinates.
+* `q0, q1, q2, q3`: quaternions.
+"""
+function body2hor(xb, yb, zb, q0, q1, q2, q3)
+    
+    q02, q12, q22, q32 = q0*q0, q1*q1, q2*q2, q3*q3
+    
+    # Linear kinematic equations
+    xh = (q02+q12-q22-q32) * xb + 2*(q1*q2 - q0*q3) * yb + 2*(q1*q3 + q0*q2) * zb
+    yh = 2*(q1*q2 + q0*q3) * xb + (q02-q12+q22-q32) * yb + 2*(q2*q3 - q0*q1) * zb
+    zh = 2*(q1*q3 - q0*q2) * xb + 2*(q2*q3 + q0*q1) * yb + (q02-q12-q22+q32) * zb
+    return [xh, yh, zh]
+end
+
+
+"""
+    hor2body(xb, yb, zb, q0, q1, q2, q3)
+
+Transform local horizon corrdinates to body coordinates.
+
+# Arguments
+* `xh, yh, zh`: local horizon coordinates.
+* `q0, q1, q2, q3`: quaternions.
+"""
+function hor2body(xh, yh, zh, q0, q1, q2, q3)
+    
+    q02, q12, q22, q32 = q0*q0, q1*q1, q2*q2, q3*q3
+    
+    # Linear kinematic equations
+    xb = (q02+q12-q22-q32) * xh + 2*(q1*q2 + q0*q3) * yh + 2*(q1*q3 - q0*q2) * zh
+    yb = 2*(q1*q2 - q0*q3) * xh + (q02-q12+q22-q32) * yh + 2*(q2*q3 + q0*q1) * zh
+    zb = 2*(q1*q3 + q0*q2) * xh + 2*(q2*q3 - q0*q1) * yh + (q02-q12-q22+q32) * zh
+    return [xb, yb, zb]
+end
+
+
+"""
     hor2body(xh, yh, zh, psi, theta, phi)
 
 Transform local horizon coordinates to body.
