@@ -336,3 +336,53 @@ function ecef2body(xecef, yecef, zecef, lat, lon, q0, q1, q2, q3)
     xb, yb, zb = hor2body(xh, yh, zh, q0, q1, q2, q3)
     return [xb, yb, zb]
 end
+
+
+"""
+    euler2quaternion(psi, theta, phi)
+
+Transform Euler angles orientation to quaternion orientation.
+
+# Arguments
+* `psi, theta, phi`: Euler angles. Yaw, pitch, roll (rad).
+
+Implementation from:
+.. [1] Zipfel, P. H. (2007). Modeling and simulation of aerospace vehicle
+ dynamics. American Institute of Aeronautics and Astronautics.
+ (page 126, formula 4.78)
+"""
+function euler2quaternion(psi, theta, phi)
+
+    s_psi2, c_psi2 = sin(psi/2.0), cos(psi/2.0)
+    s_theta2, c_theta2 = sin(theta/2.0), cos(theta/2.0)
+    s_phi2, c_phi2 = sin(phi/2.0), cos(phi/2.0)
+
+    q0 = c_psi2*c_theta2*c_phi2 + s_psi2*s_theta2*s_phi2
+    q1 = c_psi2*c_theta2*s_phi2 - s_psi2*s_theta2*c_phi2
+    q2 = c_psi2*s_theta2*c_phi2 + s_psi2*c_theta2*s_phi2
+    q3 = s_psi2*c_theta2*c_phi2 - c_psi2*s_theta2*s_phi2
+    
+    return [q0, q1, q2, q3]
+end
+
+
+"""
+    quaternion2euler(q0, q1, q2, q3)
+
+Transform quaternion orientation to Euler angles orientation.
+
+#Arguments
+`q0, q1, q2, q3`: quaternions.
+
+Implementation from:
+.. [1] Zipfel, P. H. (2007). Modeling and simulation of aerospace vehicle
+ dynamics. American Institute of Aeronautics and Astronautics.
+ (page 127, formula 4.82)
+"""
+function quaternion2euler(q0, q1, q2, q3)
+    psi = atan2(2 * (q1*q2 + q0*q3), q0*q0 + q1*q1 - q2*q2 - q3*q3)
+    theta = asin(-2 * (q1*q3 - q0*q2))
+    phi = atan2(2 * (q2*q3 + q0 * q1), q0*q0 - q1*q1 - q2*q2 + q3*q3)
+
+    return [psi, theta, phi]
+end
