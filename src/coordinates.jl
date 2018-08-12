@@ -431,11 +431,13 @@ Implementation from:
 
 Notes
 -----
-* [1] is used for longitude and latitude, [2] is used for latitude.
-* The calculation is presented in a direct form (non-iterative).
-* According to [1] <<For earth bound points (-5000m to 10000 m) the maximnum 
-error is not more than 0·000 000 030">> for the latitude.
-* Model becomes unstable if latitude is close to 90º
+* The transformation is direct without iterations as [1] introduced the need to
+iterate for near Earth positions.
+* [2] is an updated of incresed accuracy of [1]. The former is used for
+in this implementation although the latter implementation is commented in the 
+code.
+* Model becomes unstable if latitude is close to 90º. An alternative equation
+can be found in [2] equation (16) but has not been implemented.
 """
 function ecef2llh(xecef, yecef, zecef; ellipsoid=WGS84)
 
@@ -450,30 +452,32 @@ function ecef2llh(xecef, yecef, zecef; ellipsoid=WGS84)
     R = sqrt(p*p + z*z)
     θ = atan2(z, p)
 
+    # [1] equation (1) does not change in [2]
     lon = atan2(y, x)
 
     # u -> geographical latitude
-    # Bowring, B. R. (1976). Transformation from spatial to geographical 
-    # coordinates. Survey review, 23(181), 323-327.
+    # [1] below equation (4) and [2] equation (6)
+    # This lead to errors in latitud with maximum value 0.0018"
     #u = atan(a/b * z/x)
 
-    # Bowring, B. R. (1985). The accuracy of geodetic latitude and height
-    # equations. Survey Review, 28(218), 202-206.
+    # [2] equation (17) If the latitude is also required to be very accurate
+    # for outer-space positions then the value of u for (6) should be obtained
+    # from:
     u = atan( b*z / (a*p) * (1 + ϵ2 * b / R) )
 
-    # Bowring, B. R. (1976). Transformation from spatial to geographical 
-    # coordinates. Survey review, 23(181), 323-327.
+    # [1] equation (4)
     #lat = atan((z + ϵ2 * b * sin(u)^3) / (x - e2 * a * cos(u)^3))
 
-    # Bowring, B. R. (1985). The accuracy of geodetic latitude and height
-    # equations. Survey Review, 28(218), 202-206.
+    # [2] equation (18)
     lat = atan( (z + ϵ2 * b * sin(u)^3) / (p - e2 * a * cos(u)^3) )
     
-    # Bowring, B. R. (1985). The accuracy of geodetic latitude and height
-    # equations. Survey Review, 28(218), 202-206.
+    # [2] after equation (1)
     v = a / sqrt(1.0 - e2*sin(lat)^2)
+    # [2] equation (7)
     # height = p*cos(lat) + z*sin(lat) - a*a / v
-    # equivalent to
+    # equivalent to [2] equation (8) 
     height = R * cos(lat - θ) - a*a / v
+    # which is insensitive to the error in latitude calculation (The influence
+    # is of order 2 [2] equation (12))
     return [lat, lon, height]
 end
