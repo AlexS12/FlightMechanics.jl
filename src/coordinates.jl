@@ -442,7 +442,7 @@ can be found in [2] equation (16) but has not been implemented.
 function ecef2llh(xecef, yecef, zecef; ellipsoid=WGS84)
 
     x, y, z = xecef, yecef, zecef
-    e = sqrt(ellipsoid.e);
+    e = sqrt(ellipsoid.e2);
     e2 = ellipsoid.e2
     ϵ2 = ellipsoid.ϵ2
     a = ellipsoid.a
