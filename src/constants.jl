@@ -18,6 +18,9 @@ module EarthConstants
 const GRAVITY_ACCEL = 9.80665  # Gravity of Ethe Earth (m/s^2)
 # Standard Gravitational Parameter
 # product of the gravitational constant G and the mass M of the body
+# TODO: review values with
+# Rogers, R. M. (2007). Applied mathematics in integrated navigation systems.
+# American Institute of Aeronautics and Astronautics. (Page 76, table 4.1)
 const STD_GRAV_PARAMETER = 3.986004418e14  # (m³/s²)
 const EARTH_MASS = 5.9722e24  # Mass of the Earth (kg)
 const GRAV_CONSTANT = 6.67384e11  # Gravitational constant (N·m²/kg²)
@@ -42,7 +45,26 @@ function create_ellipsoid(a::Real, finv::Real)
     return Ellipsoid(a, finv, f, b, e2, ϵ2)
 end
 
-WGS84 = create_ellipsoid(6378137.0, 298.257223563)
+# Rogers, R. M. (2007). Applied mathematics in integrated navigation systems.
+# American Institute of Aeronautics and Astronautics. (Page 76, table 4.1)
+Clarke1866           = create_ellipsoid(6378206.4  , 294.9786982)
+Clarke1880           = create_ellipsoid(6378249.145, 294.465)
+International        = create_ellipsoid(6378388.0  , 297.0)
+Bessel               = create_ellipsoid(6377397.155, 299.1528128)
+Everest              = create_ellipsoid(6377276.345, 300.8017)
+ModifiedEverest      = create_ellipsoid(6377304.063, 300.8017)
+AustralianNational   = create_ellipsoid(6378160.0  , 298.25)
+SouthAmerican1969    = create_ellipsoid(6378160.0  , 298.25)
+Airy                 = create_ellipsoid(6377564.396, 299.3249646)
+ModifiedAiry         = create_ellipsoid(6377340.189, 299.3249646)
+Hough                = create_ellipsoid(6378270.0  , 297.0)
+Fischer1960SouthAsia = create_ellipsoid(6378155.0  , 298.3)
+Fischer1960Mercury   = create_ellipsoid(6378166.0  , 298.3)
+Fischer1968          = create_ellipsoid(6378150.0  , 298.3)
+WGS60                = create_ellipsoid(6378165.0  , 298.3)
+WGS66                = create_ellipsoid(6378145.0  , 298.25)
+WGS72                = create_ellipsoid(6378135.0  , 298.26)
+WGS84                = create_ellipsoid(6378137.0  , 298.257223563)
 
 end 
 
