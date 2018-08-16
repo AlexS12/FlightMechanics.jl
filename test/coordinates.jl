@@ -38,6 +38,26 @@ ones_ = [1.0, 1.0, 1.0]
 @test ones_ ≈ body2wind(0, 1, 2*0.70710678118654757, 45*pi/180., 0.)
 @test ones_ ≈ body2wind(0, 2*0.70710678118654757, 1, 0., 45*pi/180.)
 
+# Quaternion <-> Euler angles
+import FlightMechanics: quaternion2euler, euler2quaternion
+
+quat = (0.8660254037844387, 0.0, 0.5, 0.0)
+euler_exp = [0.0, 1.04719755, 0.0]
+euler = quaternion2euler(quat...)
+@test isapprox(euler, euler_exp)
+quat_exp = [quat...]
+quat = euler2quaternion(euler_exp...)
+@test isapprox(quat, quat_exp)
+
+quat = [0.5, 0.5, 0.0, 0.0]
+euler_exp = [0.0, 0.0, pi/2.0]
+euler = quaternion2euler(quat...)
+@test isapprox(euler, euler_exp)
+quat_exp = [quat...]
+quat = euler2quaternion(euler_exp...)
+@test isapprox(quat, quat_exp / norm(quat_exp))
+
+
 # llh ECEF (using data from
 # .. [1] Bowring, B. R. (1976). Transformation from spatial to geographical 
 # coordinates. Survey review, 23(181), 323-327.)
@@ -63,12 +83,32 @@ xyz = llh2ecef(deg2rad(50.0), 0, 10000.0; ellipsoid=Bowring1976)
 @test isapprox(xyz, exp_xyz)
 
 
-# 
+# http://www.sysense.com/products/ecef_lla_converter/index.html
 x, y, z = (4114496.258, 0.0, 4870157.031)  # m
 exp_llh = [deg2rad(49.996908), 0.000000, 9907.31]
 llh = ecef2llh(x, y, z)
-@test isapprox(llh[:2], exp_llh[:2], atol=0.0018/3600)
+# Longitude should be exact, latitude max error: 0.0018" according to [1]
+# Altitude 0.17 m
+# The implemented function must be better, but I don't know which one is using
+# this web page. The ellipsoid is assumed to be WGS84
+@test isapprox(llh[:2], exp_llh[:2], atol=deg2rad(0.0018/3600.0))
+@test isapprox(llh[3], exp_llh[3], atol=0.17)
 
 exp_xyz = [4114291.97, 0.00, 4870449.48]  # m
 xyz = llh2ecef(deg2rad(50.0), 0, 10000.0)
+@test isapprox(xyz, exp_xyz)
+
+# non-zero longitude
+x, y, z = (3814496.258, 1514496.258, 4870157.031)  # m
+exp_llh = [deg2rad(50.068095), deg2rad(21.654910), 3263.97]
+llh = ecef2llh(x, y, z)
+# Longitude should be exact, latitude max error: 0.0018" according to [1]
+# Altitude 0.17 m
+# The implemented function must be better, but I don't know which one is using
+# this web page. The ellipsoid is assumed to be WGS84
+@test isapprox(llh[:2], exp_llh[:2], atol=deg2rad(0.0018/3600.0))
+@test isapprox(llh[3], exp_llh[3], atol=0.17)
+
+exp_xyz = [3814496.258, 1514496.258, 4870157.031]  # m
+xyz = llh2ecef(deg2rad(50.068095), deg2rad(21.654910), 3263.97)
 @test isapprox(xyz, exp_xyz)
