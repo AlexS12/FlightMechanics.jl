@@ -223,12 +223,12 @@ coordinates using geodetic latitude and longitude.
  * `lon`: longitude (rad).
 """
 function ecef2hor(xecef, yecef, zecef, lat, lon)
-    slat, clat = cos(lat), sin(lat)
-    slon, clon = cos(lon), sin(lon)
+    clat, slat = cos(lat), sin(lat)
+    clon, slon = cos(lon), sin(lon)
 
-    xh =  clat * xecef - slat*slon * yecef + slat*clon * zecef
-    yh =                 clon      * yecef + slon      * zecef
-    zh = -slat * xecef - clat*slon * yecef + clat*clon * zecef
+    xh = -slat*clon * xecef - slat*slon * yecef + clat * zecef
+    yh = -slon      * xecef + clon      * yecef              
+    zh = -clat*clon * xecef - clat*slon * yecef - slat * zecef
 
     return [xh, yh, zh]
 end
@@ -252,12 +252,12 @@ Implementation from:
  (page 36, formula 1.4-9)
 """
 function hor2ecef(xh, yh, zh, lat, lon)
-    slat, clat = cos(lat), sin(lat)
-    slon, clon = cos(lon), sin(lon)
+    clat, slat = cos(lat), sin(lat)
+    clon, slon = cos(lon), sin(lon)
 
-    xecef =  clat      * xh +           - slat      * zh
+    xecef = -slat*clon * xh - slon * yh - clat*clon * zh
     yecef = -slat*slon * xh + clon * yh - clat*slon * zh
-    zecef =  slat*clon * xh + slon * yh + clat*clon * zh
+    zecef =  clat      * xh +           - slat      * zh
 
     return [xecef, yecef, zecef]
 end
