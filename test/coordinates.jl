@@ -61,3 +61,14 @@ llh = ecef2llh(x, y, z; ellipsoid=Bowring1976)
 exp_xyz = [4114496.258, 0.0, 4870157.031]  # m
 xyz = llh2ecef(deg2rad(50.0), 0, 10000.0; ellipsoid=Bowring1976)
 @test isapprox(xyz, exp_xyz)
+
+
+# 
+x, y, z = (4114496.258, 0.0, 4870157.031)  # m
+exp_llh = [deg2rad(49.996908), 0.000000, 9907.31]
+llh = ecef2llh(x, y, z)
+@test isapprox(llh[:2], exp_llh[:2], atol=0.0018/3600)
+
+exp_xyz = [4114291.97, 0.00, 4870449.48]  # m
+xyz = llh2ecef(deg2rad(50.0), 0, 10000.0)
+@test isapprox(xyz, exp_xyz)
