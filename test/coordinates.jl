@@ -38,6 +38,42 @@ ones_ = [1.0, 1.0, 1.0]
 @test ones_ ≈ body2wind(0, 1, 2*0.70710678118654757, 45*pi/180., 0.)
 @test ones_ ≈ body2wind(0, 2*0.70710678118654757, 1, 0., 45*pi/180.)
 
+# Hor <-> ECEF
+import FlightMechanics: ecef2hor, hor2ecef
+xecef, yecef, zecef = 1.0, 10.0, 100.0
+lat, lon = 0.0, 0.0
+exp_xyz_hor = [100.0, 10.0 ,-1.0]
+xyz_hor =  ecef2hor(xecef, yecef, zecef, lat, lon)
+@test isapprox(xyz_hor, exp_xyz_hor)
+exp_xyz_ecef = [xecef, yecef, zecef]
+xyz_ecef = hor2ecef(exp_xyz_hor..., lat, lon)
+@test isapprox(xyz_ecef, exp_xyz_ecef)
+
+lat, lon = pi/2.0, 0.0
+exp_xyz_hor = [-1.0, 10.0 ,-100.0]
+xyz_hor =  ecef2hor(xecef, yecef, zecef, lat, lon)
+@test isapprox(xyz_hor, exp_xyz_hor)
+exp_xyz_ecef = [xecef, yecef, zecef]
+xyz_ecef = hor2ecef(exp_xyz_hor..., lat, lon)
+@test isapprox(xyz_ecef, exp_xyz_ecef)
+
+lat, lon = 0.0, pi/2.0
+exp_xyz_hor = [100.0, -1.0 ,-10.0]
+xyz_hor =  ecef2hor(xecef, yecef, zecef, lat, lon)
+@test isapprox(xyz_hor, exp_xyz_hor)
+exp_xyz_ecef = [xecef, yecef, zecef]
+xyz_ecef = hor2ecef(exp_xyz_hor..., lat, lon)
+@test isapprox(xyz_ecef, exp_xyz_ecef)
+
+lat, lon = pi/2.0, pi/2.0
+exp_xyz_hor = [-10.0, -1.0 ,-100.0]
+xyz_hor =  ecef2hor(xecef, yecef, zecef, lat, lon)
+@test isapprox(xyz_hor, exp_xyz_hor)
+exp_xyz_ecef = [xecef, yecef, zecef]
+xyz_ecef = hor2ecef(exp_xyz_hor..., lat, lon)
+@test isapprox(xyz_ecef, exp_xyz_ecef)
+
+
 # Quaternion <-> Euler angles
 import FlightMechanics: quaternion2euler, euler2quaternion
 
