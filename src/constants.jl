@@ -37,34 +37,34 @@ struct Ellipsoid
 end
 
 
-function create_ellipsoid(a::Real, finv::Real)
+Ellipsoid(a, finv) = begin
     f = 1.0 / finv
     b = a * (1.0 - f)
     e2 = 1.0 - (1.0 - f) ^ 2.0
     ϵ2 = a*a / (b*b) - 1.0
-    return Ellipsoid(a, finv, f, b, e2, ϵ2)
+    Ellipsoid(a, finv, f, b, e2, ϵ2)
 end
 
 # Rogers, R. M. (2007). Applied mathematics in integrated navigation systems.
 # American Institute of Aeronautics and Astronautics. (Page 76, table 4.1)
-Clarke1866           = create_ellipsoid(6378206.4  , 294.9786982)
-Clarke1880           = create_ellipsoid(6378249.145, 294.465)
-International        = create_ellipsoid(6378388.0  , 297.0)
-Bessel               = create_ellipsoid(6377397.155, 299.1528128)
-Everest              = create_ellipsoid(6377276.345, 300.8017)
-ModifiedEverest      = create_ellipsoid(6377304.063, 300.8017)
-AustralianNational   = create_ellipsoid(6378160.0  , 298.25)
-SouthAmerican1969    = create_ellipsoid(6378160.0  , 298.25)
-Airy                 = create_ellipsoid(6377564.396, 299.3249646)
-ModifiedAiry         = create_ellipsoid(6377340.189, 299.3249646)
-Hough                = create_ellipsoid(6378270.0  , 297.0)
-Fischer1960SouthAsia = create_ellipsoid(6378155.0  , 298.3)
-Fischer1960Mercury   = create_ellipsoid(6378166.0  , 298.3)
-Fischer1968          = create_ellipsoid(6378150.0  , 298.3)
-WGS60                = create_ellipsoid(6378165.0  , 298.3)
-WGS66                = create_ellipsoid(6378145.0  , 298.25)
-WGS72                = create_ellipsoid(6378135.0  , 298.26)
-WGS84                = create_ellipsoid(6378137.0  , 298.257223563)
+Clarke1866           = Ellipsoid(6378206.4  , 294.9786982)
+Clarke1880           = Ellipsoid(6378249.145, 294.465)
+International        = Ellipsoid(6378388.0  , 297.0)
+Bessel               = Ellipsoid(6377397.155, 299.1528128)
+Everest              = Ellipsoid(6377276.345, 300.8017)
+ModifiedEverest      = Ellipsoid(6377304.063, 300.8017)
+AustralianNational   = Ellipsoid(6378160.0  , 298.25)
+SouthAmerican1969    = Ellipsoid(6378160.0  , 298.25)
+Airy                 = Ellipsoid(6377564.396, 299.3249646)
+ModifiedAiry         = Ellipsoid(6377340.189, 299.3249646)
+Hough                = Ellipsoid(6378270.0  , 297.0)
+Fischer1960SouthAsia = Ellipsoid(6378155.0  , 298.3)
+Fischer1960Mercury   = Ellipsoid(6378166.0  , 298.3)
+Fischer1968          = Ellipsoid(6378150.0  , 298.3)
+WGS60                = Ellipsoid(6378165.0  , 298.3)
+WGS66                = Ellipsoid(6378145.0  , 298.25)
+WGS72                = Ellipsoid(6378135.0  , 298.26)
+WGS84                = Ellipsoid(6378137.0  , 298.257223563)
 
 end 
 
