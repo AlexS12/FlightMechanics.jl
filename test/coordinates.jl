@@ -7,18 +7,52 @@ else
     using Test
 end
 
+# Quaternion <-> Euler angles
+import FlightMechanics: quaternion2euler, euler2quaternion
+
+quat = (0.8660254037844387, 0.0, 0.5, 0.0)
+euler_exp = [0.0, 1.04719755, 0.0]
+euler = quaternion2euler(quat...)
+@test isapprox(euler, euler_exp)
+quat_exp = [quat...]
+quat = euler2quaternion(euler_exp...)
+@test isapprox(quat, quat_exp)
+
+quat = [0.5, 0.5, 0.0, 0.0]
+euler_exp = [0.0, 0.0, pi/2.0]
+euler = quaternion2euler(quat...)
+@test isapprox(euler, euler_exp)
+quat_exp = [quat...]
+quat = euler2quaternion(euler_exp...)
+@test isapprox(quat, quat_exp / norm(quat_exp))
+
 ones_ = [1.0, 1.0, 1.0]
 
-# body2hor
+# body2hor Euler
 @test ones_ ≈ body2hor(ones_..., 0., 0., 0.)
 @test [2*0.70710678118654757, 1, 0] ≈ body2hor(ones_..., 0., 45*pi/180., 0.)
 @test [1, 0, 2*0.70710678118654757] ≈ body2hor(ones_..., 0., 0., 45*pi/180)
 @test [0, 2*0.70710678118654757, 1] ≈ body2hor(ones_..., 45*pi/180, 0., 0.)
-# hor2body
+# hor2body Euler
 @test ones_ ≈ hor2body(ones_..., 0., 0., 0.)
 @test ones_ ≈ hor2body(2*0.70710678118654757, 1, 0, 0., 45*pi/180., 0.)
 @test ones_ ≈ hor2body(1, 0, 2*0.70710678118654757, 0., 0., 45*pi/180)
 @test ones_ ≈ hor2body(0, 2*0.70710678118654757, 1, 45*pi/180, 0., 0.)
+# body2hor quaternion
+@test ones_ ≈ body2hor(ones_..., 0., 0., 0.)
+quat0 = euler2quaternion(0., 45*pi/180., 0.)
+quat1 = euler2quaternion(0., 0., 45*pi/180.)
+quat2 = euler2quaternion(45*pi/180., 0., 0.)
+
+@test [2*0.70710678118654757, 1, 0] ≈ body2hor(ones_..., quat0...)
+@test [1, 0, 2*0.70710678118654757] ≈ body2hor(ones_..., quat1...)
+@test [0, 2*0.70710678118654757, 1] ≈ body2hor(ones_..., quat2...)
+# hor2body
+@test ones_ ≈ hor2body(ones_..., 0., 0., 0.)
+@test ones_ ≈ hor2body(2*0.70710678118654757, 1, 0,  quat0...)
+@test ones_ ≈ hor2body(1, 0, 2*0.70710678118654757,  quat1...)
+@test ones_ ≈ hor2body(0, 2*0.70710678118654757, 1,  quat2...)
+
 #wind2hor
 @test ones_ ≈ wind2hor(ones_..., 0., 0., 0.)
 @test [2*0.70710678118654757, 1, 0] ≈ wind2hor(ones_..., 0., 45*pi/180., 0.)
@@ -72,27 +106,6 @@ xyz_hor =  ecef2hor(xecef, yecef, zecef, lat, lon)
 exp_xyz_ecef = [xecef, yecef, zecef]
 xyz_ecef = hor2ecef(exp_xyz_hor..., lat, lon)
 @test isapprox(xyz_ecef, exp_xyz_ecef)
-
-
-# Quaternion <-> Euler angles
-import FlightMechanics: quaternion2euler, euler2quaternion
-
-quat = (0.8660254037844387, 0.0, 0.5, 0.0)
-euler_exp = [0.0, 1.04719755, 0.0]
-euler = quaternion2euler(quat...)
-@test isapprox(euler, euler_exp)
-quat_exp = [quat...]
-quat = euler2quaternion(euler_exp...)
-@test isapprox(quat, quat_exp)
-
-quat = [0.5, 0.5, 0.0, 0.0]
-euler_exp = [0.0, 0.0, pi/2.0]
-euler = quaternion2euler(quat...)
-@test isapprox(euler, euler_exp)
-quat_exp = [quat...]
-quat = euler2quaternion(euler_exp...)
-@test isapprox(quat, quat_exp / norm(quat_exp))
-
 
 # llh ECEF (using data from
 # .. [1] Bowring, B. R. (1976). Transformation from spatial to geographical 
