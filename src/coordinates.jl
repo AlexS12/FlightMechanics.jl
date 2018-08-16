@@ -221,6 +221,20 @@ coordinates using geodetic latitude and longitude.
  * `xecef, yecef, zecef`: ECEF coordinates.
  * `lat`: geodetic latitude (rad).
  * `lon`: longitude (rad).
+
+ Implementation from:
+
+.. [1] Stevens, B. L., Lewis, F. L., (1992). Aircraft control and simulation:
+ dynamics, controls design, and autonomous systems. John Wiley & Sons.
+ (page 36, formula 1.4-9)
+
+ Notes
+ -----
+ X, Y, Z ECEF are defined in a different way in [1]. In order to reproduce this
+ transformation substitute in [1] Y->X, Z->Y, X->Z
+
+ [1] Only defines the opposite transformation. However this must be the 
+ transpose of hor2ecef.
 """
 function ecef2hor(xecef, yecef, zecef, lat, lon)
     clat, slat = cos(lat), sin(lat)
@@ -250,6 +264,11 @@ Implementation from:
 .. [1] Stevens, B. L., Lewis, F. L., (1992). Aircraft control and simulation:
  dynamics, controls design, and autonomous systems. John Wiley & Sons.
  (page 36, formula 1.4-9)
+
+ Notes
+ -----
+ X, Y, Z ECEF are defined in a different way in [1]. In order to reproduce this
+ transformation substitute in [1] Y->X, Z->Y, X->Z
 """
 function hor2ecef(xh, yh, zh, lat, lon)
     clat, slat = cos(lat), sin(lat)
@@ -385,7 +404,7 @@ Implementation from:
 function quaternion2euler(q0, q1, q2, q3)
     psi = atan2(2 * (q1*q2 + q0*q3), q0*q0 + q1*q1 - q2*q2 - q3*q3)
     theta = asin(-2 * (q1*q3 - q0*q2))
-    phi = atan2(2 * (q2*q3 + q0 * q1), q0*q0 - q1*q1 - q2*q2 + q3*q3)
+    phi = atan2(2 * (q2*q3 + q0*q1), q0*q0 - q1*q1 - q2*q2 + q3*q3)
 
     return [psi, theta, phi]
 end
