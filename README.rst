@@ -33,6 +33,10 @@ This package is intended to provide utils for Flight Mechanics computations.
   * body
   * horizon
   * wind
+  * ECEF
+  * llh (latitude, longitude, height) over various ellipsoid models
+  
+* Quaternion and euler angles conversions
   
 * Anemometry:
 
