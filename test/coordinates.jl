@@ -26,6 +26,17 @@ quat_exp = [quat...]
 quat = euler2quaternion(euler_exp...)
 @test isapprox(quat, quat_exp / norm(quat_exp))
 
+psi, theta, phi = pi/4.0, pi/6.0, pi/12.0
+quat = euler2quaternion(psi, theta, phi)
+euler = quaternion2euler(quat...)
+@test isapprox([psi, theta, phi], euler)
+
+quat = [0.5, 0.1, 0.2, 0.7]
+quat = quat / norm(quat)
+euler = quaternion2euler(quat...)
+quat2 = euler2quaternion(euler...)
+@test isapprox(quat, quat2)
+
 ones_ = [1.0, 1.0, 1.0]
 
 # body2hor Euler
@@ -43,15 +54,27 @@ ones_ = [1.0, 1.0, 1.0]
 quat0 = euler2quaternion(0., 45*pi/180., 0.)
 quat1 = euler2quaternion(0., 0., 45*pi/180.)
 quat2 = euler2quaternion(45*pi/180., 0., 0.)
-
 @test [2*0.70710678118654757, 1, 0] ≈ body2hor(ones_..., quat0...)
 @test [1, 0, 2*0.70710678118654757] ≈ body2hor(ones_..., quat1...)
 @test [0, 2*0.70710678118654757, 1] ≈ body2hor(ones_..., quat2...)
-# hor2body
+# hor2body quaternionr
 @test ones_ ≈ hor2body(ones_..., 0., 0., 0.)
 @test ones_ ≈ hor2body(2*0.70710678118654757, 1, 0,  quat0...)
 @test ones_ ≈ hor2body(1, 0, 2*0.70710678118654757,  quat1...)
 @test ones_ ≈ hor2body(0, 2*0.70710678118654757, 1,  quat2...)
+
+# Test that quaternion and euler produce the same transformation
+psi, theta, phi = pi/4.0, pi/6.0, pi/12.0
+quat = euler2quaternion(psi, theta, phi)
+xh, yh, zh = 100.0, 10.0, -1.0
+xyz_b_e = hor2body(xh, yh, zh, psi, theta, phi)
+xyz_b_q = hor2body(xh, yh, zh, quat...)
+@test isapprox(xyz_b_e, xyz_b_q)
+
+xyz_h_e = body2hor(xyz_b_e..., psi, theta, phi)
+xyz_h_q = body2hor(xyz_b_e..., quat...)
+@test isapprox(xyz_h_e, xyz_h_q)
+
 
 #wind2hor
 @test ones_ ≈ wind2hor(ones_..., 0., 0., 0.)
@@ -105,6 +128,26 @@ xyz_hor =  ecef2hor(xecef, yecef, zecef, lat, lon)
 @test isapprox(xyz_hor, exp_xyz_hor)
 exp_xyz_ecef = [xecef, yecef, zecef]
 xyz_ecef = hor2ecef(exp_xyz_hor..., lat, lon)
+@test isapprox(xyz_ecef, exp_xyz_ecef)
+
+# Body <--> ECEF (uses ecef2hor and hor2body so not intensive testing necessary)
+import FlightMechanics: ecef2body, body2ecef
+xecef, yecef, zecef = 1.0, 10.0, 100.0
+psi, theta, phi = pi/4.0, pi/6.0, pi/12.0
+quat = euler2quaternion(psi, theta, phi)
+lat, lon = pi/3, pi/6
+xh, yh, zh = ecef2hor(xecef, yecef, zecef, lat, lon)
+exp_xyz_b = hor2body(xh, yh, zh, psi, theta, phi)
+
+xyz_body = ecef2body(xecef, yecef, zecef, lat, lon , psi, theta, phi)
+@test isapprox(xyz_body, exp_xyz_b)
+xyz_body = ecef2body(xecef, yecef, zecef, lat, lon , quat...)
+@test isapprox(xyz_body, exp_xyz_b)
+
+exp_xyz_ecef = [xecef, yecef, zecef]
+xyz_ecef = body2ecef(exp_xyz_b..., lat, lon, psi, theta, phi)
+@test isapprox(xyz_ecef, exp_xyz_ecef)
+xyz_ecef = body2ecef(exp_xyz_b..., lat, lon, quat...)
 @test isapprox(xyz_ecef, exp_xyz_ecef)
 
 # llh ECEF (using data from
