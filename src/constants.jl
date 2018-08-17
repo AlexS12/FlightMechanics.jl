@@ -18,10 +18,54 @@ module EarthConstants
 const GRAVITY_ACCEL = 9.80665  # Gravity of Ethe Earth (m/s^2)
 # Standard Gravitational Parameter
 # product of the gravitational constant G and the mass M of the body
+# TODO: review values with
+# Rogers, R. M. (2007). Applied mathematics in integrated navigation systems.
+# American Institute of Aeronautics and Astronautics. (Page 76, table 4.1)
 const STD_GRAV_PARAMETER = 3.986004418e14  # (m³/s²)
 const EARTH_MASS = 5.9722e24  # Mass of the Earth (kg)
 const GRAV_CONSTANT = 6.67384e11  # Gravitational constant (N·m²/kg²)
 const EARTH_MEAN_RADIUS = 6371000  # Mean radius of the Earth (m)
+
+# Ellipsoids
+struct Ellipsoid 
+    a :: Real  # semi-major axis
+    finv :: Real  # inverse of flattening
+    f :: Real  # flattening
+    b :: Real  # semi-minor axis
+    e2 :: Real  # eccentricity squared
+    ϵ2 :: Real  # second eccentricity squared
+end
+
+
+Ellipsoid(a, finv) = begin
+    f = 1.0 / finv
+    b = a * (1.0 - f)
+    e2 = 1.0 - (1.0 - f) ^ 2.0
+    ϵ2 = a*a / (b*b) - 1.0
+    Ellipsoid(a, finv, f, b, e2, ϵ2)
+end
+
+# Rogers, R. M. (2007). Applied mathematics in integrated navigation systems.
+# American Institute of Aeronautics and Astronautics. (Page 76, table 4.1)
+Clarke1866           = Ellipsoid(6378206.4  , 294.9786982)
+Clarke1880           = Ellipsoid(6378249.145, 294.465)
+International        = Ellipsoid(6378388.0  , 297.0)
+Bessel               = Ellipsoid(6377397.155, 299.1528128)
+Everest              = Ellipsoid(6377276.345, 300.8017)
+ModifiedEverest      = Ellipsoid(6377304.063, 300.8017)
+AustralianNational   = Ellipsoid(6378160.0  , 298.25)
+SouthAmerican1969    = Ellipsoid(6378160.0  , 298.25)
+Airy                 = Ellipsoid(6377564.396, 299.3249646)
+ModifiedAiry         = Ellipsoid(6377340.189, 299.3249646)
+Hough                = Ellipsoid(6378270.0  , 297.0)
+Fischer1960SouthAsia = Ellipsoid(6378155.0  , 298.3)
+Fischer1960Mercury   = Ellipsoid(6378166.0  , 298.3)
+Fischer1968          = Ellipsoid(6378150.0  , 298.3)
+WGS60                = Ellipsoid(6378165.0  , 298.3)
+WGS66                = Ellipsoid(6378145.0  , 298.25)
+WGS72                = Ellipsoid(6378135.0  , 298.26)
+WGS84                = Ellipsoid(6378137.0  , 298.257223563)
+
 end 
 
 
