@@ -45,7 +45,6 @@ function body2hor(xb, yb, zb, q0, q1, q2, q3)
     
     q02, q12, q22, q32 = q0*q0, q1*q1, q2*q2, q3*q3
     
-    # Linear kinematic equations
     xh = (q02+q12-q22-q32) * xb + 2*(q1*q2 - q0*q3) * yb + 2*(q1*q3 + q0*q2) * zb
     yh = 2*(q1*q2 + q0*q3) * xb + (q02-q12+q22-q32) * yb + 2*(q2*q3 - q0*q1) * zb
     zh = 2*(q1*q3 - q0*q2) * xb + 2*(q2*q3 + q0*q1) * yb + (q02-q12-q22+q32) * zb
@@ -66,7 +65,6 @@ function hor2body(xh, yh, zh, q0, q1, q2, q3)
     
     q02, q12, q22, q32 = q0*q0, q1*q1, q2*q2, q3*q3
     
-    # Linear kinematic equations
     xb = (q02+q12-q22-q32) * xh + 2*(q1*q2 + q0*q3) * yh + 2*(q1*q3 - q0*q2) * zh
     yb = 2*(q1*q2 - q0*q3) * xh + (q02-q12+q22-q32) * yh + 2*(q2*q3 + q0*q1) * zh
     zb = 2*(q1*q3 + q0*q2) * xh + 2*(q2*q3 - q0*q1) * yh + (q02-q12-q22+q32) * zh
@@ -93,7 +91,7 @@ function hor2body(xh, yh, zh, psi, theta, phi)
           c_theta * s_psi * yh -
           s_theta         * zh
 
-    yb = (s_phi * s_theta * c_psi - c_psi * s_psi) * xh +
+    yb = (s_phi * s_theta * c_psi - c_phi * s_psi) * xh +
          (s_phi * s_theta * s_psi + c_phi * c_psi) * yh +
          (s_phi * c_theta)                         * zh
 
