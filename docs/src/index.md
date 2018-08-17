@@ -18,11 +18,24 @@ FlightMechanics.atmosphere_isa(height::Real)
 
 ```@docs
 FlightMechanics.body2hor(xb, yb, zb, psi, theta, phi)
+FlightMechanics.body2hor(xb, yb, zb, q0, q1, q2, q3)
 FlightMechanics.hor2body(xh, yh, zh, psi, theta, phi)
+FlightMechanics.hor2body(xh, yh, zh, q0, q1, q2, q3)
 FlightMechanics.wind2hor(xw, yw, zw, chi, gamma, mu)
 FlightMechanics.hor2wind(xh, yh, zh, chi, gamma, mu)
 FlightMechanics.body2wind(xb, yb, zb, alpha, beta)
 FlightMechanics.wind2body(xw, yw, zw, alpha, beta)
+FlightMechanics.euler2quaternion(psi, theta, phi)
+FlightMechanics.quaternion2euler(q0, q1, q2, q3)
+FlightMechanics.ecef2hor(xecef, yecef, zecef, lat, lon)
+FlightMechanics.hor2ecef(xh, yh, zh, lat, lon)
+FlightMechanics.ecef2body(xecef, yecef, zecef, lat, lon, psi, theta, phi)
+FlightMechanics.ecef2body(xecef, yecef, zecef, lat, lon, q0, q1, q2, q3)
+FlightMechanics.body2ecef(xb, yb, zb, lat, lon, psi, theta, phi)
+FlightMechanics.body2ecef(xb, yb, zb, lat, lon, q0, q1, q2, q3)
+FlightMechanics.llh2ecef(lat, lon, height; ellipsoid=WGS84)
+FlightMechanics.ecef2llh(xecef, yecef, zecef; ellipsoid=WGS84)
+
 ```
 
 ### Anemometry

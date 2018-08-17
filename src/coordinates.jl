@@ -290,12 +290,6 @@ Transform body coordinates to ECEF coordinates.
 * `lat`: geodetic latitude (rad).
 * `lon`: longitude (rad).
 * `psi, theta, phi`: Euler angles. Yaw, pitch, roll (rad).
-
-Implementation from:
-
-.. [1] Stevens, B. L., Lewis, F. L., (1992). Aircraft control and simulation:
- dynamics, controls design, and autonomous systems. John Wiley & Sons.
- (page 36, formula 1.4-9)
 """
 function body2ecef(xb, yb, zb, lat, lon, psi, theta, phi)
     xh, yh, zh = body2hor(xb, yb, zb, psi, theta, phi)
