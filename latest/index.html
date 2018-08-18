@@ -62,6 +62,15 @@
         
             <li><a class="toctree-l3" href="#functions">Functions</a></li>
         
+        </ul>
+    
+
+    <li class="toctree-l2"><a href="#arguments-q0-q1-q2-q3-quaternions">Arguments q0, q1, q2, q3: quaternions.</a></li>
+    
+        <ul>
+        
+            <li><a class="toctree-l3" href="#anemometry">Anemometry</a></li>
+        
             <li><a class="toctree-l3" href="#index">Index</a></li>
         
         </ul>
@@ -193,7 +202,7 @@
 </tr>
 </tbody>
 </table>
-<p><a target='_blank' href='https://github.com/AlexS12/FlightMechanics.jl/blob/79a43d1baee4a465da5eb22f4094b515cd66f39e/src/atmosphere.jl#L7-L31' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/AlexS12/FlightMechanics.jl/blob/34bcc570570bbf670f1fae18adaceea882a87ac2/src/atmosphere.jl#L7-L31' class='documenter-source'>source</a><br></p>
 <p><a id='Coordinates-Systems-(coordinates.jl)-1'></a></p>
 <h3 id="coordinates-systems-coordinatesjl">Coordinates Systems (coordinates.jl)</h3>
 <p><a id='FlightMechanics.body2hor-NTuple{6,Any}' href='#FlightMechanics.body2hor-NTuple{6,Any}'>#</a>
@@ -207,7 +216,19 @@
 <li><code>xb, yb, zb</code>: body coordinates.</li>
 <li><code>psi, theta, phi</code>: Euler angles. Yaw, pitch, roll (rad).</li>
 </ul>
-<p><a target='_blank' href='https://github.com/AlexS12/FlightMechanics.jl/blob/79a43d1baee4a465da5eb22f4094b515cd66f39e/src/coordinates.jl#L4-L12' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/AlexS12/FlightMechanics.jl/blob/34bcc570570bbf670f1fae18adaceea882a87ac2/src/coordinates.jl#L4-L12' class='documenter-source'>source</a><br></p>
+<p><a id='FlightMechanics.body2hor-NTuple{7,Any}' href='#FlightMechanics.body2hor-NTuple{7,Any}'>#</a>
+<strong><code>FlightMechanics.body2hor</code></strong> &mdash; <em>Method</em>.</p>
+<pre><code>body2hor(xb, yb, zb, q0, q1, q2, q3)
+</code></pre>
+
+<p>Transform body coordinates to local horizon.</p>
+<p><strong>Arguments</strong></p>
+<ul>
+<li><code>xb, yb, zb</code>: body coordinates.</li>
+<li><code>q0, q1, q2, q3</code>: quaternions.</li>
+</ul>
+<p><a target='_blank' href='https://github.com/AlexS12/FlightMechanics.jl/blob/34bcc570570bbf670f1fae18adaceea882a87ac2/src/coordinates.jl#L35-L43' class='documenter-source'>source</a><br></p>
 <p><a id='FlightMechanics.hor2body-NTuple{6,Any}' href='#FlightMechanics.hor2body-NTuple{6,Any}'>#</a>
 <strong><code>FlightMechanics.hor2body</code></strong> &mdash; <em>Method</em>.</p>
 <pre><code>hor2body(xh, yh, zh, psi, theta, phi)
@@ -219,7 +240,19 @@
 <li><code>xh, yh, zh</code>: local horizon coordinates.</li>
 <li><code>psi, theta, phi</code>: Euler angles. Yaw, pitch, roll (rad).</li>
 </ul>
-<p><a target='_blank' href='https://github.com/AlexS12/FlightMechanics.jl/blob/79a43d1baee4a465da5eb22f4094b515cd66f39e/src/coordinates.jl#L75-L83' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/AlexS12/FlightMechanics.jl/blob/34bcc570570bbf670f1fae18adaceea882a87ac2/src/coordinates.jl#L75-L83' class='documenter-source'>source</a><br></p>
+<p><a id='FlightMechanics.hor2body-NTuple{7,Any}' href='#FlightMechanics.hor2body-NTuple{7,Any}'>#</a>
+<strong><code>FlightMechanics.hor2body</code></strong> &mdash; <em>Method</em>.</p>
+<pre><code>hor2body(xb, yb, zb, q0, q1, q2, q3)
+</code></pre>
+
+<p>Transform local horizon corrdinates to body coordinates.</p>
+<p><strong>Arguments</strong></p>
+<ul>
+<li><code>xh, yh, zh</code>: local horizon coordinates.</li>
+<li><code>q0, q1, q2, q3</code>: quaternions.</li>
+</ul>
+<p><a target='_blank' href='https://github.com/AlexS12/FlightMechanics.jl/blob/34bcc570570bbf670f1fae18adaceea882a87ac2/src/coordinates.jl#L55-L63' class='documenter-source'>source</a><br></p>
 <p><a id='FlightMechanics.wind2hor-NTuple{6,Any}' href='#FlightMechanics.wind2hor-NTuple{6,Any}'>#</a>
 <strong><code>FlightMechanics.wind2hor</code></strong> &mdash; <em>Method</em>.</p>
 <pre><code>wind2hor(xw, yw, zw, chi, gamma, mu)
@@ -231,7 +264,7 @@
 <li><code>xw, yw, zw</code>: wind coordinates.</li>
 <li><code>chi, gamma, mu</code>: Velocity angles. Yaw (azimuth), pitch(elevation), roll (rad).</li>
 </ul>
-<p><a target='_blank' href='https://github.com/AlexS12/FlightMechanics.jl/blob/79a43d1baee4a465da5eb22f4094b515cd66f39e/src/coordinates.jl#L106-L114' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/AlexS12/FlightMechanics.jl/blob/34bcc570570bbf670f1fae18adaceea882a87ac2/src/coordinates.jl#L106-L114' class='documenter-source'>source</a><br></p>
 <p><a id='FlightMechanics.hor2wind-NTuple{6,Any}' href='#FlightMechanics.hor2wind-NTuple{6,Any}'>#</a>
 <strong><code>FlightMechanics.hor2wind</code></strong> &mdash; <em>Method</em>.</p>
 <pre><code>hor2wind(xh, yh, zh, chi, gamma, mu)
@@ -243,7 +276,7 @@
 <li><code>xh, yh, zh</code>: local horizon coordinates.</li>
 <li><code>chi, gamma, mu</code>: Velocity angles. Yaw (azimuth), pitch(elevation), roll (rad).</li>
 </ul>
-<p><a target='_blank' href='https://github.com/AlexS12/FlightMechanics.jl/blob/79a43d1baee4a465da5eb22f4094b515cd66f39e/src/coordinates.jl#L137-L145' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/AlexS12/FlightMechanics.jl/blob/34bcc570570bbf670f1fae18adaceea882a87ac2/src/coordinates.jl#L137-L145' class='documenter-source'>source</a><br></p>
 <p><a id='FlightMechanics.body2wind-NTuple{5,Any}' href='#FlightMechanics.body2wind-NTuple{5,Any}'>#</a>
 <strong><code>FlightMechanics.body2wind</code></strong> &mdash; <em>Method</em>.</p>
 <pre><code>body2wind(xb, yb, zb, alpha, beta)
@@ -255,7 +288,7 @@
 <li><code>xb, yb, zb</code>: body coordinates.</li>
 <li><code>alpha, beta</code>: Aerodynamic angles. Angle of attack, angle of side-slip (rad).</li>
 </ul>
-<p><a target='_blank' href='https://github.com/AlexS12/FlightMechanics.jl/blob/79a43d1baee4a465da5eb22f4094b515cd66f39e/src/coordinates.jl#L168-L176' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/AlexS12/FlightMechanics.jl/blob/34bcc570570bbf670f1fae18adaceea882a87ac2/src/coordinates.jl#L168-L176' class='documenter-source'>source</a><br></p>
 <p><a id='FlightMechanics.wind2body-NTuple{5,Any}' href='#FlightMechanics.wind2body-NTuple{5,Any}'>#</a>
 <strong><code>FlightMechanics.wind2body</code></strong> &mdash; <em>Method</em>.</p>
 <pre><code>wind2body(xw, yw, zw, alpha, beta)
@@ -267,7 +300,148 @@
 <li><code>xw, yw, zw</code>: wind coordinates.</li>
 <li><code>alpha, beta</code>: Aerodynamic angles. Angle of attack, angle of side-slip (rad).</li>
 </ul>
-<p><a target='_blank' href='https://github.com/AlexS12/FlightMechanics.jl/blob/79a43d1baee4a465da5eb22f4094b515cd66f39e/src/coordinates.jl#L190-L198' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/AlexS12/FlightMechanics.jl/blob/34bcc570570bbf670f1fae18adaceea882a87ac2/src/coordinates.jl#L190-L198' class='documenter-source'>source</a><br></p>
+<p><a id='FlightMechanics.euler2quaternion-Tuple{Any,Any,Any}' href='#FlightMechanics.euler2quaternion-Tuple{Any,Any,Any}'>#</a>
+<strong><code>FlightMechanics.euler2quaternion</code></strong> &mdash; <em>Method</em>.</p>
+<pre><code>euler2quaternion(psi, theta, phi)
+</code></pre>
+
+<p>Transform Euler angles orientation to quaternion orientation.</p>
+<p><strong>Arguments</strong></p>
+<ul>
+<li><code>psi, theta, phi</code>: Euler angles. Yaw, pitch, roll (rad).</li>
+</ul>
+<p>Implementation from: .. [1] Zipfel, P. H. (2007). Modeling and simulation of aerospace vehicle  dynamics. American Institute of Aeronautics and Astronautics.  (page 126, formula 4.78)</p>
+<p><a target='_blank' href='https://github.com/AlexS12/FlightMechanics.jl/blob/34bcc570570bbf670f1fae18adaceea882a87ac2/src/coordinates.jl#L355-L367' class='documenter-source'>source</a><br></p>
+<p><a id='FlightMechanics.quaternion2euler-NTuple{4,Any}' href='#FlightMechanics.quaternion2euler-NTuple{4,Any}'>#</a>
+<strong><code>FlightMechanics.quaternion2euler</code></strong> &mdash; <em>Method</em>.</p>
+<pre><code>quaternion2euler(q0, q1, q2, q3)
+</code></pre>
+
+<p>Transform quaternion orientation to Euler angles orientation.</p>
+<h1 id="arguments-q0-q1-q2-q3-quaternions">Arguments <code>q0, q1, q2, q3</code>: quaternions.</h1>
+<p>Implementation from: .. [1] Zipfel, P. H. (2007). Modeling and simulation of aerospace vehicle  dynamics. American Institute of Aeronautics and Astronautics.  (page 127, formula 4.82)</p>
+<p><a target='_blank' href='https://github.com/AlexS12/FlightMechanics.jl/blob/34bcc570570bbf670f1fae18adaceea882a87ac2/src/coordinates.jl#L383-L395' class='documenter-source'>source</a><br></p>
+<p><a id='FlightMechanics.ecef2hor-NTuple{5,Any}' href='#FlightMechanics.ecef2hor-NTuple{5,Any}'>#</a>
+<strong><code>FlightMechanics.ecef2hor</code></strong> &mdash; <em>Method</em>.</p>
+<pre><code>ecef2hor(xecef, yecef, zecef, lat, lon)
+</code></pre>
+
+<p>Transform ECEF (Earth Fixed Earth Centered) coordinates to local horizon coordinates using geodetic latitude and longitude.</p>
+<p><strong>Arguments</strong></p>
+<ul>
+<li><code>xecef, yecef, zecef</code>: ECEF coordinates.</li>
+<li><code>lat</code>: geodetic latitude (rad).</li>
+<li><code>lon</code>: longitude (rad).</li>
+</ul>
+<p>Implementation from:</p>
+<p>.. [1] Stevens, B. L., Lewis, F. L., (1992). Aircraft control and simulation:  dynamics, controls design, and autonomous systems. John Wiley &amp; Sons.  (page 36, formula 1.4-9)</p>
+<p><strong>Notes</strong></p>
+<p>X, Y, Z ECEF are defined in a different way in [1]. In order to reproduce this  transformation substitute in [1] Y-&gt;X, Z-&gt;Y, X-&gt;Z</p>
+<p>[1] Only defines the opposite transformation. However this must be the   transpose of hor2ecef.</p>
+<p><a target='_blank' href='https://github.com/AlexS12/FlightMechanics.jl/blob/34bcc570570bbf670f1fae18adaceea882a87ac2/src/coordinates.jl#L212-L236' class='documenter-source'>source</a><br></p>
+<p><a id='FlightMechanics.hor2ecef-NTuple{5,Any}' href='#FlightMechanics.hor2ecef-NTuple{5,Any}'>#</a>
+<strong><code>FlightMechanics.hor2ecef</code></strong> &mdash; <em>Method</em>.</p>
+<pre><code>hor2ecef(xh, yh, zh, lat, lon)
+</code></pre>
+
+<p>Transform local horizon coordinates to ECEF (Earth Centered Earth Fixed)  coordinates using geodetic latitude and longitude.</p>
+<p><strong>Arguments</strong></p>
+<ul>
+<li><code>xh, yh, zh</code>: local horizon coordinates.</li>
+<li><code>lat</code>: geodetic latitude (rad).</li>
+<li><code>lon</code>: longitude (rad).</li>
+</ul>
+<p>Implementation from:</p>
+<p>.. [1] Stevens, B. L., Lewis, F. L., (1992). Aircraft control and simulation:  dynamics, controls design, and autonomous systems. John Wiley &amp; Sons.  (page 36, formula 1.4-9)</p>
+<p><strong>Notes</strong></p>
+<p>X, Y, Z ECEF are defined in a different way in [1]. In order to reproduce this  transformation substitute in [1] Y-&gt;X, Z-&gt;Y, X-&gt;Z</p>
+<p><a target='_blank' href='https://github.com/AlexS12/FlightMechanics.jl/blob/34bcc570570bbf670f1fae18adaceea882a87ac2/src/coordinates.jl#L249-L270' class='documenter-source'>source</a><br></p>
+<p><a id='FlightMechanics.ecef2body-NTuple{8,Any}' href='#FlightMechanics.ecef2body-NTuple{8,Any}'>#</a>
+<strong><code>FlightMechanics.ecef2body</code></strong> &mdash; <em>Method</em>.</p>
+<pre><code>ecef2body(xecef, yecef, zecef, lat, lon, psi, theta, phi)
+</code></pre>
+
+<p>Transform ECEF coordinates to body coordinates.</p>
+<p><strong>Arguments</strong></p>
+<ul>
+<li><code>xecef, yecef, zecef</code>: ECEF (Earth Centered Earth Fixed) coordinates.</li>
+<li><code>lat</code>: geodetic latitude (rad).</li>
+<li><code>lon</code>: longitude (rad).</li>
+<li><code>psi, theta, phi</code>: Euler angles. Yaw, pitch, roll (rad).</li>
+</ul>
+<p><a target='_blank' href='https://github.com/AlexS12/FlightMechanics.jl/blob/34bcc570570bbf670f1fae18adaceea882a87ac2/src/coordinates.jl#L301-L311' class='documenter-source'>source</a><br></p>
+<p><a id='FlightMechanics.ecef2body-NTuple{9,Any}' href='#FlightMechanics.ecef2body-NTuple{9,Any}'>#</a>
+<strong><code>FlightMechanics.ecef2body</code></strong> &mdash; <em>Method</em>.</p>
+<pre><code>ecef2body(xecef, yecef, zecef, lat, lon, q0, q1, q2, q3)
+</code></pre>
+
+<p>Transform ECEF coordinates to body coordinates.</p>
+<p><strong>Arguments</strong></p>
+<ul>
+<li><code>xecef, yecef, zecef</code>: ECEF (Earth Centered Earth Fixed) coordinates.</li>
+<li><code>lat</code>: geodetic latitude (rad).</li>
+<li><code>lon</code>: longitude (rad).</li>
+<li><code>q0, q1, q2, q3</code>: quaternions.</li>
+</ul>
+<p><a target='_blank' href='https://github.com/AlexS12/FlightMechanics.jl/blob/34bcc570570bbf670f1fae18adaceea882a87ac2/src/coordinates.jl#L337-L347' class='documenter-source'>source</a><br></p>
+<p><a id='FlightMechanics.body2ecef-NTuple{8,Any}' href='#FlightMechanics.body2ecef-NTuple{8,Any}'>#</a>
+<strong><code>FlightMechanics.body2ecef</code></strong> &mdash; <em>Method</em>.</p>
+<pre><code>body2ecef(xb, yb, zb, lat, lon, psi, theta, phi)
+</code></pre>
+
+<p>Transform body coordinates to ECEF coordinates.</p>
+<p><strong>Arguments</strong></p>
+<ul>
+<li><code>xb, yb, zb</code>: body coordinates.</li>
+<li><code>lat</code>: geodetic latitude (rad).</li>
+<li><code>lon</code>: longitude (rad).</li>
+<li><code>psi, theta, phi</code>: Euler angles. Yaw, pitch, roll (rad).</li>
+</ul>
+<p><a target='_blank' href='https://github.com/AlexS12/FlightMechanics.jl/blob/34bcc570570bbf670f1fae18adaceea882a87ac2/src/coordinates.jl#L283-L293' class='documenter-source'>source</a><br></p>
+<p><a id='FlightMechanics.body2ecef-NTuple{9,Any}' href='#FlightMechanics.body2ecef-NTuple{9,Any}'>#</a>
+<strong><code>FlightMechanics.body2ecef</code></strong> &mdash; <em>Method</em>.</p>
+<pre><code>body2ecef(xb, yb, zb, lat, lon, q0, q1, q2, q3)
+</code></pre>
+
+<p>Transform body coordinates to ECEF coordinates.</p>
+<p><strong>Arguments</strong></p>
+<ul>
+<li><code>xb, yb, zb</code>: body coordinates.</li>
+<li><code>lat</code>: geodetic latitude (rad).</li>
+<li><code>lon</code>: longitude (rad).</li>
+<li><code>q0, q1, q2, q3</code>: quaternions.</li>
+</ul>
+<p><a target='_blank' href='https://github.com/AlexS12/FlightMechanics.jl/blob/34bcc570570bbf670f1fae18adaceea882a87ac2/src/coordinates.jl#L319-L329' class='documenter-source'>source</a><br></p>
+<p><a id='FlightMechanics.llh2ecef-Tuple{Any,Any,Any}' href='#FlightMechanics.llh2ecef-Tuple{Any,Any,Any}'>#</a>
+<strong><code>FlightMechanics.llh2ecef</code></strong> &mdash; <em>Method</em>.</p>
+<pre><code>llh2ecef(lat, lon, height; ellipsoid=WGS84)
+</code></pre>
+
+<p>Transform geodetic latitude, longitude and ellipsoidal height to ECEF for the given ellipsoid (default ellipsoid is WGS84)</p>
+<p>Implementation from: .. [1] Rogers, R. M. (2007). Applied mathematics in integrated navigation  systems. American Institute of Aeronautics and Astronautics.  (Page 75, equations 4.20, 4.21, 4.22)</p>
+<p><a target='_blank' href='https://github.com/AlexS12/FlightMechanics.jl/blob/34bcc570570bbf670f1fae18adaceea882a87ac2/src/coordinates.jl#L405-L415' class='documenter-source'>source</a><br></p>
+<p><a id='FlightMechanics.ecef2llh-Tuple{Any,Any,Any}' href='#FlightMechanics.ecef2llh-Tuple{Any,Any,Any}'>#</a>
+<strong><code>FlightMechanics.ecef2llh</code></strong> &mdash; <em>Method</em>.</p>
+<pre><code>ecef2llh(xecef, yecef, zecef; ellipsoid=WGS84)
+</code></pre>
+
+<p>Transform ECEF coordinates to geodetic latitude, longitude and ellipsoidal  height for the given ellipsoid (default ellipsoid is WGS84)</p>
+<p>Implementation from: .. [1] Bowring, B. R. (1976). Transformation from spatial to geographical   coordinates. Survey review, 23(181), 323-327. .. [2] Bowring, B. R. (1985). The accuracy of geodetic latitude and height  equations. Survey Review, 28(218), 202-206.</p>
+<p><strong>Notes</strong></p>
+<ul>
+<li>The transformation is direct without iterations as [1] introduced the need to</li>
+</ul>
+<p>iterate for near Earth positions.</p>
+<ul>
+<li>[2] is an updated of incresed accuracy of [1]. The former is used for</li>
+</ul>
+<p>in this implementation although the latter implementation is commented in the  code.</p>
+<ul>
+<li>Model becomes unstable if latitude is close to 90º. An alternative equation</li>
+</ul>
+<p>can be found in [2] equation (16) but has not been implemented.</p>
+<p><a target='_blank' href='https://github.com/AlexS12/FlightMechanics.jl/blob/34bcc570570bbf670f1fae18adaceea882a87ac2/src/coordinates.jl#L431-L452' class='documenter-source'>source</a><br></p>
 <p><a id='Anemometry-1'></a></p>
 <h3 id="anemometry">Anemometry</h3>
 <p><a id='FlightMechanics.qc2cas-Tuple{Any}' href='#FlightMechanics.qc2cas-Tuple{Any}'>#</a>
@@ -278,7 +452,7 @@
 <p>Calculate calibrated airspeed from ASI (Air Speed indicator), differential pressure between impact pressure and static pressure. qc = p_t - p_s</p>
 <p>Implementation from:</p>
 <p>.. [1] Ward, D. T. (1993). Introduction to flight test engineering. Elsevier     Science Ltd. (page 13, formula 2.13)</p>
-<p><a target='_blank' href='https://github.com/AlexS12/FlightMechanics.jl/blob/79a43d1baee4a465da5eb22f4094b515cd66f39e/src/anemometry.jl#L10-L21' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/AlexS12/FlightMechanics.jl/blob/34bcc570570bbf670f1fae18adaceea882a87ac2/src/anemometry.jl#L10-L21' class='documenter-source'>source</a><br></p>
 <p><a id='FlightMechanics.qc2tas-Tuple{Any,Any,Any}' href='#FlightMechanics.qc2tas-Tuple{Any,Any,Any}'>#</a>
 <strong><code>FlightMechanics.qc2tas</code></strong> &mdash; <em>Method</em>.</p>
 <pre><code>qc2tas(qc)
@@ -287,7 +461,7 @@
 <p>Calculate true airspeed from ASI (Air Speed indicator), differential pressure between impact pressure and static pressure (qc = p_t - p_s), rho and p.</p>
 <p>Implementation from:</p>
 <p>.. [1] Ward, D. T. (1993). Introduction to flight test engineering. Elsevier     Science Ltd. (page 12, based on formula 2.11)</p>
-<p><a target='_blank' href='https://github.com/AlexS12/FlightMechanics.jl/blob/79a43d1baee4a465da5eb22f4094b515cd66f39e/src/anemometry.jl#L28-L39' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/AlexS12/FlightMechanics.jl/blob/34bcc570570bbf670f1fae18adaceea882a87ac2/src/anemometry.jl#L28-L39' class='documenter-source'>source</a><br></p>
 <p><a id='FlightMechanics.qc2eas-Tuple{Any,Any}' href='#FlightMechanics.qc2eas-Tuple{Any,Any}'>#</a>
 <strong><code>FlightMechanics.qc2eas</code></strong> &mdash; <em>Method</em>.</p>
 <pre><code>qc2eas(qc, p)
@@ -296,7 +470,7 @@
 <p>Calculate equivalent airspeed from ASI (Air Speed indicator), differential pressure between impact pressure and static pressure (qc = p_t - p_s) and p.</p>
 <p>Implementation from:</p>
 <p>.. [1] Ward, D. T. (1993). Introduction to flight test engineering. Elsevier     Science Ltd.</p>
-<p><a target='_blank' href='https://github.com/AlexS12/FlightMechanics.jl/blob/79a43d1baee4a465da5eb22f4094b515cd66f39e/src/anemometry.jl#L46-L56' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/AlexS12/FlightMechanics.jl/blob/34bcc570570bbf670f1fae18adaceea882a87ac2/src/anemometry.jl#L46-L56' class='documenter-source'>source</a><br></p>
 <p><a id='FlightMechanics.tas2eas-Tuple{Any,Any}' href='#FlightMechanics.tas2eas-Tuple{Any,Any}'>#</a>
 <strong><code>FlightMechanics.tas2eas</code></strong> &mdash; <em>Method</em>.</p>
 <pre><code>tas2eas(tas, ρ)
@@ -305,7 +479,7 @@
 <p>Calculate equivalent airspeed from true airspeed and density at current  altitude (ρ).</p>
 <p>Implementation from:</p>
 <p>.. [1] Ward, D. T. (1993). Introduction to flight test engineering. Elsevier     Science Ltd. (page 13, formula 2.15)</p>
-<p><a target='_blank' href='https://github.com/AlexS12/FlightMechanics.jl/blob/79a43d1baee4a465da5eb22f4094b515cd66f39e/src/anemometry.jl#L63-L73' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/AlexS12/FlightMechanics.jl/blob/34bcc570570bbf670f1fae18adaceea882a87ac2/src/anemometry.jl#L63-L73' class='documenter-source'>source</a><br></p>
 <p><a id='FlightMechanics.eas2tas-Tuple{Any,Any}' href='#FlightMechanics.eas2tas-Tuple{Any,Any}'>#</a>
 <strong><code>FlightMechanics.eas2tas</code></strong> &mdash; <em>Method</em>.</p>
 <pre><code>eas2tas(qc, ρ)
@@ -314,35 +488,35 @@
 <p>Calculate true airspeed from equivalent airspeed and density at current  altitude (ρ).</p>
 <p>Implementation from:</p>
 <p>.. [1] Ward, D. T. (1993). Introduction to flight test engineering. Elsevier     Science Ltd. (page 13, formula 2.15)</p>
-<p><a target='_blank' href='https://github.com/AlexS12/FlightMechanics.jl/blob/79a43d1baee4a465da5eb22f4094b515cd66f39e/src/anemometry.jl#L80-L90' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/AlexS12/FlightMechanics.jl/blob/34bcc570570bbf670f1fae18adaceea882a87ac2/src/anemometry.jl#L80-L90' class='documenter-source'>source</a><br></p>
 <p><a id='FlightMechanics.cas2eas-Tuple{Any,Any,Any}' href='#FlightMechanics.cas2eas-Tuple{Any,Any,Any}'>#</a>
 <strong><code>FlightMechanics.cas2eas</code></strong> &mdash; <em>Method</em>.</p>
 <pre><code>cas2eas(cas, ρ, p)
 </code></pre>
 
 <p>Calculate equivalent airspeed from calibrated airspeed, density (ρ) and pressure (p) at the current altitude.</p>
-<p><a target='_blank' href='https://github.com/AlexS12/FlightMechanics.jl/blob/79a43d1baee4a465da5eb22f4094b515cd66f39e/src/anemometry.jl#L97-L102' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/AlexS12/FlightMechanics.jl/blob/34bcc570570bbf670f1fae18adaceea882a87ac2/src/anemometry.jl#L97-L102' class='documenter-source'>source</a><br></p>
 <p><a id='FlightMechanics.eas2cas-Tuple{Any,Any,Any}' href='#FlightMechanics.eas2cas-Tuple{Any,Any,Any}'>#</a>
 <strong><code>FlightMechanics.eas2cas</code></strong> &mdash; <em>Method</em>.</p>
 <pre><code>eas2cas(eas, ρ, p)
 </code></pre>
 
 <p>Calculate calibrated airspeed from equivalent airspeed, density (ρ) and pressure (p) at the current altitude.</p>
-<p><a target='_blank' href='https://github.com/AlexS12/FlightMechanics.jl/blob/79a43d1baee4a465da5eb22f4094b515cd66f39e/src/anemometry.jl#L110-L115' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/AlexS12/FlightMechanics.jl/blob/34bcc570570bbf670f1fae18adaceea882a87ac2/src/anemometry.jl#L110-L115' class='documenter-source'>source</a><br></p>
 <p><a id='FlightMechanics.cas2tas-Tuple{Any,Any,Any}' href='#FlightMechanics.cas2tas-Tuple{Any,Any,Any}'>#</a>
 <strong><code>FlightMechanics.cas2tas</code></strong> &mdash; <em>Method</em>.</p>
 <pre><code>cas2tas(cas, ρ, p)
 </code></pre>
 
 <p>Calculate true airspeed from calibrated airspeed, density (ρ) and pressure (p) at the current altitude.</p>
-<p><a target='_blank' href='https://github.com/AlexS12/FlightMechanics.jl/blob/79a43d1baee4a465da5eb22f4094b515cd66f39e/src/anemometry.jl#L123-L128' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/AlexS12/FlightMechanics.jl/blob/34bcc570570bbf670f1fae18adaceea882a87ac2/src/anemometry.jl#L123-L128' class='documenter-source'>source</a><br></p>
 <p><a id='FlightMechanics.tas2cas-Tuple{Any,Any,Any}' href='#FlightMechanics.tas2cas-Tuple{Any,Any,Any}'>#</a>
 <strong><code>FlightMechanics.tas2cas</code></strong> &mdash; <em>Method</em>.</p>
 <pre><code>cas2tas(cas, ρ, p)
 </code></pre>
 
 <p>Calculate true airspeed from calibrated airspeed, density (ρ) and pressure (p) at the current altitude.</p>
-<p><a target='_blank' href='https://github.com/AlexS12/FlightMechanics.jl/blob/79a43d1baee4a465da5eb22f4094b515cd66f39e/src/anemometry.jl#L143-L148' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/AlexS12/FlightMechanics.jl/blob/34bcc570570bbf670f1fae18adaceea882a87ac2/src/anemometry.jl#L143-L148' class='documenter-source'>source</a><br></p>
 <p><a id='FlightMechanics.tas_alpha_beta_from_uvw-Tuple{Any,Any,Any}' href='#FlightMechanics.tas_alpha_beta_from_uvw-Tuple{Any,Any,Any}'>#</a>
 <strong><code>FlightMechanics.tas_alpha_beta_from_uvw</code></strong> &mdash; <em>Method</em>.</p>
 <pre><code>tas_alpha_beta_from_uvw(u, v, w)
@@ -351,7 +525,7 @@
 <p>Calculate true air speed (TAS), angle of attack (α) and angle of side-slip (β) from aerodynamic velocity expressed in body axis.</p>
 <p>Implementation from:</p>
 <p>.. [1] Etkin, B. (2005). Dynamics of atmospheric flight. Dover Publications      (page 114, formulas 4.3,2 and 4.3,3)</p>
-<p><a target='_blank' href='https://github.com/AlexS12/FlightMechanics.jl/blob/79a43d1baee4a465da5eb22f4094b515cd66f39e/src/anemometry.jl#L163-L173' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/AlexS12/FlightMechanics.jl/blob/34bcc570570bbf670f1fae18adaceea882a87ac2/src/anemometry.jl#L163-L173' class='documenter-source'>source</a><br></p>
 <p><a id='FlightMechanics.incompressible_qinf-Tuple{Any,Any}' href='#FlightMechanics.incompressible_qinf-Tuple{Any,Any}'>#</a>
 <strong><code>FlightMechanics.incompressible_qinf</code></strong> &mdash; <em>Method</em>.</p>
 <pre><code>incompressible_qinf(tas, ρ)
@@ -359,7 +533,7 @@
 
 <p>Calculate incompressible dynamic pressure from true airspeed (tas) and density (ρ) at current altitude.</p>
 <p>.. [1] Ward, D. T. (1993). Introduction to flight test engineering. Elsevier     Science Ltd. (page 13, formula 2.14)</p>
-<p><a target='_blank' href='https://github.com/AlexS12/FlightMechanics.jl/blob/79a43d1baee4a465da5eb22f4094b515cd66f39e/src/anemometry.jl#L183-L191' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/AlexS12/FlightMechanics.jl/blob/34bcc570570bbf670f1fae18adaceea882a87ac2/src/anemometry.jl#L183-L191' class='documenter-source'>source</a><br></p>
 <p><a id='FlightMechanics.compressible_qinf-Tuple{Any,Any}' href='#FlightMechanics.compressible_qinf-Tuple{Any,Any}'>#</a>
 <strong><code>FlightMechanics.compressible_qinf</code></strong> &mdash; <em>Method</em>.</p>
 <pre><code>compressible_qinf(tas, p, a)
@@ -372,24 +546,36 @@
 <li>Supersonic case: to be implemented.</li>
 </ul>
 <p>.. [1] Ward, D. T. (1993). Introduction to flight test engineering. Elsevier     Science Ltd. (page 12)</p>
-<p><a target='_blank' href='https://github.com/AlexS12/FlightMechanics.jl/blob/79a43d1baee4a465da5eb22f4094b515cd66f39e/src/anemometry.jl#L197-L210' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/AlexS12/FlightMechanics.jl/blob/34bcc570570bbf670f1fae18adaceea882a87ac2/src/anemometry.jl#L197-L210' class='documenter-source'>source</a><br></p>
 <p><a id='Index-1'></a></p>
 <h2 id="index">Index</h2>
 <ul>
 <li><a href=".#FlightMechanics.atmosphere_isa-Tuple{Real}"><code>FlightMechanics.atmosphere_isa</code></a></li>
+<li><a href=".#FlightMechanics.body2ecef-NTuple{8,Any}"><code>FlightMechanics.body2ecef</code></a></li>
+<li><a href=".#FlightMechanics.body2ecef-NTuple{9,Any}"><code>FlightMechanics.body2ecef</code></a></li>
 <li><a href=".#FlightMechanics.body2hor-NTuple{6,Any}"><code>FlightMechanics.body2hor</code></a></li>
+<li><a href=".#FlightMechanics.body2hor-NTuple{7,Any}"><code>FlightMechanics.body2hor</code></a></li>
 <li><a href=".#FlightMechanics.body2wind-NTuple{5,Any}"><code>FlightMechanics.body2wind</code></a></li>
 <li><a href=".#FlightMechanics.cas2eas-Tuple{Any,Any,Any}"><code>FlightMechanics.cas2eas</code></a></li>
 <li><a href=".#FlightMechanics.cas2tas-Tuple{Any,Any,Any}"><code>FlightMechanics.cas2tas</code></a></li>
 <li><a href=".#FlightMechanics.compressible_qinf-Tuple{Any,Any}"><code>FlightMechanics.compressible_qinf</code></a></li>
 <li><a href=".#FlightMechanics.eas2cas-Tuple{Any,Any,Any}"><code>FlightMechanics.eas2cas</code></a></li>
 <li><a href=".#FlightMechanics.eas2tas-Tuple{Any,Any}"><code>FlightMechanics.eas2tas</code></a></li>
+<li><a href=".#FlightMechanics.ecef2body-NTuple{9,Any}"><code>FlightMechanics.ecef2body</code></a></li>
+<li><a href=".#FlightMechanics.ecef2body-NTuple{8,Any}"><code>FlightMechanics.ecef2body</code></a></li>
+<li><a href=".#FlightMechanics.ecef2hor-NTuple{5,Any}"><code>FlightMechanics.ecef2hor</code></a></li>
+<li><a href=".#FlightMechanics.ecef2llh-Tuple{Any,Any,Any}"><code>FlightMechanics.ecef2llh</code></a></li>
+<li><a href=".#FlightMechanics.euler2quaternion-Tuple{Any,Any,Any}"><code>FlightMechanics.euler2quaternion</code></a></li>
 <li><a href=".#FlightMechanics.hor2body-NTuple{6,Any}"><code>FlightMechanics.hor2body</code></a></li>
+<li><a href=".#FlightMechanics.hor2body-NTuple{7,Any}"><code>FlightMechanics.hor2body</code></a></li>
+<li><a href=".#FlightMechanics.hor2ecef-NTuple{5,Any}"><code>FlightMechanics.hor2ecef</code></a></li>
 <li><a href=".#FlightMechanics.hor2wind-NTuple{6,Any}"><code>FlightMechanics.hor2wind</code></a></li>
 <li><a href=".#FlightMechanics.incompressible_qinf-Tuple{Any,Any}"><code>FlightMechanics.incompressible_qinf</code></a></li>
+<li><a href=".#FlightMechanics.llh2ecef-Tuple{Any,Any,Any}"><code>FlightMechanics.llh2ecef</code></a></li>
 <li><a href=".#FlightMechanics.qc2cas-Tuple{Any}"><code>FlightMechanics.qc2cas</code></a></li>
 <li><a href=".#FlightMechanics.qc2eas-Tuple{Any,Any}"><code>FlightMechanics.qc2eas</code></a></li>
 <li><a href=".#FlightMechanics.qc2tas-Tuple{Any,Any,Any}"><code>FlightMechanics.qc2tas</code></a></li>
+<li><a href=".#FlightMechanics.quaternion2euler-NTuple{4,Any}"><code>FlightMechanics.quaternion2euler</code></a></li>
 <li><a href=".#FlightMechanics.tas2cas-Tuple{Any,Any,Any}"><code>FlightMechanics.tas2cas</code></a></li>
 <li><a href=".#FlightMechanics.tas2eas-Tuple{Any,Any}"><code>FlightMechanics.tas2eas</code></a></li>
 <li><a href=".#FlightMechanics.tas_alpha_beta_from_uvw-Tuple{Any,Any,Any}"><code>FlightMechanics.tas_alpha_beta_from_uvw</code></a></li>
@@ -440,5 +626,5 @@
 
 <!--
 MkDocs version : 0.17.5
-Build Date UTC : 2018-08-17 23:53:46
+Build Date UTC : 2018-08-18 00:02:33
 -->
