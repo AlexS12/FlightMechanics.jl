@@ -21,6 +21,7 @@ const GRAVITY_ACCEL = 9.80665  # Gravity of Ethe Earth (m/s^2)
 # TODO: review values with
 # Rogers, R. M. (2007). Applied mathematics in integrated navigation systems.
 # American Institute of Aeronautics and Astronautics. (Page 76, table 4.1)
+const ROT_VELOCITY = 7.292115e-5  # Angular velocity ω_i/e (rad/s)
 const STD_GRAV_PARAMETER = 3.986004418e14  # (m³/s²)
 const EARTH_MASS = 5.9722e24  # Mass of the Earth (kg)
 const GRAV_CONSTANT = 6.67384e11  # Gravitational constant (N·m²/kg²)
