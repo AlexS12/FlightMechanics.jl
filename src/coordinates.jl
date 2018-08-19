@@ -427,6 +427,27 @@ function body2ecef(xb, yb, zb, lat, lon, psi, theta, phi)
     return [xecef, yecef, zecef]
 end
 
+"""
+    rot_matrix_body2ecef(lat, lon, psi, theta, phi)
+
+Rotation matrix to transform from body to ECEF
+
+# Arguments
+* `lat`: geodetic latitude (rad).
+* `lon`: longitude (rad).
+* `psi, theta, phi`: Euler angles. Yaw, pitch, roll (rad).
+
+Implementation from:
+.. [1] Stevens, B. L., Lewis, F. L., (1992). Aircraft control and simulation:
+ dynamics, controls design, and autonomous systems. John Wiley & Sons.
+ (page 37, formula 1.4-11)
+"""
+function rot_matrix_body2ecef(lat, lon, psi, theta, phi)
+    r1 = rot_matrix_body2hor(psi, theta, phi)
+    r2 = rot_matrix_hor2ecef(lat, lon)
+    return r2 * r1
+end
+
 
 """
     ecef2body(xecef, yecef, zecef, lat, lon, psi, theta, phi)
@@ -443,6 +464,28 @@ function ecef2body(xecef, yecef, zecef, lat, lon, psi, theta, phi)
     xh, yh, zh = ecef2hor(xecef, yecef, zecef, lat, lon)
     xb, yb, zb = hor2body(xh, yh, zh, psi, theta, phi)
     return [xb, yb, zb]
+end
+
+
+"""
+    rot_matrix_ecef2body(lat, lon, psi, theta, phi)
+
+Rotation matrix to transform from ECEF to body
+
+# Arguments
+* `lat`: geodetic latitude (rad).
+* `lon`: longitude (rad).
+* `psi, theta, phi`: Euler angles. Yaw, pitch, roll (rad).
+
+Implementation from:
+.. [1] Stevens, B. L., Lewis, F. L., (1992). Aircraft control and simulation:
+ dynamics, controls design, and autonomous systems. John Wiley & Sons.
+ (page 37, formula 1.4-11)
+"""
+function rot_matrix_ecef2body(lat, lon, psi, theta, phi)
+    r1 = rot_matrix_hor2body(psi, theta, phi)
+    r2 = rot_matrix_ecef2hor(lat, lon)
+    return r1 * r2
 end
 
 
