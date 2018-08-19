@@ -91,7 +91,7 @@ function atmosphere_isa(height)
         p = p0 * (T0 / T) ^ (G0 / (R_AIR * alpha))
 
     else
-        throw(DomainError())
+        throw(DomainError(height, "height must be between 0 m and 84500 m"))
     end
 
     rho = p / (R_AIR * T)
