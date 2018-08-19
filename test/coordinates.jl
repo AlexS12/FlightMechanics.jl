@@ -200,7 +200,7 @@ r_ecefh = rot_matrix_hor2ecef(lat, lon)
 @test isapprox(exp_xyz_ecef, r_ecefh * exp_xyz_hor)
 
 # Body <--> ECEF (uses ecef2hor and hor2body so not intensive testing necessary)
-import FlightMechanics: ecef2body, body2ecef
+import FlightMechanics: ecef2body, body2ecef, rot_matrix_body2ecef, rot_matrix_ecef2body
 xecef, yecef, zecef = 1.0, 10.0, 100.0
 psi, theta, phi = pi/4.0, pi/6.0, pi/12.0
 quat = euler2quaternion(psi, theta, phi)
@@ -210,14 +210,22 @@ exp_xyz_b = hor2body(xh, yh, zh, psi, theta, phi)
 
 xyz_body = ecef2body(xecef, yecef, zecef, lat, lon , psi, theta, phi)
 @test isapprox(xyz_body, exp_xyz_b)
+r_becef = rot_matrix_ecef2body(lat, lon , psi, theta, phi)
+@test isapprox(r_becef * [xecef, yecef, zecef], exp_xyz_b)
 xyz_body = ecef2body(xecef, yecef, zecef, lat, lon , quat...)
 @test isapprox(xyz_body, exp_xyz_b)
+r_becef_q = rot_matrix_ecef2body(lat, lon , quat...)
+@test isapprox(r_becef_q * [xecef, yecef, zecef], exp_xyz_b)
 
 exp_xyz_ecef = [xecef, yecef, zecef]
 xyz_ecef = body2ecef(exp_xyz_b..., lat, lon, psi, theta, phi)
 @test isapprox(xyz_ecef, exp_xyz_ecef)
+r_ecefb = rot_matrix_body2ecef(lat, lon , psi, theta, phi)
+@test isapprox(r_ecefb * exp_xyz_b, exp_xyz_ecef)
 xyz_ecef = body2ecef(exp_xyz_b..., lat, lon, quat...)
 @test isapprox(xyz_ecef, exp_xyz_ecef)
+r_ecefb_q = rot_matrix_body2ecef(lat, lon , quat...)
+@test isapprox(r_ecefb_q * exp_xyz_b, exp_xyz_ecef)
 
 # llh ECEF (using data from
 # .. [1] Bowring, B. R. (1976). Transformation from spatial to geographical 
