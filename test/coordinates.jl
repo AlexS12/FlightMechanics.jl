@@ -149,39 +149,55 @@ xyz_h_q = body2hor(xyz_b_e..., quat...)
 @test ones_ ≈ body2wind(exp_b2h_3..., 0., 45*pi/180.)
 
 # Hor <-> ECEF
-import FlightMechanics: ecef2hor, hor2ecef
+import FlightMechanics: ecef2hor, hor2ecef, rot_matrix_ecef2hor, rot_matrix_hor2ecef
 xecef, yecef, zecef = 1.0, 10.0, 100.0
 lat, lon = 0.0, 0.0
 exp_xyz_hor = [100.0, 10.0 ,-1.0]
 xyz_hor =  ecef2hor(xecef, yecef, zecef, lat, lon)
 @test isapprox(xyz_hor, exp_xyz_hor)
+r_hecef = rot_matrix_ecef2hor(lat, lon)
+@test isapprox(exp_xyz_hor, r_hecef * [xecef, yecef, zecef])
 exp_xyz_ecef = [xecef, yecef, zecef]
 xyz_ecef = hor2ecef(exp_xyz_hor..., lat, lon)
 @test isapprox(xyz_ecef, exp_xyz_ecef)
+r_ecefh = rot_matrix_hor2ecef(lat, lon)
+@test isapprox(exp_xyz_ecef, r_ecefh * exp_xyz_hor)
 
 lat, lon = pi/2.0, 0.0
 exp_xyz_hor = [-1.0, 10.0 ,-100.0]
 xyz_hor =  ecef2hor(xecef, yecef, zecef, lat, lon)
 @test isapprox(xyz_hor, exp_xyz_hor)
+r_hecef = rot_matrix_ecef2hor(lat, lon)
+@test isapprox(exp_xyz_hor, r_hecef * [xecef, yecef, zecef])
 exp_xyz_ecef = [xecef, yecef, zecef]
 xyz_ecef = hor2ecef(exp_xyz_hor..., lat, lon)
 @test isapprox(xyz_ecef, exp_xyz_ecef)
+r_ecefh = rot_matrix_hor2ecef(lat, lon)
+@test isapprox(exp_xyz_ecef, r_ecefh * exp_xyz_hor)
 
 lat, lon = 0.0, pi/2.0
 exp_xyz_hor = [100.0, -1.0 ,-10.0]
 xyz_hor =  ecef2hor(xecef, yecef, zecef, lat, lon)
 @test isapprox(xyz_hor, exp_xyz_hor)
+r_hecef = rot_matrix_ecef2hor(lat, lon)
+@test isapprox(exp_xyz_hor, r_hecef * [xecef, yecef, zecef])
 exp_xyz_ecef = [xecef, yecef, zecef]
 xyz_ecef = hor2ecef(exp_xyz_hor..., lat, lon)
 @test isapprox(xyz_ecef, exp_xyz_ecef)
+r_ecefh = rot_matrix_hor2ecef(lat, lon)
+@test isapprox(exp_xyz_ecef, r_ecefh * exp_xyz_hor)
 
 lat, lon = pi/2.0, pi/2.0
 exp_xyz_hor = [-10.0, -1.0 ,-100.0]
 xyz_hor =  ecef2hor(xecef, yecef, zecef, lat, lon)
 @test isapprox(xyz_hor, exp_xyz_hor)
+r_hecef = rot_matrix_ecef2hor(lat, lon)
+@test isapprox(exp_xyz_hor, r_hecef * [xecef, yecef, zecef])
 exp_xyz_ecef = [xecef, yecef, zecef]
 xyz_ecef = hor2ecef(exp_xyz_hor..., lat, lon)
 @test isapprox(xyz_ecef, exp_xyz_ecef)
+r_ecefh = rot_matrix_hor2ecef(lat, lon)
+@test isapprox(exp_xyz_ecef, r_ecefh * exp_xyz_hor)
 
 # Body <--> ECEF (uses ecef2hor and hor2body so not intensive testing necessary)
 import FlightMechanics: ecef2body, body2ecef
