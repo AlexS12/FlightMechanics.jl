@@ -33,6 +33,26 @@ end
 
 
 """
+    rot_matrix_body2hor(psi, theta, phi)
+
+Rotation matrix from body to local horizon
+
+# Arguments
+* `psi, theta, phi`: Euler angles. Yaw, pitch, roll (rad).
+"""
+function rot_matrix_body2hor(psi, theta, phi)
+    sψ, cψ = sin(psi), cos(psi)
+    sθ, cθ = sin(theta), cos(theta)
+    sϕ, cϕ = sin(phi), cos(phi)
+
+    r = [ cθ*cψ   (sϕ*sθ*cψ - cϕ*sψ)   (cϕ*sθ*cψ + sϕ*sψ);
+          cθ*sψ   (sϕ*sθ*sψ + cϕ*cψ)   (cϕ*sθ*sψ - sϕ*cψ);
+         -sθ          sϕ*cθ                cϕ*cθ         ]
+    return r
+end
+
+
+"""
     body2hor(xb, yb, zb, q0, q1, q2, q3)
 
 Transform body coordinates to local horizon.
@@ -42,13 +62,37 @@ Transform body coordinates to local horizon.
 * `q0, q1, q2, q3`: quaternions.
 """
 function body2hor(xb, yb, zb, q0, q1, q2, q3)
-    
     q02, q12, q22, q32 = q0*q0, q1*q1, q2*q2, q3*q3
     
     xh = (q02+q12-q22-q32) * xb + 2*(q1*q2 - q0*q3) * yb + 2*(q1*q3 + q0*q2) * zb
     yh = 2*(q1*q2 + q0*q3) * xb + (q02-q12+q22-q32) * yb + 2*(q2*q3 - q0*q1) * zb
     zh = 2*(q1*q3 - q0*q2) * xb + 2*(q2*q3 + q0*q1) * yb + (q02-q12-q22+q32) * zb
     return [xh, yh, zh]
+end
+
+
+"""
+    rot_matrix_body2hor(q0, q1, q2, q3)
+
+Rotation matrix to transform from body to local horizon.
+
+# Arguments
+* `q0, q1, q2, q3`: quaternions.
+
+Implementation from:
+.. [1] Stevens, B. L., Lewis, F. L., (1992). Aircraft control and simulation:
+ dynamics, controls design, and autonomous systems. John Wiley & Sons.
+ (page 41, formula 1.4-23)
+"""
+function rot_matrix_body2hor(q0, q1, q2, q3)
+    
+    q02, q12, q22, q32 = q0*q0, q1*q1, q2*q2, q3*q3
+
+    r = [(q02+q12-q22-q32)    2*(q1*q2 - q0*q3)    2*(q1*q3 + q0*q2);
+         2*(q1*q2 + q0*q3)    (q02-q12+q22-q32)    2*(q2*q3 - q0*q1);
+         2*(q1*q3 - q0*q2)    2*(q2*q3 + q0*q1)    (q02-q12-q22+q32)]
+
+    return r
 end
 
 
@@ -69,6 +113,25 @@ function hor2body(xh, yh, zh, q0, q1, q2, q3)
     yb = 2*(q1*q2 - q0*q3) * xh + (q02-q12+q22-q32) * yh + 2*(q2*q3 + q0*q1) * zh
     zb = 2*(q1*q3 + q0*q2) * xh + 2*(q2*q3 - q0*q1) * yh + (q02-q12-q22+q32) * zh
     return [xb, yb, zb]
+end
+
+
+"""
+    rot_matrix_hor2body(q0, q1, q2, q3)
+
+Rotation matrix to transform from local horizon to body.
+
+# Arguments
+* `q0, q1, q2, q3`: quaternions.
+
+Implementation from:
+.. [1] Stevens, B. L., Lewis, F. L., (1992). Aircraft control and simulation:
+ dynamics, controls design, and autonomous systems. John Wiley & Sons.
+ (page 41, formula 1.4-23)
+"""
+function rot_matrix_hor2body(q0, q1, q2, q3)
+    r = rot_matrix_body2hor(q0, q1, q2, q3)
+    return r'
 end
 
 
@@ -100,6 +163,20 @@ function hor2body(xh, yh, zh, psi, theta, phi)
          (c_phi * c_theta)                         * zh
 
     return [xb, yb, zb]
+end
+
+
+"""
+    rot_matrix_hor2body(psi, theta, phi)
+
+Rotation matrix from body to local horizon
+
+# Arguments
+* `psi, theta, phi`: Euler angles. Yaw, pitch, roll (rad).
+"""
+function rot_matrix_hor2body(psi, theta, phi)
+    r = rot_matrix_body2hor(psi, theta, phi)
+    return r'
 end
 
 
