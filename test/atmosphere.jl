@@ -20,7 +20,7 @@ h = [0.0, 50.0, 550.0, 6500.0, 10000.0, 11000.0]
 # I would expect a tuple of Arrays, however an Array of tuples is returned.
 # https://discourse.julialang.org/t/broadcast-map-return-type-for-a-function-returning-a-tuple/574/6
 rv = atmosphere_isa.(h)
-rv_arr = reinterpret(Float64, rv, (4, size(h, 1)))
+rv_arr = reduce(hcat, rv)
 T = rv_arr[1, :]
 p = rv_arr[2, :]
 rho = rv_arr[3, :]
@@ -32,7 +32,7 @@ a = rv_arr[4, :]
 # Test 11-20 Km
 h = [12000, 14200, 17500, 20000, ]  # m
 rv = atmosphere_isa.(h)
-rv_arr = reinterpret(Float64, rv, (4, size(h, 1)))
+rv_arr = reduce(hcat, rv)
 T = rv_arr[1, :]
 p = rv_arr[2, :]
 rho = rv_arr[3, :]
@@ -44,7 +44,7 @@ a = rv_arr[4, :]
 # Test 20-32 Km
 h = [22100, 24000, 28800, 32000]  # m
 rv = atmosphere_isa.(h)
-rv_arr = reinterpret(Float64, rv, (4, size(h, 1)))
+rv_arr = reduce(hcat, rv)
 T = rv_arr[1, :]
 p = rv_arr[2, :]
 rho = rv_arr[3, :]
@@ -56,7 +56,7 @@ a = rv_arr[4, :]
 # Test 32-47 Km
 h = [32200, 36000, 42000, 47000]  # m
 rv = atmosphere_isa.(h)
-rv_arr = reinterpret(Float64, rv, (4, size(h, 1)))
+rv_arr = reduce(hcat, rv)
 T = rv_arr[1, :]
 p = rv_arr[2, :]
 rho = rv_arr[3, :]
@@ -68,7 +68,7 @@ a = rv_arr[4, :]
 # Test 47-51 Km
 h = [47200, 49000, 51000]  # m
 rv = atmosphere_isa.(h)
-rv_arr = reinterpret(Float64, rv, (4, size(h, 1)))
+rv_arr = reduce(hcat, rv)
 T = rv_arr[1, :]
 p = rv_arr[2, :]
 rho = rv_arr[3, :]
@@ -80,7 +80,7 @@ a = rv_arr[4, :]
 # Test 51-71 Km
 h = [51500, 60000, 71000]  # m
 rv = atmosphere_isa.(h)
-rv_arr = reinterpret(Float64, rv, (4, size(h, 1)))
+rv_arr = reduce(hcat, rv)
 T = rv_arr[1, :]
 p = rv_arr[2, :]
 rho = rv_arr[3, :]
@@ -92,7 +92,7 @@ a = rv_arr[4, :]
 # Test 71-84 Km
 h = [52000, 60000, 84500]  # m
 rv = atmosphere_isa.(h)
-rv_arr = reinterpret(Float64, rv, (4, size(h, 1)))
+rv_arr = reduce(hcat, rv)
 T = rv_arr[1, :]
 p = rv_arr[2, :]
 rho = rv_arr[3, :]
