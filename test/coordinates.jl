@@ -1,3 +1,4 @@
+using LinearAlgebra
 import FlightMechanics: body2hor, hor2body, wind2hor, hor2wind, wind2body,
                         body2wind
 
