@@ -1,0 +1,8 @@
+name = "FlightMechanics"
+uuid = "b53c057e-b8f7-52b0-b891-15a01c28915a"
+authors = ["Álex Sáez <alex.saez.12@gmail.com>"]
+version = "0.0.0"
+
+[deps]
+Documenter = "e30172f5-a6a5-5a46-863b-614d45cd2de4"
+Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
