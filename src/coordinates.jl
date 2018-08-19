@@ -394,9 +394,9 @@ Implementation from:
  (page 127, formula 4.82)
 """
 function quaternion2euler(q0, q1, q2, q3)
-    psi = atan2(2 * (q1*q2 + q0*q3), q0*q0 + q1*q1 - q2*q2 - q3*q3)
+    psi = atan(2 * (q1*q2 + q0*q3), q0*q0 + q1*q1 - q2*q2 - q3*q3)
     theta = asin(-2 * (q1*q3 - q0*q2))
-    phi = atan2(2 * (q2*q3 + q0*q1), q0*q0 - q1*q1 - q2*q2 + q3*q3)
+    phi = atan(2 * (q2*q3 + q0*q1), q0*q0 - q1*q1 - q2*q2 + q3*q3)
 
     return [psi, theta, phi]
 end
@@ -461,10 +461,10 @@ function ecef2llh(xecef, yecef, zecef; ellipsoid=WGS84)
 
     p = sqrt(x*x + y*y)
     R = sqrt(p*p + z*z)
-    θ = atan2(z, p)
+    θ = atan(z, p)
 
     # [1] equation (1) does not change in [2]
-    lon = atan2(y, x)
+    lon = atan(y, x)
 
     # u -> geographical latitude
     # [1] below equation (4) and [2] equation (6)
