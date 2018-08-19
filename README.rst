@@ -24,7 +24,7 @@ Flight Mechanics utils :airplane:
 
 \:warning: This package is in its initial development phase :construction:
 
-This package is intended to provide utils for Flight Mechanics computations.
+This package is intended to provide utils for Flight Mechanics computations. It runs on julia ≥ 0.7.0. 
 
 * International Standard Atmosphere: get pressure, temperature, density, sound velocity for a given altitude.
 
@@ -50,11 +50,15 @@ Install :rocket:
 
 You can install this package cloning it::
 
-  julia> Pkg.clone("git@github.com:AlexS12/FlightMechanics.jl.git", "FlightMechanics")
+  Pkg> add git@github.com:AlexS12/FlightMechanics.jl.git
+  
+or if you want the dev version::
+
+  Pkg> dev git@github.com:AlexS12/FlightMechanics.jl.git
 
 and run the tests::
 
-  julia> Pkg.test("FlightMechanics")
+  Pkg> test FlightMechanics
 
 
 Contributing :helicopter:
