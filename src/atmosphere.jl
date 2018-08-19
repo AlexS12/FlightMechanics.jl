@@ -97,5 +97,5 @@ function atmosphere_isa(height)
     rho = p / (R_AIR * T)
     a   = sqrt(GAMMA_AIR * R_AIR * T)
 
-    return T, p, rho, a
+    return [T, p, rho, a]
 end
