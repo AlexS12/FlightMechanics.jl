@@ -35,34 +35,86 @@ euler = quaternion2euler(quat...)
 quat = [0.5, 0.1, 0.2, 0.7]
 quat = quat / norm(quat)
 euler = quaternion2euler(quat...)
-quat2 = euler2quaternion(euler...)
-@test isapprox(quat, quat2)
+quat3 = euler2quaternion(euler...)
+@test isapprox(quat, quat3)
 
 ones_ = [1.0, 1.0, 1.0]
 
 # body2hor Euler
 @test ones_ ≈ body2hor(ones_..., 0., 0., 0.)
-@test [2*0.70710678118654757, 1, 0] ≈ body2hor(ones_..., 0., 45*pi/180., 0.)
-@test [1, 0, 2*0.70710678118654757] ≈ body2hor(ones_..., 0., 0., 45*pi/180)
-@test [0, 2*0.70710678118654757, 1] ≈ body2hor(ones_..., 45*pi/180, 0., 0.)
+angles1 = [0., 45*pi/180., 0.]
+angles2 = [0., 0., 45*pi/180]
+angles3 = [45*pi/180, 0., 0.]
+
+exp_b2h_1 = [2*0.70710678118654757, 1, 0]
+exp_b2h_2 = [1, 0, 2*0.70710678118654757]
+exp_b2h_3 = [0, 2*0.70710678118654757, 1]
+
+@test exp_b2h_1 ≈ body2hor(ones_..., angles1...)
+@test exp_b2h_2 ≈ body2hor(ones_..., angles2...)
+@test exp_b2h_3 ≈ body2hor(ones_..., angles3...)
 # hor2body Euler
 @test ones_ ≈ hor2body(ones_..., 0., 0., 0.)
-@test ones_ ≈ hor2body(2*0.70710678118654757, 1, 0, 0., 45*pi/180., 0.)
-@test ones_ ≈ hor2body(1, 0, 2*0.70710678118654757, 0., 0., 45*pi/180)
-@test ones_ ≈ hor2body(0, 2*0.70710678118654757, 1, 45*pi/180, 0., 0.)
+@test ones_ ≈ hor2body(exp_b2h_1..., angles1...)
+@test ones_ ≈ hor2body(exp_b2h_2..., angles2...)
+@test ones_ ≈ hor2body(exp_b2h_3..., angles3...)
 # body2hor quaternion
 @test ones_ ≈ body2hor(ones_..., 0., 0., 0.)
-quat0 = euler2quaternion(0., 45*pi/180., 0.)
-quat1 = euler2quaternion(0., 0., 45*pi/180.)
-quat2 = euler2quaternion(45*pi/180., 0., 0.)
-@test [2*0.70710678118654757, 1, 0] ≈ body2hor(ones_..., quat0...)
-@test [1, 0, 2*0.70710678118654757] ≈ body2hor(ones_..., quat1...)
-@test [0, 2*0.70710678118654757, 1] ≈ body2hor(ones_..., quat2...)
+quat1 = euler2quaternion(angles1...)
+quat2 = euler2quaternion(angles2...)
+quat3 = euler2quaternion(angles3...)
+@test exp_b2h_1 ≈ body2hor(ones_..., quat1...)
+@test exp_b2h_2 ≈ body2hor(ones_..., quat2...)
+@test exp_b2h_3 ≈ body2hor(ones_..., quat3...)
 # hor2body quaternionr
 @test ones_ ≈ hor2body(ones_..., 0., 0., 0.)
-@test ones_ ≈ hor2body(2*0.70710678118654757, 1, 0,  quat0...)
-@test ones_ ≈ hor2body(1, 0, 2*0.70710678118654757,  quat1...)
-@test ones_ ≈ hor2body(0, 2*0.70710678118654757, 1,  quat2...)
+@test ones_ ≈ hor2body(exp_b2h_1...,  quat1...)
+@test ones_ ≈ hor2body(exp_b2h_2...,  quat2...)
+@test ones_ ≈ hor2body(exp_b2h_3...,  quat3...)
+
+# rotation matrix body to hor (euler)
+import FlightMechanics: rot_matrix_body2hor, rot_matrix_hor2body
+r_hb1 = rot_matrix_body2hor(angles1...)
+@test exp_b2h_1 ≈ r_hb1 * ones_
+r_hb2 = rot_matrix_body2hor(angles2...)
+@test exp_b2h_2 ≈ r_hb2 * ones_
+r_hb3 = rot_matrix_body2hor(angles3...)
+@test exp_b2h_3 ≈ r_hb3 * ones_
+
+# rotation matrix body <-> hor (quaternion)
+r_hb1q = rot_matrix_body2hor(quat1...)
+@test exp_b2h_1 ≈ r_hb1q * ones_
+r_hb2q = rot_matrix_body2hor(quat2...)
+@test exp_b2h_2 ≈ r_hb2q * ones_
+r_hb3q = rot_matrix_body2hor(quat3...)
+@test exp_b2h_3 ≈ r_hb3q * ones_
+
+# r_hb equivalent with euler and quaternion
+@test isapprox(r_hb1, r_hb1q)
+@test isapprox(r_hb2, r_hb2q)
+@test isapprox(r_hb3, r_hb3q)
+
+# rotation matrix hor to body (euler)
+r_bh1 = rot_matrix_hor2body(angles1...)
+@test ones_ ≈ r_bh1 * exp_b2h_1
+r_bh2 = rot_matrix_hor2body(angles2...)
+@test ones_ ≈ r_bh2 * exp_b2h_2
+r_bh3 = rot_matrix_hor2body(angles3...)
+@test ones_ ≈ r_bh3 * exp_b2h_3
+
+# rotation matrix hor2body (quaternion)
+r_bh1q = rot_matrix_hor2body(quat1...)
+@test ones_ ≈ r_bh1q * exp_b2h_1
+r_bh2q = rot_matrix_hor2body(quat2...)
+@test ones_ ≈ r_bh2q * exp_b2h_2
+r_bh3q = rot_matrix_hor2body(quat3...)
+@test ones_ ≈ r_bh3q * exp_b2h_3
+
+# r_bh equivalent with euler and quaternion
+@test isapprox(r_bh1, r_bh1q)
+@test isapprox(r_bh2, r_bh2q)
+@test isapprox(r_bh3, r_bh3q)
+
 
 # Test that quaternion and euler produce the same transformation
 psi, theta, phi = pi/4.0, pi/6.0, pi/12.0
@@ -79,22 +131,22 @@ xyz_h_q = body2hor(xyz_b_e..., quat...)
 
 #wind2hor
 @test ones_ ≈ wind2hor(ones_..., 0., 0., 0.)
-@test [2*0.70710678118654757, 1, 0] ≈ wind2hor(ones_..., 0., 45*pi/180., 0.)
-@test [1, 0, 2*0.70710678118654757] ≈ wind2hor(ones_..., 0., 0., 45*pi/180)
-@test [0, 2*0.70710678118654757, 1] ≈ wind2hor(ones_..., 45*pi/180, 0., 0.)
+@test exp_b2h_1 ≈ wind2hor(ones_..., angles1...)
+@test exp_b2h_2 ≈ wind2hor(ones_..., angles2...)
+@test exp_b2h_3 ≈ wind2hor(ones_..., angles3...)
 #hor2wind
 @test ones_ ≈ hor2wind(ones_..., 0., 0., 0.)
-@test ones_ ≈ hor2wind(2*0.70710678118654757, 1, 0, 0., 45*pi/180., 0.)
-@test ones_ ≈ hor2wind(1, 0, 2*0.70710678118654757, 0., 0., 45*pi/180)
-@test ones_ ≈ hor2wind(0, 2*0.70710678118654757, 1, 45*pi/180, 0., 0.)
+@test ones_ ≈ hor2wind(exp_b2h_1..., angles1...)
+@test ones_ ≈ hor2wind(exp_b2h_2..., angles2...)
+@test ones_ ≈ hor2wind(exp_b2h_3..., angles3...)
 #wind2body
 @test ones_ ≈ wind2body(ones_..., 0., 0.)
 @test [0, 1, 2*0.70710678118654757] ≈ wind2body(ones_..., 45*pi/180., 0.)
-@test [0, 2*0.70710678118654757, 1] ≈ wind2body(ones_..., 0., 45*pi/180.)
+@test exp_b2h_3 ≈ wind2body(ones_..., 0., 45*pi/180.)
 #body2wind
 @test ones_ ≈ body2wind(ones_..., 0., 0.)
 @test ones_ ≈ body2wind(0, 1, 2*0.70710678118654757, 45*pi/180., 0.)
-@test ones_ ≈ body2wind(0, 2*0.70710678118654757, 1, 0., 45*pi/180.)
+@test ones_ ≈ body2wind(exp_b2h_3..., 0., 45*pi/180.)
 
 # Hor <-> ECEF
 import FlightMechanics: ecef2hor, hor2ecef
