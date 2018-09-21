@@ -55,7 +55,7 @@ function six_dof_ecef_quaternion_fixed_mass(state, mass, inertia, forces, moment
     λ = k * (1.0 - q*q)
     q_dot = (-0.5 * Ωq + λ) * q
 
-    state_dot = [vb_dot, ωb_dot, q_dot, p_dot]
+    state_dot = [vb_dot..., ωb_dot..., q_dot..., p_dot...]
 
     return state_dot
 end
