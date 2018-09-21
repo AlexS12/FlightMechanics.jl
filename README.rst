@@ -44,6 +44,12 @@ This package is intended to provide utils for Flight Mechanics computations. It 
   * velocity calculation from airspeed indicator (ASI) pressure difference
   * dynamic pressure calculation (compressible and incompressible cases)
   * tas, alpha, beta from body velocity
+  
+* 6 DOF Dynamic fixed mass models:
+
+  * Flat Earth Euler angles
+  * Flat Earth quaternions
+  * Ellipsoidal Earth ECEF model quaternion
 
 Install :rocket:
 ----------------
