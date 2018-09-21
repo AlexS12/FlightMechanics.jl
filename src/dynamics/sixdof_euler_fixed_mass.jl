@@ -21,7 +21,7 @@ account.
 - `mass::Number`: total mass of the aircraft (kg)
 - `inertia::3×3 Array{Number,2}`: inertia tensor (kg·m²)
 - `forces::3-element Array{Number,1}`: total forces expressed in body axis. (N)
-- `moments`::3-element Array{Number,1}: total moments expressed in body axis.(N·m)
+- `moments::3-element Array{Number,1}`: total moments expressed in body axis.(N·m)
 
 # Returns
 - `state_dot`: state vector derivative according to the equation of motion,
