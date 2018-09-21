@@ -34,10 +34,10 @@ function six_dof_quaternion_fixed_mass(state, mass, inertia, forces, moments; k=
     r_dot = (L*Jxz + N*Ix + p*q * (Ix*Ix - Ix*Iy + Jxz2) - q*r * Jxz * temp) / den
 
     # Angular Kinematic equations
-    q0_dot = 0.5 * (     - p*q1 - q*q2 - r*q3 + λ*q0)
-    q1_dot = 0.5 * (p*q0        + r*q2 - q*q3 + λ*q1)
-    q2_dot = 0.5 * (q*q0 - r*q1        + p*q3 + λ*q2)
-    q3_dot = 0.5 * (r*q0 + q*q1 - p*q2        + λ*q3)
+    q0_dot = 0.5 * (     - p*q1 - q*q2 - r*q3 ) + λ * q0
+    q1_dot = 0.5 * (p*q0        + r*q2 - q*q3 ) + λ * q1
+    q2_dot = 0.5 * (q*q0 - r*q1        + p*q3 ) + λ * q2
+    q3_dot = 0.5 * (r*q0 + q*q1 - p*q2        ) + λ * q3
 
     # Linear kinematic equations
     xe_dot = u*(q02 + q12 - q22 - q32) + 2*v*(q1*q2 - q0*q3) + 2*w*(q1*q3 + q0*q2)
