@@ -1,5 +1,45 @@
 
+"""
+    six_dof_euler_fixed_mass(state, mass, inertia, forces, moments)
 
+Six degrees of freedom dynamic system using Euler angles for attitude 
+representation and assuming fixed mass. 
+
+Flat Earth hypothesis is applied and Earth reference frame is considered
+inertial.
+
+It is considered that the aircraft xb-zb plane is a plane of symmetry so that
+Jxy and Jyz cross-product of inertia are zero and will not be taken into 
+account.
+
+# Arguments
+- `state::12-element Array{Number,1}`: state vector.
+    u, v, w: inertial linear velocity expressed in body axis. (m/s)
+    p, q, r: inertial rotatinal velocity expressed in body axis. (rad/s)
+    ψ, θ, ϕ: attitude given by Euler angles (zyx). Yaw, pitch, roll. (rad)
+    xe, ye, ze: position wrt the inertial system origin expressed in Earth Axis. (m)
+- `mass::Number`: total mass of the aircraft (kg)
+- `inertia::3×3 Array{Number,2}`: inertia tensor (kg·m²)
+- `forces::3-element Array{Number,1}`: total forces expressed in body axis. (N)
+- `moments`::3-element Array{Number,1}: total moments expressed in body axis.(N·m)
+
+# Returns
+- `state_dot`: state vector derivative according to the equation of motion,
+    inertial properties and applied forces and moments.
+
+# References
+.. [1] Stevens, B. L., Lewis, F. L., (1992). Aircraft control and simulation:
+ dynamics, controls design, and autonomous systems. John Wiley & Sons.
+ (Section 1.5, equations 1.5-4, page 46)
+
+.. [2] Etkin, B. (2005). Dynamics of atmospheric flight. Dover Publications 
+ (Section 5.8, page 148, formulas 5.8,1 to 5.8,7)
+
+.. [3] Zipfel, P. H. (2007). Modeling and simulation of aerospace vehicle
+ dynamics. American Institute of Aeronautics and Astronautics.
+ (page 368, figure 10.2, not taking into account quaternions in angular 
+ kinematic equations)
+"""
 function six_dof_euler_fixed_mass(state, mass, inertia, forces, moments)
 
     m = mass
