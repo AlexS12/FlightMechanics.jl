@@ -660,12 +660,11 @@ Implementation from:
 Notes
 -----
 * The transformation is direct without iterations as [1] introduced the need to
-iterate for near Earth positions.
-* [2] is an updated of incresed accuracy of [1]. The former is used for
-in this implementation although the latter implementation is commented in the 
-code.
+ iterate for near Earth positions.
+* [2] is an updated of increased accuracy of [1]. The former is used in this
+ implementation although the latter implementation is commented in the code.
 * Model becomes unstable if latitude is close to 90º. An alternative equation
-can be found in [2] equation (16) but has not been implemented.
+ can be found in [2] equation (16) but has not been implemented.
 """
 function ecef2llh(xecef, yecef, zecef; ellipsoid=WGS84)
 
