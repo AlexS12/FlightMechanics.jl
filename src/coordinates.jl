@@ -79,7 +79,7 @@ Rotation matrix to transform from body to local horizon.
 # Arguments
 * `q0, q1, q2, q3`: quaternions.
 
-Implementation from:
+# References
 .. [1] Stevens, B. L., Lewis, F. L., (1992). Aircraft control and simulation:
  dynamics, controls design, and autonomous systems. John Wiley & Sons.
  (page 41, formula 1.4-23)
@@ -124,7 +124,7 @@ Rotation matrix to transform from local horizon to body.
 # Arguments
 * `q0, q1, q2, q3`: quaternions.
 
-Implementation from:
+# References
 .. [1] Stevens, B. L., Lewis, F. L., (1992). Aircraft control and simulation:
  dynamics, controls design, and autonomous systems. John Wiley & Sons.
  (page 41, formula 1.4-23)
@@ -297,7 +297,7 @@ coordinates using geodetic latitude and longitude.
  * `lat`: geodetic latitude (rad).
  * `lon`: longitude (rad).
 
- Implementation from:
+ # References
 
 .. [1] Stevens, B. L., Lewis, F. L., (1992). Aircraft control and simulation:
  dynamics, controls design, and autonomous systems. John Wiley & Sons.
@@ -331,7 +331,7 @@ Rotation matrix to transform from ECEF to local horizon.
 # Arguments
 * `lat, lon`: geodetic latitude and longitude (rad)
 
-Implementation from:
+# References
 .. [1] Stevens, B. L., Lewis, F. L., (1992). Aircraft control and simulation:
  dynamics, controls design, and autonomous systems. John Wiley & Sons.
  (page 36, formula 1.4-9)
@@ -358,7 +358,7 @@ coordinates using geodetic latitude and longitude.
 * `lat`: geodetic latitude (rad).
 * `lon`: longitude (rad).
 
-Implementation from:
+# References
 
 .. [1] Stevens, B. L., Lewis, F. L., (1992). Aircraft control and simulation:
  dynamics, controls design, and autonomous systems. John Wiley & Sons.
@@ -389,7 +389,7 @@ Rotation matrix to transform from local horizon to ECEF.
 # Arguments
 * `lat, lon`: geodetic latitude and longitude (rad)
 
-Implementation from:
+# References
 .. [1] Stevens, B. L., Lewis, F. L., (1992). Aircraft control and simulation:
  dynamics, controls design, and autonomous systems. John Wiley & Sons.
  (page 36, formula 1.4-9)
@@ -437,7 +437,7 @@ Rotation matrix to transform from body to ECEF
 * `lon`: longitude (rad).
 * `psi, theta, phi`: Euler angles. Yaw, pitch, roll (rad).
 
-Implementation from:
+# References
 .. [1] Stevens, B. L., Lewis, F. L., (1992). Aircraft control and simulation:
  dynamics, controls design, and autonomous systems. John Wiley & Sons.
  (page 37, formula 1.4-11)
@@ -477,7 +477,7 @@ Rotation matrix to transform from ECEF to body
 * `lon`: longitude (rad).
 * `psi, theta, phi`: Euler angles. Yaw, pitch, roll (rad).
 
-Implementation from:
+# References
 .. [1] Stevens, B. L., Lewis, F. L., (1992). Aircraft control and simulation:
  dynamics, controls design, and autonomous systems. John Wiley & Sons.
  (page 37, formula 1.4-11)
@@ -517,7 +517,7 @@ Rotation matrix to transform from body to ECEF
 * `lon`: longitude (rad).
 * `q0, q1, q2, q3`: quaternions.
 
-Implementation from:
+# References
 .. [1] Stevens, B. L., Lewis, F. L., (1992). Aircraft control and simulation:
  dynamics, controls design, and autonomous systems. John Wiley & Sons.
  (page 37, formula 1.4-11)
@@ -557,7 +557,7 @@ Rotation matrix to transform from ECEF to body
 * `lon`: longitude (rad).
 * `q0, q1, q2, q3`: quaternions.
 
-Implementation from:
+# References
 .. [1] Stevens, B. L., Lewis, F. L., (1992). Aircraft control and simulation:
  dynamics, controls design, and autonomous systems. John Wiley & Sons.
  (page 37, formula 1.4-11)
@@ -577,7 +577,7 @@ Transform Euler angles orientation to quaternion orientation.
 # Arguments
 * `psi, theta, phi`: Euler angles. Yaw, pitch, roll (rad).
 
-Implementation from:
+# References
 .. [1] Zipfel, P. H. (2007). Modeling and simulation of aerospace vehicle
  dynamics. American Institute of Aeronautics and Astronautics.
  (page 126, formula 4.78)
@@ -605,7 +605,7 @@ Transform quaternion orientation to Euler angles orientation.
 #Arguments
 * `q0, q1, q2, q3`: quaternions.
 
-Implementation from:
+# References
 .. [1] Zipfel, P. H. (2007). Modeling and simulation of aerospace vehicle
  dynamics. American Institute of Aeronautics and Astronautics.
  (page 127, formula 4.82)
@@ -625,7 +625,7 @@ end
 Transform geodetic latitude, longitude and ellipsoidal height to ECEF for the
 given ellipsoid (default ellipsoid is WGS84)
 
-Implementation from:
+# References
 .. [1] Rogers, R. M. (2007). Applied mathematics in integrated navigation
  systems. American Institute of Aeronautics and Astronautics.
  (Page 75, equations 4.20, 4.21, 4.22)
@@ -651,7 +651,7 @@ end
 Transform ECEF coordinates to geodetic latitude, longitude and ellipsoidal 
 height for the given ellipsoid (default ellipsoid is WGS84)
 
-Implementation from:
+# References
 .. [1] Bowring, B. R. (1976). Transformation from spatial to geographical 
  coordinates. Survey review, 23(181), 323-327.
 .. [2] Bowring, B. R. (1985). The accuracy of geodetic latitude and height

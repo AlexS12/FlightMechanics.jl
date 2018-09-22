@@ -12,7 +12,7 @@ given geopotential height according to International Standard Atmosphere 1976.
 
 # Notes
 
-Implementation based on:
+# References
 
 .. [1] U.S. Standard Atmosphere, 1976, U.S. Government Printing Office,
         Washington, D.C., 1976

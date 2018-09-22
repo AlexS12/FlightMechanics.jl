@@ -14,7 +14,7 @@ Calculate calibrated airspeed from ASI (Air Speed indicator), differential
 pressure between impact pressure and static pressure.
 qc = p_t - p_s
 
-Implementation from:
+# References
 
 .. [1] Ward, D. T. (1993). Introduction to flight test engineering. Elsevier
     Science Ltd. (page 13, formula 2.13)
@@ -32,7 +32,7 @@ Calculate true airspeed from ASI (Air Speed indicator), differential
 pressure between impact pressure and static pressure (qc = p_t - p_s), rho
 and p.
 
-Implementation from:
+# References
 
 .. [1] Ward, D. T. (1993). Introduction to flight test engineering. Elsevier
     Science Ltd. (page 12, based on formula 2.11)
@@ -49,7 +49,7 @@ end
 Calculate equivalent airspeed from ASI (Air Speed indicator), differential
 pressure between impact pressure and static pressure (qc = p_t - p_s) and p.
 
-Implementation from:
+# References
 
 .. [1] Ward, D. T. (1993). Introduction to flight test engineering. Elsevier
     Science Ltd.
@@ -66,7 +66,7 @@ end
 Calculate equivalent airspeed from true airspeed and density at current 
 altitude (ρ).
 
-Implementation from:
+# References
 
 .. [1] Ward, D. T. (1993). Introduction to flight test engineering. Elsevier
     Science Ltd. (page 13, formula 2.15)
@@ -83,7 +83,7 @@ end
 Calculate true airspeed from equivalent airspeed and density at current 
 altitude (ρ).
 
-Implementation from:
+# References
 
 .. [1] Ward, D. T. (1993). Introduction to flight test engineering. Elsevier
     Science Ltd. (page 13, formula 2.15)
@@ -166,7 +166,7 @@ end
 Calculate true air speed (TAS), angle of attack (α) and angle of side-slip (β)
 from aerodynamic velocity expressed in body axis.
 
-Implementation from:
+# References
 
 .. [1] Etkin, B. (2005). Dynamics of atmospheric flight. Dover Publications 
     (page 114, formulas 4.3,2 and 4.3,3)
@@ -186,6 +186,8 @@ end
 Calculate incompressible dynamic pressure from true airspeed (tas) and density
 (ρ) at current altitude.
 
+# References
+
 .. [1] Ward, D. T. (1993). Introduction to flight test engineering. Elsevier
     Science Ltd. (page 13, formula 2.14)
 """
@@ -204,6 +206,8 @@ Two different models are used depending on the Mach number:
 
 - Subsonic case: Bernouilli's equation compressible form.
 - Supersonic case: to be implemented.
+
+# References
 
 .. [1] Ward, D. T. (1993). Introduction to flight test engineering. Elsevier
     Science Ltd. (page 12)
