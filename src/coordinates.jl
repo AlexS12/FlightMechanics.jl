@@ -603,7 +603,7 @@ end
 Transform quaternion orientation to Euler angles orientation.
 
 #Arguments
-`q0, q1, q2, q3`: quaternions.
+* `q0, q1, q2, q3`: quaternions.
 
 Implementation from:
 .. [1] Zipfel, P. H. (2007). Modeling and simulation of aerospace vehicle
