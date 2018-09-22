@@ -46,7 +46,6 @@ account.
  dynamics. American Institute of Aeronautics and Astronautics.
  (page 368, figure 10.2)
 """
-
 function six_dof_quaternion_fixed_mass(state, mass, inertia, forces, moments; k=0.0)
 
     m = mass
