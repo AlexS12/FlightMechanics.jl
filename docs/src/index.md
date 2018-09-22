@@ -55,6 +55,14 @@ FlightMechanics.incompressible_qinf(tas, ρ)
 FlightMechanics.compressible_qinf(M, p)
 ```
 
+### 6 Degrees of Freedom dynamic models
+
+```@docs
+FlightMechanics.six_dof_euler_fixed_mass(state, mass, inertia, forces, moments)
+FlightMechanics.six_dof_quaternion_fixed_mass(state, mass, inertia, forces, moments; k=0.0)
+FlightMechanics.six_dof_ecef_quaternion_fixed_mass(state, mass, inertia, forces, moments; k=0.0, ellipsoid=WGS84)
+```
+
 ## Index
 ```@index
 ```
