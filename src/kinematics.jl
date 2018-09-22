@@ -1,6 +1,7 @@
 using LinearAlgebra
 
-"""
+
+@doc doc"""
     rigid_body_velocity(vel_P, ω, r_PQ)
 
 Calculate the velocity of a point Q of a rigid solid given the velocity of a 
@@ -25,7 +26,7 @@ function rigid_body_velocity(vel_P, ω, r_PQ)
 end
 
 
-"""
+@doc doc"""
     rigid_body_acceleration(acc_P, ω, ω_dot, r_PQ)
 
 Calculate the acceleration of a point Q of a rigid solid given the acceleration
@@ -35,7 +36,7 @@ acceleration of the solid (ω_dot) and the relative position of Q wrt P.
 ``a_{10}^{Q} = a_{10}^{P} + \omega_{10} \times (\omega_{10} \times r^{PQ}) + \dot{\omega}_{10} \times r^{PQ}``
 
 being:
-- a_{10}^{Q} the acceleration of point Q, fixed to 1, wrt 0
+- ``a_{10}^{Q}`` the acceleration of point Q, fixed to 1, wrt 0
 - ``\omega_{10}`` the angular velocity of the solid 1 wrt 0
 - ``\dot{\omega}_{10}`` the angular acceleration of the solid 1 wrt 0
 - ``r^{PQ}`` the position of Q wrt P (``r^{Q}-r^{P}``)
