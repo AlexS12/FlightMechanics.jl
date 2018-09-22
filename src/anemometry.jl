@@ -26,7 +26,7 @@ end
 
 
 """
-    qc2tas(qc)
+    qc2tas(qc, ρ, p)
 
 Calculate true airspeed from ASI (Air Speed indicator), differential
 pressure between impact pressure and static pressure (qc = p_t - p_s), rho
