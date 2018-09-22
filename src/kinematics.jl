@@ -1,7 +1,8 @@
 using LinearAlgebra
+using Markdown
 
 
-@doc doc"""
+Markdown.doc"""
     rigid_body_velocity(vel_P, ω, r_PQ)
 
 Calculate the velocity of a point Q of a rigid solid given the velocity of a 
@@ -31,7 +32,7 @@ function rigid_body_velocity(vel_P, ω, r_PQ)
 end
 
 
-@doc doc"""
+Markdown.doc"""
     rigid_body_acceleration(acc_P, ω, ω_dot, r_PQ)
 
 Calculate the acceleration of a point Q of a rigid solid given the acceleration
