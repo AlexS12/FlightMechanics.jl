@@ -303,8 +303,8 @@ coordinates using geodetic latitude and longitude.
  dynamics, controls design, and autonomous systems. John Wiley & Sons.
  (page 36, formula 1.4-9)
 
- Notes
- -----
+ # Notes
+
  X, Y, Z ECEF are defined in a different way in [1]. In order to reproduce this
  transformation substitute in [1] Y->X, Z->Y, X->Z
 
@@ -336,8 +336,8 @@ Rotation matrix to transform from ECEF to local horizon.
  dynamics, controls design, and autonomous systems. John Wiley & Sons.
  (page 36, formula 1.4-9)
 
- Notes
- -----
+# Notes
+ 
  X, Y, Z ECEF are defined in a different way in [1]. In order to reproduce this
  transformation substitute in [1] Y->X, Z->Y, X->Z
 """
@@ -364,8 +364,8 @@ coordinates using geodetic latitude and longitude.
  dynamics, controls design, and autonomous systems. John Wiley & Sons.
  (page 36, formula 1.4-9)
 
- Notes
- -----
+# Notes
+
  X, Y, Z ECEF are defined in a different way in [1]. In order to reproduce this
  transformation substitute in [1] Y->X, Z->Y, X->Z
 """
@@ -394,8 +394,8 @@ Rotation matrix to transform from local horizon to ECEF.
  dynamics, controls design, and autonomous systems. John Wiley & Sons.
  (page 36, formula 1.4-9)
 
- Notes
- -----
+# Notes
+
  X, Y, Z ECEF are defined in a different way in [1]. In order to reproduce this
  transformation substitute in [1] Y->X, Z->Y, X->Z
 """
@@ -657,8 +657,8 @@ height for the given ellipsoid (default ellipsoid is WGS84)
 .. [2] Bowring, B. R. (1985). The accuracy of geodetic latitude and height
  equations. Survey Review, 28(218), 202-206.
 
-Notes
------
+# Notes
+
 * The transformation is direct without iterations as [1] introduced the need to
  iterate for near Earth positions.
 * [2] is an updated of increased accuracy of [1]. The former is used in this

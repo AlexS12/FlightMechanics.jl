@@ -10,8 +10,6 @@ G0 = GRAVITY_ACCEL
 Calculate temperature, pressure, density and sound velocity for the
 given geopotential height according to International Standard Atmosphere 1976.
 
-# Notes
-
 # References
 
 .. [1] U.S. Standard Atmosphere, 1976, U.S. Government Printing Office,
