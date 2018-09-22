@@ -65,6 +65,13 @@ FlightMechanics.incompressible_qinf(tas, ρ)
 FlightMechanics.compressible_qinf(M, p)
 ```
 
+### Kinematics
+```@docs
+FlightMechanics.rigid_body_velocity(vel_P, ω, r_PQ)
+FlightMechanics.rigid_body_acceleration(acc_P, ω, ω_dot, r_PQ)
+```
+
+
 ### 6 Degrees of Freedom dynamic models
 
 ```@docs
