@@ -284,7 +284,7 @@ end
 
 @testset "llh <-> ECEF" begin
     # llh ECEF (using data from
-    # .. [1] Bowring, B. R. (1976). Transformation from spatial to geographical 
+    # - [1] Bowring, B. R. (1976). Transformation from spatial to geographical 
     # coordinates. Survey review, 23(181), 323-327.)
     import FlightMechanics.EarthConstants: Ellipsoid
 

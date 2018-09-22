@@ -28,14 +28,14 @@ account.
     inertial properties and applied forces and moments.
 
 # References
-.. [1] Stevens, B. L., Lewis, F. L., (1992). Aircraft control and simulation:
+- [1] Stevens, B. L., Lewis, F. L., (1992). Aircraft control and simulation:
  dynamics, controls design, and autonomous systems. John Wiley & Sons.
  (Section 1.5, equations 1.5-4, page 46)
 
-.. [2] Etkin, B. (2005). Dynamics of atmospheric flight. Dover Publications 
+- [2] Etkin, B. (2005). Dynamics of atmospheric flight. Dover Publications 
  (Section 5.8, page 148, formulas 5.8,1 to 5.8,7)
 
-.. [3] Zipfel, P. H. (2007). Modeling and simulation of aerospace vehicle
+- [3] Zipfel, P. H. (2007). Modeling and simulation of aerospace vehicle
  dynamics. American Institute of Aeronautics and Astronautics.
  (page 368, figure 10.2, not taking into account quaternions in angular 
  kinematic equations)

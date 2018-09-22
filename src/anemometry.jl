@@ -16,7 +16,7 @@ qc = p_t - p_s
 
 # References
 
-.. [1] Ward, D. T. (1993). Introduction to flight test engineering. Elsevier
+- [1] Ward, D. T. (1993). Introduction to flight test engineering. Elsevier
     Science Ltd. (page 13, formula 2.13)
 """
 function qc2cas(qc)
@@ -34,7 +34,7 @@ and p.
 
 # References
 
-.. [1] Ward, D. T. (1993). Introduction to flight test engineering. Elsevier
+- [1] Ward, D. T. (1993). Introduction to flight test engineering. Elsevier
     Science Ltd. (page 12, based on formula 2.11)
 """
 function qc2tas(qc, ρ, p)
@@ -51,7 +51,7 @@ pressure between impact pressure and static pressure (qc = p_t - p_s) and p.
 
 # References
 
-.. [1] Ward, D. T. (1993). Introduction to flight test engineering. Elsevier
+- [1] Ward, D. T. (1993). Introduction to flight test engineering. Elsevier
     Science Ltd.
 """
 function qc2eas(qc, p)
@@ -68,7 +68,7 @@ altitude (ρ).
 
 # References
 
-.. [1] Ward, D. T. (1993). Introduction to flight test engineering. Elsevier
+- [1] Ward, D. T. (1993). Introduction to flight test engineering. Elsevier
     Science Ltd. (page 13, formula 2.15)
 """
 function tas2eas(tas, ρ)
@@ -85,7 +85,7 @@ altitude (ρ).
 
 # References
 
-.. [1] Ward, D. T. (1993). Introduction to flight test engineering. Elsevier
+- [1] Ward, D. T. (1993). Introduction to flight test engineering. Elsevier
     Science Ltd. (page 13, formula 2.15)
 """
 function eas2tas(eas, ρ)
@@ -168,7 +168,7 @@ from aerodynamic velocity expressed in body axis.
 
 # References
 
-.. [1] Etkin, B. (2005). Dynamics of atmospheric flight. Dover Publications 
+- [1] Etkin, B. (2005). Dynamics of atmospheric flight. Dover Publications 
     (page 114, formulas 4.3,2 and 4.3,3)
 """
 function tas_alpha_beta_from_uvw(u, v, w)
@@ -188,7 +188,7 @@ Calculate incompressible dynamic pressure from true airspeed (tas) and density
 
 # References
 
-.. [1] Ward, D. T. (1993). Introduction to flight test engineering. Elsevier
+- [1] Ward, D. T. (1993). Introduction to flight test engineering. Elsevier
     Science Ltd. (page 13, formula 2.14)
 """
 function incompressible_qinf(tas, ρ)
@@ -209,7 +209,7 @@ Two different models are used depending on the Mach number:
 
 # References
 
-.. [1] Ward, D. T. (1993). Introduction to flight test engineering. Elsevier
+- [1] Ward, D. T. (1993). Introduction to flight test engineering. Elsevier
     Science Ltd. (page 12)
 """
 function compressible_qinf(M, p)

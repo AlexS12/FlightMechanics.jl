@@ -38,11 +38,11 @@ account.
   orthonormality error factor.
 
 # References
-.. [1] Stevens, B. L., Lewis, F. L., (1992). Aircraft control and simulation:
+- [1] Stevens, B. L., Lewis, F. L., (1992). Aircraft control and simulation:
  dynamics, controls design, and autonomous systems. John Wiley & Sons.
  (Section 1.5, equations 1.5-4, page 46)
 
-.. [2] Zipfel, P. H. (2007). Modeling and simulation of aerospace vehicle
+- [2] Zipfel, P. H. (2007). Modeling and simulation of aerospace vehicle
  dynamics. American Institute of Aeronautics and Astronautics.
  (page 368, figure 10.2)
 """

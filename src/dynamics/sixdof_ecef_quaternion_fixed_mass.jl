@@ -47,11 +47,11 @@ account.
 - Implementation based on [1]. However, [2] can also be read.
 
 # References
-.. [1] Stevens, B. L., Lewis, F. L., (1992). Aircraft control and simulation:
+- [1] Stevens, B. L., Lewis, F. L., (1992). Aircraft control and simulation:
  dynamics, controls design, and autonomous systems. John Wiley & Sons.
  (page 45, formula 1.5-1)
 
-.. [2] Zipfel, P. H. (2007). Modeling and simulation of aerospace vehicle
+- [2] Zipfel, P. H. (2007). Modeling and simulation of aerospace vehicle
  dynamics. American Institute of Aeronautics and Astronautics.
  (page 396, figure 10.6)
 """
