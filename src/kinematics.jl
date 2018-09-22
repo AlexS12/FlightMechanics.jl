@@ -19,6 +19,11 @@ being:
 - ``r^{PQ}`` the position of Q wrt P (``r^{Q}-r^{P}``)
 
 Every vector needs to be expressed in the same coordinate system.
+
+# References
+- [1] Stevens, B. L., Lewis, F. L., (1992). Aircraft control and simulation:
+ dynamics, controls design, and autonomous systems. John Wiley & Sons.
+ (Section 1.3, page 26)
 """
 function rigid_body_velocity(vel_P, ω, r_PQ)
     vel_Q = vel_P + cross(ω, r_PQ)
@@ -40,6 +45,11 @@ being:
 - ``\omega_{10}`` the angular velocity of the solid 1 wrt 0
 - ``\dot{\omega}_{10}`` the angular acceleration of the solid 1 wrt 0
 - ``r^{PQ}`` the position of Q wrt P (``r^{Q}-r^{P}``)
+
+# References
+- [1] Stevens, B. L., Lewis, F. L., (1992). Aircraft control and simulation:
+ dynamics, controls design, and autonomous systems. John Wiley & Sons.
+ (Section 1.3, Formaula 1.3-14c, page 26)
 """
 function rigid_body_acceleration(acc_P, ω, ω_dot, r_PQ)
     acc_Q = acc_P + cross(ω, cross(ω, r_PQ)) + cross(ω_dot, r_PQ)
