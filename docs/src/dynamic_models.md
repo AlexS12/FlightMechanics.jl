@@ -17,6 +17,7 @@ symmetrical aircraft
 
 To be removed when this section is complete...
 
+
 ```@docs
 FlightMechanics.six_dof_euler_fixed_mass(state, mass, inertia, forces, moments)
 FlightMechanics.six_dof_quaternion_fixed_mass(state, mass, inertia, forces, moments; k=0.0)
