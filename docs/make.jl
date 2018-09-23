@@ -3,10 +3,10 @@ using FlightMechanics
 
 
 makedocs(authors="Alejandro Saez Mollejo",
-         pages = Any[
+         pages = [
          "Home" => "index.md",
-         "API Reference" => "api-reference.md",
-         "Basics" => Any[
+         "API Reference" => ["api-reference.md"],
+         "Basics" => [
            "isa.md",
            "coordinate-systems.md",
            "dynamic_models.md",
