@@ -29,10 +29,10 @@ git:
 #script:
 #  - julia -e 'Pkg.clone(pwd()); Pkg.build("FlightMechanics"); Pkg.test("FlightMechanics"; coverage=true)'
 after_success:
-  # push coverage results to Coveralls
-  - julia -e 'cd(Pkg.dir("FlightMechanics")); Pkg.add("Coverage"); using Coverage; Coveralls.submit(Coveralls.process_folder())'
+  # push coverage results to Coverall
+  - julia -e 'using Pkg; cd(Pkg.dir("FlightMechanics")); Pkg.add("Coverage"); using Coverage; Coveralls.submit(Coveralls.process_folder())'
   # push coverage results to Codecov
-  - julia -e 'cd(Pkg.dir("FlightMechanics")); Pkg.add("Coverage"); using Coverage; Codecov.submit(Codecov.process_folder())'
-  # Documenter
-  - julia -e 'Pkg.add("Documenter")'
-  - julia -e 'cd(Pkg.dir("FlightMechanics")); include(joinpath("docs", "make.jl"))'
+  - julia -e 'using Pkg; cd(Pkg.dir("FlightMechanics")); Pkg.add("Coverage"); using Coverage; Codecov.submit(Codecov.process_folder())'
+  # Documenter  
+  - julia -e 'using Pkg; Pkg.add("Documenter")'
+  - julia -e 'using Pkg; ENV["DOCUMENTER_DEBUG"] = "true"; cd(Pkg.dir("FlightMechanics")); include(joinpath("docs", "make.jl"))'
