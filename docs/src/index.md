@@ -1,85 +1,41 @@
-# Flight Mechanics
+# Home
 
-# FlightMechanics.jl API REFERENCE
+## Overview
 
+This package is intended to provide utils for Flight Mechanics computations in Julia. Its purpose is to provide reliable, documented, efficient and tested Julia implementations for common calculations in Flight Mechanics such as:
 
-```@contents
-```
-
-## Functions
-
-### Atmosphere ISA (atmosphere.jl)
-
-```@docs
-FlightMechanics.atmosphere_isa(height::Real)
-```
-
-### Coordinates Systems (coordinates.jl)
-
-```@docs
-FlightMechanics.body2hor(xb, yb, zb, psi, theta, phi)
-FlightMechanics.body2hor(xb, yb, zb, q0, q1, q2, q3)
-FlightMechanics.hor2body(xh, yh, zh, psi, theta, phi)
-FlightMechanics.hor2body(xh, yh, zh, q0, q1, q2, q3)
-FlightMechanics.rot_matrix_body2hor(psi, theta, phi)
-FlightMechanics.rot_matrix_body2hor(q0, q1, q2, q3)
-FlightMechanics.rot_matrix_hor2body(psi, theta, phi)
-FlightMechanics.rot_matrix_hor2body(q0, q1, q2, q3)
-FlightMechanics.wind2hor(xw, yw, zw, chi, gamma, mu)
-FlightMechanics.hor2wind(xh, yh, zh, chi, gamma, mu)
-FlightMechanics.body2wind(xb, yb, zb, alpha, beta)
-FlightMechanics.wind2body(xw, yw, zw, alpha, beta)
-FlightMechanics.euler2quaternion(psi, theta, phi)
-FlightMechanics.quaternion2euler(q0, q1, q2, q3)
-FlightMechanics.ecef2hor(xecef, yecef, zecef, lat, lon)
-FlightMechanics.hor2ecef(xh, yh, zh, lat, lon)
-FlightMechanics.rot_matrix_ecef2hor(lat, lon)
-FlightMechanics.rot_matrix_hor2ecef(lat, lon)
-FlightMechanics.ecef2body(xecef, yecef, zecef, lat, lon, psi, theta, phi)
-FlightMechanics.ecef2body(xecef, yecef, zecef, lat, lon, q0, q1, q2, q3)
-FlightMechanics.body2ecef(xb, yb, zb, lat, lon, psi, theta, phi)
-FlightMechanics.body2ecef(xb, yb, zb, lat, lon, q0, q1, q2, q3)
-FlightMechanics.rot_matrix_body2ecef(lat, lon, psi, theta, phi)
-FlightMechanics.rot_matrix_body2ecef(lat, lon, q0, q1, q2, q3)
-FlightMechanics.rot_matrix_ecef2body(lat, lon, psi, theta, phi)
-FlightMechanics.rot_matrix_ecef2body(lat, lon, q0, q1, q2, q3)
-FlightMechanics.llh2ecef(lat, lon, height; ellipsoid=WGS84)
-FlightMechanics.ecef2llh(xecef, yecef, zecef; ellipsoid=WGS84)
-
-```
-
-### Anemometry
-
-```@docs
-FlightMechanics.qc2cas(qc)
-FlightMechanics.qc2tas(qc, ρ, p)
-FlightMechanics.qc2eas(qc, p)
-FlightMechanics.tas2eas(tas, ρ)
-FlightMechanics.eas2tas(eas, ρ)
-FlightMechanics.cas2eas(cas, ρ, p)
-FlightMechanics.eas2cas(eas, ρ, p)
-FlightMechanics.cas2tas(cas, ρ, p)
-FlightMechanics.tas2cas(tas, ρ, p)
-FlightMechanics.tas_alpha_beta_from_uvw(u, v, w)
-FlightMechanics.incompressible_qinf(tas, ρ)
-FlightMechanics.compressible_qinf(M, p)
-```
-
-### Kinematics
-```@docs
-FlightMechanics.rigid_body_velocity(vel_P, ω, r_PQ)
-FlightMechanics.rigid_body_acceleration(acc_P, ω, ω_dot, r_PQ)
-```
+* International Standard Atmosphere: get pressure, temperature, density, sound velocity for a given altitude.
+* Conversion between different coordinate systems: body/ABC, horizon/NED, wind, ECEF (Earth Cenetered Earth Fixed), LLH (Latitude, Longitude, Height for various ellipsoids models).
+* Support for various attitude representations: Euler angles, quaternions.
+* Anemometry calculations: conversions between TAS, CAS, EAS; velocity calculation from airspeed indicator (ASI) pressure difference; dynamic pressure calculation, TAS, $\alpha$, $\beta$ from body velocity.
+* 6 DOF Dynamic fixed mass models:
+  * Flat Earth Euler angles
+  * Flat Earth quaternions
+  * Ellipsoidal Earth ECEF model quaternion
 
 
-### 6 Degrees of Freedom dynamic models
+For the sake of reliability and reproducibility, several references are listed in the documentation of the different methods so they can be consulted and studied.
 
-```@docs
-FlightMechanics.six_dof_euler_fixed_mass(state, mass, inertia, forces, moments)
-FlightMechanics.six_dof_quaternion_fixed_mass(state, mass, inertia, forces, moments; k=0.0)
-FlightMechanics.six_dof_ecef_quaternion_fixed_mass(state, mass, inertia, forces, moments; k=0.0, ellipsoid=WGS84)
-```
+## Installing FlightMechanics.jl
 
-## Index
-```@index
-```
+This package is still in its initial development phase and has not been registered in the Julia official repository.
+
+You can install this package cloning it:
+    
+    Pkg> add git@github.com:AlexS12/FlightMechanics.jl.git
+
+You can read more about adding unregistered pakcages in [Julia documentation](https://docs.julialang.org/en/latest/stdlib/Pkg/#Adding-unregistered-packages-1.)
+  
+or if you are planning to make a contribution and want the dev version:
+
+    Pkg> dev git@github.com:AlexS12/FlightMechanics.jl.git
+
+Once you have installed the package, it is highly recommended to run the tests:
+
+    Pkg> test FlightMechanics
+
+## Contributing
+
+If you used this package and have any suggestion or found a bug, please [open an issue](https://github.com/AlexS12/FlightMechanics.jl/issues).
+
+If this package is useful for you and want to join efforts don't hesitate to let me know: [https://github.com/AlexS12](https://github.com/AlexS12)
