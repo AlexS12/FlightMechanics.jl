@@ -22,3 +22,10 @@ docs_dir: 'build'
 
 pages:
   - Home: index.md
+  - API Reference: api-reference.md
+  - Basics:
+    - isa.md
+    - coordinate-systems.md
+    - dynamic_models.md
+    - anemometry.md
+    - kinematics.md

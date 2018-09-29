@@ -602,7 +602,7 @@ end
 
 Transform quaternion orientation to Euler angles orientation.
 
-#Arguments
+# Arguments
 * `q0, q1, q2, q3`: quaternions.
 
 # References
