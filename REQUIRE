@@ -1,5 +1,2 @@
 julia 0.7
-LinearAlgebra
 Documenter
-Markdown
-Test
