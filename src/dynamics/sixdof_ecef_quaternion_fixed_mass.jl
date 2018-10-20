@@ -1,8 +1,9 @@
-import FlightMechanics.EarthConstants: ROT_VELOCITY, WGS84
-import FlightMechanics: rot_matrix_body2ecef, ecef2llh
+using FlightMechanics
 
+export six_dof_ecef_quaternion_fixed_mass
 
-ωe = ROT_VELOCITY
+const ωe = EarthConstants.ROT_VELOCITY
+const WGS84 = EarthConstants.WGS84
 
 """
     six_dof_ecef_quaternion_fixed_mass(state, mass, inertia, forces, moments;

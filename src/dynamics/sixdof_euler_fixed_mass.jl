@@ -1,4 +1,6 @@
 
+export six_dof_euler_fixed_mass
+
 """
     six_dof_euler_fixed_mass(state, mass, inertia, forces, moments)
 

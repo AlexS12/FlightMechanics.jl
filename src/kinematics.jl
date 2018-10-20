@@ -2,6 +2,8 @@ using LinearAlgebra
 using Markdown
 
 
+export rigid_body_velocity, rigid_body_acceleration
+
 @doc doc"""
     rigid_body_velocity(vel_P, ω, r_PQ)
 

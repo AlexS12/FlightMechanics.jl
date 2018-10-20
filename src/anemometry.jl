@@ -1,10 +1,18 @@
-import .AirConstants: GAMMA_AIR, P0, RHO0, T0, A0
+using FlightMechanics
+
+export qc2cas, qc2tas, qc2eas,
+       tas2eas, eas2tas,
+       cas2eas, eas2cas,
+       cas2tas, tas2cas,
+       tas_alpha_beta_from_uvw,
+       incompressible_qinf,
+       compressible_qinf
 
 
-γ = GAMMA_AIR
-p0 = P0
-ρ0 = RHO0
-a0 = A0
+const γ = AirConstants.GAMMA_AIR
+const p0 = AirConstants.P0
+const ρ0 = AirConstants.RHO0
+const a0 = AirConstants.A0
 
 
 """
