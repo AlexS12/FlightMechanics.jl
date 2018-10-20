@@ -1,9 +1,4 @@
-import FlightMechanics.ConversionConstants: KT2MS
-import FlightMechanics: atmosphere_isa
-import FlightMechanics: tas2eas, tas2cas, cas2eas, cas2tas, eas2cas, eas2tas
-import FlightMechanics: qc2cas, qc2tas, qc2eas
-import FlightMechanics: incompressible_qinf, compressible_qinf
-import FlightMechanics: tas_alpha_beta_from_uvw
+using FlightMechanics
 
 
 @static if VERSION < v"0.7.0-DEV.2005"
@@ -12,6 +7,8 @@ else
     using Test
 end
 
+
+KT2MS = ConversionConstants.KT2MS
 
 # TESTS for TAS CAS EAS based on values from
 # http://www.hochwarth.com/misc/AviationCalculator.html

@@ -1,3 +1,5 @@
+export six_dof_quaternion_fixed_mass
+
 """
     six_dof_quaternion_fixed_mass(state, mass, inertia, forces, moments; k=0.0)
 

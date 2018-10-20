@@ -1,4 +1,4 @@
-import FlightMechanics: rigid_body_velocity, rigid_body_acceleration
+using FlightMechanics
 
 @static if VERSION < v"0.7.0-DEV.2005"
     using Base.Test

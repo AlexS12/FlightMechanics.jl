@@ -1,8 +1,11 @@
-import .EarthConstants: GRAVITY_ACCEL
-import .AirConstants: R_AIR, GAMMA_AIR
+using FlightMechanics
+
+export atmosphere_isa
 
 
-G0 = GRAVITY_ACCEL
+const G0 = EarthConstants.GRAVITY_ACCEL
+const R_AIR = AirConstants.R_AIR
+const GAMMA_AIR = AirConstants.GAMMA_AIR
 
 """
     atmosphere_isa(height)
