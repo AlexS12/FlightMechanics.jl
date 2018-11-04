@@ -8,8 +8,6 @@ else
 end
 
 
-KT2MS = ConversionConstants.KT2MS
-
 # TESTS for TAS CAS EAS based on values from
 # http://www.hochwarth.com/misc/AviationCalculator.html
 
