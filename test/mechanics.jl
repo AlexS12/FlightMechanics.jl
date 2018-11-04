@@ -87,3 +87,17 @@ exp_inertia = [0       0     0;
                0    1000     0;
                0       0  1000]
 @test isapprox(steiner_inertia(point0, inertia, mass, point1), exp_inertia)
+
+
+# Point with no inertia
+point0 = [0, 0, 0]
+point1 = [10, 0, 0]
+inertia = [1 0 0;
+           0 2 0;
+           0 0 3]
+mass = 10
+
+exp_inertia = [0       0     0;
+               0    1000     0;
+               0       0  1000] + inertia
+@test isapprox(steiner_inertia(point0, inertia, mass, point1), exp_inertia)
