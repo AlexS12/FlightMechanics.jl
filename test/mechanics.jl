@@ -66,3 +66,24 @@ r_PQ = [5.0, 5.0, 5.0]
 exp_accel_Q = [-4.0 * sqrt(50) * sin(pi/4), -4.0 * sqrt(50) * cos(pi/4), 0.0]
 accel_Q = rigid_body_acceleration(acc_P, ω, ω_dot, r_PQ)
 @test isapprox(accel_Q, exp_accel_Q)
+
+# Steiner theorem
+# No point translation
+point0 = [0, 0, 0]
+point1 = point0
+inertia = [1 0 0;
+           0 2 0;
+           0 0 3]
+mass = 10
+@test isapprox(steiner_inertia(point0, inertia, mass, point1), inertia)
+
+# Point with no inertia
+point0 = [0, 0, 0]
+point1 = [10, 0, 0]
+inertia = zeros(3, 3)
+mass = 10
+
+exp_inertia = [0       0     0;
+               0    1000     0;
+               0       0  1000]
+@test isapprox(steiner_inertia(point0, inertia, mass, point1), exp_inertia)

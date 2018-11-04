@@ -2,7 +2,8 @@ using LinearAlgebra
 using Markdown
 
 
-export rigid_body_velocity, rigid_body_acceleration
+export rigid_body_velocity, rigid_body_acceleration,
+    steiner_inertia
 
 # KINEMATICS
 @doc doc"""
@@ -58,4 +59,11 @@ being:
 function rigid_body_acceleration(acc_P, ω, ω_dot, r_PQ)
     acc_Q = acc_P + cross(ω, cross(ω, r_PQ)) + cross(ω_dot, r_PQ)
     return acc_Q
+end
+
+
+# Mechanics
+function steiner_inertia(point0, inertia0, mass, point1)
+    r = point1 - point0
+    inertia0 + mass * (dot(r, r) * I - r*r')
 end
