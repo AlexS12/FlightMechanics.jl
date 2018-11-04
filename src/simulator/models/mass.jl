@@ -15,11 +15,6 @@ function PointMass(mass::Number, position::Array{T, 1}) where T<:Number
 end
 
 
-get_mass(component::RigidSolid) = component.mass
-get_cg(component::RigidSolid) = component.cg
-get_inertia(component::RigidSolid) = component.inertia
-
-
 function get_inertia(component::RigidSolid, point::Array{T, 1}) where T<:Number
     steiner_inertia(component.cg, component.inertia, component.mass, point)
 end
