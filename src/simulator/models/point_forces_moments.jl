@@ -13,9 +13,13 @@ end
 
 function translate_forces_moments(pfm::PointForcesMoments, point::Array{T, 1}) where T<:Number
     r = pfm.point - point
-    f = pfm.forces
-    m = pfm.moments + cross(r, f)
-    PointForcesMoments(point, f, m)
+    if isapprox(r, zeros(r))
+        return pfm
+    else
+        f = pfm.forces
+        m = pfm.moments + cross(r, f)
+        return PointForcesMoments(point, f, m)
+    end
 end
 
 function +(pfm1::PointForcesMoments, pfm2::PointForcesMoments, point::Array{T, 1}) where T<:Number
