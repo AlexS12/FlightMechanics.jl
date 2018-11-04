@@ -9,4 +9,4 @@ end
 @testset "atmosphere" begin include("atmosphere.jl") end
 @testset "coordinates" begin include("coordinates.jl") end
 @testset "anemometry" begin include("anemometry.jl") end
-@testset "kinematics" begin include("kinematics.jl") end
+@testset "mechanics" begin include("mechanics.jl") end
