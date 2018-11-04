@@ -6,4 +6,7 @@ module Models
     include("environment.jl")
     include("aero_state.jl")
     include("controls.jl")
+    include("propulsion.jl")
+    include("fcs.jl")
+    include("aircraft.jl")
 end
