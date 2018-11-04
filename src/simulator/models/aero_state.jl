@@ -1,0 +1,76 @@
+using FlightMechanics
+using FlightMechanics.Simulator.Models
+
+export AeroState,
+    get_alpha, get_beta, get_aero_angles,
+    get_tas, get_eas, get_cas, get_ias, get_aero_speeds,
+    get_qinf, get_mach
+
+
+struct AeroState
+    alpha :: Number
+    beta :: Number
+
+    alpha_dot::Number
+
+    tas :: Number
+    eas :: Number
+    cas :: Number
+    ias :: Number
+
+    qinf :: Number
+    mach :: Number
+end
+
+function AeroState(state::State, env::Environment)
+
+    p = get_pressure(env)
+    ρ = get_density(env)
+    a = get_sound_velocity(env)
+
+    # coming from
+    wind_hor = get_wind_NED(env)
+    wind_body = hor2body(wind_hor..., get_euler_angles(state)...)
+
+    aero_speed = get_body_velocity(state) + wind_body
+
+    tas, alpha, beta = tas_alpha_beta_from_uvw(aero_speed...)
+
+    cas = tas2cas(tas, ρ, p)
+    ias = tas
+    eas = tas2eas(tas, ρ)
+
+    qinf = incompressible_qinf(tas, ρ)
+    mach = tas / a
+
+    AeroState(alpha, beta, 0, tas, eas, cas, ias, qinf, mach)
+end
+
+function AeroState(tas::Number, alpha::Number, beta::Number, height::Number)
+
+    p = get_pressure(env)
+    ρ = get_density(env)
+    a = get_sound_velocity(env)
+
+    cas = tas2cas(tas, ρ, p)
+    ias = tas
+    eas = tas2eas(tas, ρ)
+
+    qinf = incompressible_qinf(tas, ρ)
+    mach = tas / a
+
+    AeroState(alpha, beta, 0, tas, eas, cas, ias, qinf, mach)
+end
+
+get_alpha(aerost::AeroState) = aerost.alpha
+get_beta(aerost::AeroState) = aerost.beta
+get_aero_angles(aerost::AeroState) = [aerost.alpha, aerost.beta]
+
+get_aero_speeds(aerost::AeroState) = [aerost.tas, aerost.eas, aerost.cas, aerost.ias]
+get_tas(aerost::AeroState) = aerost.tas
+get_eas(aerost::AeroState) = aerost.eas
+get_cas(aerost::AeroState) = aerost.cas
+get_ias(aerost::AeroState) = aerost.ias
+
+get_qinf(aerost::AeroState) = aerost.qinf
+get_mach(aerost::AeroState) = aerost.mach
