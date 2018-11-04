@@ -5,7 +5,10 @@ using FlightMechanics.Simulator.Models
 export AtmosphereISA, calculate_atmosphere
 export ConstantWind, calculate_wind
 export EarthConstantGravity, calculate_gravity
-export Environment, calculate_environment
+export Environment, calculate_environment,
+    get_temperature, get_pressure, get_density, get_sound_velocity,
+    get_wind, get_wind_NED, get_wind_direction, get_wind_intensity, get_wind_vertical,
+    get_gravity_accel
 
 
 # -------- ATMOSPHERE --------
