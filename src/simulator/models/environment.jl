@@ -34,17 +34,23 @@ end
 abstract type Wind end
 
 struct ConstantWind<:Wind
-    wind_direction::Number  # coming from [rad]
-    wind_intensity::Number  # positive blowing to ac [m/s]
-    wind_vertical::Number   # positive blowing to ac [m/s]
+    direction::Number  # coming from [rad]
+    intensity::Number  # positive blowing to ac [m/s]
+    vertical::Number   # positive blowing to ac [m/s]
 end
 
 ConstantWind() = ConstantWind(0, 0, 0)
 
-get_wind(wind::Wind) = [wind.wind_direction, wind.wind_intensity, wind.wind_vertical]
-get_wind_direction(wind::Wind) = wind.wind_direction
-get_wind_intensity(wind::Wind) = wind.wind_intensity
-get_wind_vertical(wind::Wind) = wind.wind_vertical
+get_wind(wind::Wind) = [wind.direction, wind.intensity, wind.vertical]
+get_direction(wind::Wind) = wind.direction
+get_intensity(wind::Wind) = wind.intensity
+get_vertical(wind::Wind) = wind.vertical
+
+function get_wind_NED(wind::Wind)
+    # coming from
+    wind_N = wind.intensity * cos(wind.direction + π)
+    wind_E = wind.intensity * sin(wind.direction + π)
+    wind_D = wind.vertical
 
 calculate_wind(wind::ConstantWind, state::State) = wind
 
@@ -75,7 +81,8 @@ get_pressure(env::Environment) = get_pressure(env.atmos)
 get_density(env::Environment) = get_density(env.atmos)
 get_sound_velocity(env:Environment) = get_sound_velocity(env.atmos)
 
-get_wind(env::Environment) = get_wind(atmos.wind)
+get_wind(env::Environment) = get_wind(env.wind)
+get_wind_NED(env::Environment) = get_wind_NED(env.wind)
 get_wind_direction(env::Environment) = get_wind_direction(env.wind)
 get_wind_intensity(env::Environment) = get_wind_intensity(env.wind)
 get_wind_vertical(env::Environment) = get_wind_vertical(env.wind)
