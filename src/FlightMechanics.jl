@@ -11,4 +11,7 @@ include("dynamics/sixdof_euler_fixed_mass.jl")
 include("dynamics/sixdof_quaternion_fixed_mass.jl")
 include("dynamics/sixdof_ecef_quaternion_fixed_mass.jl")
 
+# Simulator
+include("simulator/Simulator.jl")
+
 end # module
