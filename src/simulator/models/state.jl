@@ -11,7 +11,7 @@ export State,
        get_body_accel,
        get_horizon_accel,
        get_body_ang_accel,
-       get_sixdof_euler_fixed_mass_state,
+       get_sixdof_euler_fixed_mass_state
 
 
 abstract type State end
