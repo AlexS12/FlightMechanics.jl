@@ -3,9 +3,7 @@ using FlightMechanics
 export atmosphere_isa
 
 
-const G0 = EarthConstants.GRAVITY_ACCEL
-const R_AIR = AirConstants.R_AIR
-const GAMMA_AIR = AirConstants.GAMMA_AIR
+const G0 = GRAVITY_ACCEL
 
 """
     atmosphere_isa(height)
@@ -17,7 +15,7 @@ given geopotential height according to International Standard Atmosphere 1976.
 
 - [1] U.S. Standard Atmosphere, 1976, U.S. Government Printing Office,
         Washington, D.C., 1976
-        
+
 From: https://en.wikipedia.org/wiki/U.S._Standard_Atmosphere
 
 | Layer | h (m) | p (Pa)  | T (K)  | ``α`` (K/m) |
@@ -39,11 +37,11 @@ function atmosphere_isa(height)
 
         T = T0 + alpha * height
         p = p0 * (T0 / T) ^ (G0 / (R_AIR * alpha))
-    
+
     elseif 11000 <= height < 20000  # Tropopause
         T = 216.65    # K
         p0 = 22632.1  # Pa
-        h0 = 11000    # m 
+        h0 = 11000    # m
 
         p = p0 * exp(-G0 * (height - h0) / (R_AIR * T))
 
@@ -51,7 +49,7 @@ function atmosphere_isa(height)
         alpha = 0.001    # K/m
         T0 = 216.65      # K
         p0 = 5474.89     # Pa
-        h0 = 20000       # m 
+        h0 = 20000       # m
 
         T = T0 + alpha * (height - h0)
         p = p0 * (T0 / T) ^ (G0 / (R_AIR * alpha))
@@ -60,7 +58,7 @@ function atmosphere_isa(height)
         alpha = 0.0028   # K/m
         T0 = 228.65      # K
         p0 = 868.019     # Pa
-        h0 = 32000       # m 
+        h0 = 32000       # m
 
         T = T0 + alpha * (height - h0)
         p = p0 * (T0 / T) ^ (G0 / (R_AIR * alpha))
@@ -69,7 +67,7 @@ function atmosphere_isa(height)
         T = 270.65    # K
         p0 = 110.906  # Pa
         h0 = 47000    # m
-        h0 = 47000    # m 
+        h0 = 47000    # m
 
         p = p0 * exp(-G0 * (height - h0) / (R_AIR * T))
 

@@ -9,10 +9,10 @@ export qc2cas, qc2tas, qc2eas,
        compressible_qinf
 
 
-const γ = AirConstants.GAMMA_AIR
-const p0 = AirConstants.P0
-const ρ0 = AirConstants.RHO0
-const a0 = AirConstants.A0
+const γ = GAMMA_AIR
+const p0 = P0
+const ρ0 = RHO0
+const a0 = A0
 
 
 """
@@ -71,7 +71,7 @@ end
 """
     tas2eas(tas, ρ)
 
-Calculate equivalent airspeed from true airspeed and density at current 
+Calculate equivalent airspeed from true airspeed and density at current
 altitude (ρ).
 
 # References
@@ -88,7 +88,7 @@ end
 """
     eas2tas(qc, ρ)
 
-Calculate true airspeed from equivalent airspeed and density at current 
+Calculate true airspeed from equivalent airspeed and density at current
 altitude (ρ).
 
 # References
@@ -135,7 +135,7 @@ Calculate true airspeed from calibrated airspeed, density (ρ) and pressure (p)
 at the current altitude.
 """
 function cas2tas(cas, ρ, p)
-    
+
     a = sqrt(γ * p / ρ)
 
     temp = (cas*cas * (γ - 1.0)/(2.0 * a0*a0) + 1.0) ^ (γ / (γ - 1.0))
@@ -155,13 +155,13 @@ Calculate true airspeed from calibrated airspeed, density (ρ) and pressure (p)
 at the current altitude.
 """
 function tas2cas(tas, ρ, p)
-    
+
     a = sqrt(γ * p / ρ)
 
     temp = (tas*tas * (γ - 1.0)/(2.0 * a*a) + 1.0) ^ (γ / (γ - 1.0))
-    temp = (temp - 1.0) * (p / p0) 
+    temp = (temp - 1.0) * (p / p0)
     temp = (temp + 1.0) ^ ((γ - 1.0) / γ) - 1.0
-    
+
     cas = sqrt(2.0 * a0*a0 / (γ - 1) * temp)
 
     return cas
@@ -176,11 +176,11 @@ from aerodynamic velocity expressed in body axis.
 
 # References
 
-- [1] Etkin, B. (2005). Dynamics of atmospheric flight. Dover Publications 
+- [1] Etkin, B. (2005). Dynamics of atmospheric flight. Dover Publications
     (page 114, formulas 4.3,2 and 4.3,3)
 """
 function tas_alpha_beta_from_uvw(u, v, w)
-    
+
     tas = sqrt(u*u + v*v + w*w)
     alpha = atan(w / u)
     beta = asin(v / tas)
@@ -207,7 +207,7 @@ end
 """
     compressible_qinf(tas, p, a)
 
-Calculate compressible dynamic pressure from Mach number and static 
+Calculate compressible dynamic pressure from Mach number and static
 pressure (p)
 
 Two different models are used depending on the Mach number:
