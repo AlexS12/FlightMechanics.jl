@@ -8,18 +8,18 @@ export AeroState,
 
 
 struct AeroState
-    alpha :: Number
-    beta :: Number
+    alpha :: Number  # AOA [rad]
+    beta :: Number  # AOS [rad]
 
-    alpha_dot::Number
+    alpha_dot::Number  # rad/s
 
-    tas :: Number
-    eas :: Number
-    cas :: Number
-    ias :: Number
+    tas :: Number  # True Airspeed [m/s]
+    eas :: Number  # Equivalent Airspeed [m/s]
+    cas :: Number  # Calibrated Airspeed [m/s]
+    ias :: Number  # Indicated Airspeed [m/s]
 
-    qinf :: Number
-    mach :: Number
+    qinf :: Number  # Dynamic Pressure [Pa]
+    mach :: Number  # Mach number
 end
 
 function AeroState(state::State, env::Environment)
