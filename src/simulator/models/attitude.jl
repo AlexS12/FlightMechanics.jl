@@ -17,21 +17,13 @@ struct Attitude
 end
 
 # Constructor from Euler angles
-function Attitude(psi, theta, phi)
-    Attitude(psi, theta, phi, euler2quaternion(psi, theta, phi)...)
-end
+Attitude(psi, theta, phi) = Attitude(psi, theta, phi,
+                                     euler2quaternion(psi, theta, phi)...)
 
 # Constructor from quaternions
-function Attitude(q0, q1, q2, q3)
-    Attitude(quaternion2euler(q0, q1, q2, q3)..., q0, q1, q2, q3)
-end
+Attitude(q0, q1, q2, q3) = Attitude(quaternion2euler(q0, q1, q2, q3)...,
+                                    q0, q1, q2, q3)
 
-
-function get_euler_angles(att::Attitude)
-    return [att.psi, att.theta, att.phi]
-end
-
-
-function get_quaternions(att::Attitude)
-    return [att.q0, att.q1, att.q2, att.q3]
-end
+# Getters
+get_euler_angles(att::Attitude) = [att.psi, att.theta, att.phi]
+get_quaternions(att::Attitude) = [att.q0, att.q1, att.q2, att.q3]
