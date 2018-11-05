@@ -19,7 +19,6 @@ struct C310<:Aircraft
 
     aerodynamics::C310Aerodynamics
     propulsion::Propulsion
-    fcs::FCS
 end
 
 
@@ -42,9 +41,7 @@ function C310()
                                 )
     propulsion0 = Propulsion(pfm0, 0, 0, 0, [engine_right, engine_left])
 
-    fcs0 = C310FCS()
-
-    C310(mass_props0, pfm0, aero0, propulsion0, fcs0)
+    C310(mass_props0, pfm0, aero0, propulsion0)
 end
 
 
