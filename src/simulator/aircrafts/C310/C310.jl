@@ -6,6 +6,7 @@ using FlightMechanics.Simulator.Aircrafts
 export C310,
     get_name,
     get_payload_mass_props,
+    get_empty_mass_props,
     get_wing_area,
     get_wing_span,
     get_chord,
@@ -43,7 +44,7 @@ function C310()
 
     fcs0 = C310FCS()
 
-    C310() = C310(mass_props0, pfm0, aero0, propulsion0, fcs0)
+    C310(mass_props0, pfm0, aero0, propulsion0, fcs0)
 end
 
 
@@ -63,7 +64,7 @@ get_arp(ac::C310) = [46, 0, 8.6] .* IN2M
 
 # MASS PROPERTIES
 function get_empty_mass_props(ac::C310)
-    VolumeMass(
+    RigidSolid(
         2950 * LB2KG,                            # Empty mass
         [46, 0, 8.6] .* IN2M,                    # Empty CG
         [8884      0      0;                     # Empty inertia
