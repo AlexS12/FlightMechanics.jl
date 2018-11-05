@@ -2,6 +2,10 @@ using FlightMechanics
 import Base: +
 
 
+export RigidSolid, PointMass,
+    get_inertia, +
+
+
 # TODO: provide outer constructor checking dimensions?
 struct RigidSolid
     mass::Number
