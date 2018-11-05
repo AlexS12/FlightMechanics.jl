@@ -54,6 +54,7 @@ function get_wind_NED(wind::Wind)
     wind_N = wind.intensity * cos(wind.direction + π)
     wind_E = wind.intensity * sin(wind.direction + π)
     wind_D = wind.vertical
+end
 
 calculate_wind(wind::ConstantWind, state::State) = wind
 
@@ -82,7 +83,7 @@ DefaultEnvironment = Environment(AtmosphereISA(), ConstantWind(), EarthConstantG
 get_temperature(env::Environment) = get_temperature(env.atmos)
 get_pressure(env::Environment) = get_pressure(env.atmos)
 get_density(env::Environment) = get_density(env.atmos)
-get_sound_velocity(env:Environment) = get_sound_velocity(env.atmos)
+get_sound_velocity(env::Environment) = get_sound_velocity(env.atmos)
 
 get_wind(env::Environment) = get_wind(env.wind)
 get_wind_NED(env::Environment) = get_wind_NED(env.wind)
