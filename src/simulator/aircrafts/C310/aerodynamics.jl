@@ -8,7 +8,6 @@ export C310Aerodynamics, calculate_aero_pfm
 
 struct C310Aerodynamics<:Aerodynamics
     pfm::PointForcesMoments
-    aero_state::AeroState
 end
 
 
@@ -190,5 +189,5 @@ function calculate_aero_pfm(aero::C310Aerodynamics, fcs::FCS,
                                   qinf*Sw*[-cD, cY, -cL],
                                   qinf*Sw*[b*cl, c*cm, b*cn])
 
-    return C310Aerodynamics(pfm_wind, aeroste)
+    return C310Aerodynamics(pfm_wind)
 end
