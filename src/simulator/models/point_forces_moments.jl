@@ -32,3 +32,10 @@ end
 function +(pfm1::PointForcesMoments, pfm2::PointForcesMoments)
     +(pfm1, pfm2, pfm1.point)
 end
+
+function rotate(pfm::PointForcesMoments, psi, theta, phi)
+    pfm = PointForcesMoments(pfm.point,
+                             body2hor(pfm.forces, psi, theta, phi),
+                             body2hor(pfm.moments, psi, theta, phi)
+                             )
+end
