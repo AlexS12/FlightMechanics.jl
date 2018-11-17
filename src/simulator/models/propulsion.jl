@@ -25,6 +25,9 @@ function get_propulsion_position(prop::Propulsion)
     sum(get_engine_position(get_engines(prop))) / len(get_engines(prop))
 
 
+get_fuel_mass_props(prop::Propulsion) = sum(get_tanks(prop))
+
+
 function calculate(prop::Propulsion, fcs::FCS, aerostate::AeroState, state::State;
                    consume_fuel=false)
 
