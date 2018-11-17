@@ -63,13 +63,26 @@ abstract type Gravity end
 
 struct EarthConstantGravity<:Gravity
     value::Number  # m/s²
+    body_vector::Array{T, 1} where T<:Number
 end
 
-EarthConstantGravity() = EarthConstantGravity(GRAVITY_ACCEL)
+EarthConstantGravity() = EarthConstantGravity(GRAVITY_ACCEL, [0, 0, GRAVITY_ACCEL])
+
+function EarthConstantGravity(state::State)
+    grav = EarthConstantGravity()
+    calculate(grav, state)
+end
 
 get_gravity_accel(grav::Gravity) = grav.value
+get_grav_body_vector(grav::Gravity) = grav.body_vector
+get_grav_body_versor(grav::Gravity) = grav.body_vector / grav.value
 
-calculate_gravity(grav::EarthConstantGravity, state::State) = grav
+function calculate(grav::EarthConstantGravity, state::State)
+    grav.body_vector[:] = hor2body(0, 0, grav.value, get_euler_angles(state)...)
+    return grav
+end
+
+calculate_gravity_force(grav::Gravity, mass::Number) = get_grav_body_vector(grav) * mass
 
 # -------- ENVRIONMENT --------
 struct Environment
