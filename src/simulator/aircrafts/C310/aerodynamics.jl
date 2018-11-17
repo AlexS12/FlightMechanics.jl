@@ -148,8 +148,7 @@ cnda(aero::C310Aerodynamics, da) = -0.0168 * da
 cndr(aero::C310Aerodynamics, dr) = -0.1152 * dr
 
 # FORCES
-function calculate_aero_pfm(aero::C310Aerodynamics, fcs::FCS,
-                            aeroste::AeroState, state::State)
+function calculate(aero::C310Aerodynamics, fcs::FCS, aerostate::AeroState, state::State)
 
     ARP = get_arp(ac)
 
