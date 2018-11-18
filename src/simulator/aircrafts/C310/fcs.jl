@@ -1,7 +1,9 @@
 using FlightMechanics.Simulator.Models
 
 
-export C310FCS
+export C310FCS,
+    set_stick_long, set_stick_lat, set_pedals,
+    set_thrust1, set_thrust2, set_thrust
 
 
 struct C310FCS<:FCS

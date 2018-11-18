@@ -2,6 +2,10 @@ using FlightMechanics
 using FlightMechanics.Simulator.Models
 using FlightMechanics.Simulator.Aircrafts
 
+import FlightMechanics.Simulator.Models:
+    get_name, get_wing_area, get_wing_span, get_chord, get_arp,
+    get_empty_mass_props, get_payload_mass_props
+
 
 export C310,
     get_name,
@@ -27,7 +31,7 @@ function C310()
     pfm0 = PointForcesMoments(zeros(3), zeros(3), zeros(3))
 
     aero_state0 = AeroState(zeros(9)...)
-    aero0 = C310Aerodynamics(pfm0, aero_state0)
+    aero0 = C310Aerodynamics(pfm0)
 
     engine_right = C310EngineRight(pfm0, 0, 0, 0,
                                    [PointMass(225 * LB2KG, [35, 209.8, 28.3] .* IN2M),

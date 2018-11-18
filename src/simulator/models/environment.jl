@@ -5,7 +5,7 @@ using FlightMechanics.Simulator.Models
 export AtmosphereISA, calculate_atmosphere
 export ConstantWind, calculate_wind
 export EarthConstantGravity, calculate_gravity
-export Environment, calculate_environment,
+export Environment, DefaultEnvironment, calculate_environment,
     get_temperature, get_pressure, get_density, get_sound_velocity,
     get_wind, get_wind_NED, get_wind_direction, get_wind_intensity, get_wind_vertical,
     get_gravity_accel
@@ -54,6 +54,7 @@ function get_wind_NED(wind::Wind)
     wind_N = wind.intensity * cos(wind.direction + π)
     wind_E = wind.intensity * sin(wind.direction + π)
     wind_D = wind.vertical
+    return [wind_N, wind_E, wind_D]
 end
 
 calculate_wind(wind::ConstantWind, state::State) = wind
@@ -77,12 +78,10 @@ get_gravity_accel(grav::Gravity) = grav.value
 get_grav_body_vector(grav::Gravity) = grav.body_vector
 get_grav_body_versor(grav::Gravity) = grav.body_vector / grav.value
 
-function calculate(grav::EarthConstantGravity, state::State)
+function calculate_gravity(grav::EarthConstantGravity, state::State)
     grav.body_vector[:] = hor2body(0, 0, grav.value, get_euler_angles(state)...)
     return grav
 end
-
-calculate_gravity_force(grav::Gravity, mass::Number) = get_grav_body_vector(grav) * mass
 
 # -------- ENVRIONMENT --------
 struct Environment
@@ -91,7 +90,7 @@ struct Environment
     grav::Gravity
 end
 
-DefaultEnvironment = Environment(AtmosphereISA(), ConstantWind(), EarthConstantGravity())
+DefaultEnvironment() = Environment(AtmosphereISA(), ConstantWind(), EarthConstantGravity())
 
 get_temperature(env::Environment) = get_temperature(env.atmos)
 get_pressure(env::Environment) = get_pressure(env.atmos)
@@ -105,6 +104,8 @@ get_wind_intensity(env::Environment) = get_wind_intensity(env.wind)
 get_wind_vertical(env::Environment) = get_wind_vertical(env.wind)
 
 get_gravity_accel(env::Environment) = get_gravity_accel(env.grav)
+get_grav_body_vector(env::Environment) = get_grav_body_vector(env.grav)
+get_grav_body_versor(env::Environment) = get_grav_body_versor(env.grav)
 
 
 function calculate_environment(env::Environment, state::State)

@@ -2,8 +2,9 @@ using Dierckx
 
 using FlightMechanics
 using FlightMechanics.Simulator.Models
+import FlightMechanics.Simulator.Models: calculate_aerodynamics
 
-export C310Aerodynamics, calculate_aero_pfm
+export C310Aerodynamics, calculate_aerodynamics
 
 
 struct C310Aerodynamics<:Aerodynamics
@@ -148,11 +149,12 @@ cnda(aero::C310Aerodynamics, da) = -0.0168 * da
 cndr(aero::C310Aerodynamics, dr) = -0.1152 * dr
 
 # FORCES
-function calculate(aero::C310Aerodynamics, fcs::FCS, aerostate::AeroState, state::State)
+function calculate_aerodynamics(ac::Aircraft, aero::C310Aerodynamics, fcs::FCS,
+    aerostate::AeroState, state::State)
 
     ARP = get_arp(ac)
 
-    qinf = aero.qinf
+    qinf = get_qinf(aerostate)
     Sw = get_wing_area(ac)
     b = get_wing_span(ac)
     c = get_chord(ac)
@@ -161,28 +163,28 @@ function calculate(aero::C310Aerodynamics, fcs::FCS, aerostate::AeroState, state
     da = get_value(fcs.da)  # rad
     dr = get_value(fcs.dr)  # rad
 
-    α = aero.alpha  # rad
-    β = aero.beta   # rad
-    tas = aero.tas  # m/s
-    αdot = aero.alpha_dot
+    α = get_alpha(aerostate)  # rad
+    β = get_beta(aerostate)    # rad
+    tas = get_tas(aerostate)  # m/s
+    αdot = get_alpha_dot(aerostate)  # rad/s
 
     c2v = c / (2*tas)
     b2v = b / (2*tas)
 
     p, q, r = get_body_ang_velocity(state)  # rad/s
 
-    cD = cD0(ac) + cDα(ac, α) + cDde(ac, de) + cDβ(ac, β)
-    cY = cYβ(ac, β) + cYdr(ac, dr) +
-         b2v * (cYp(ac, p)  + cYr(ac, r))
-    cL = cL0(ac) + cLα(ac, α) + cLde(ac, de, α) +
-         c2v * (cLαdot(ac, αdot, α) + cLq(ac, q, α))
+    cD = cD0(aero) + cDα(aero, α) + cDde(aero, de) + cDβ(aero, β)
+    cY = cYβ(aero, β) + cYdr(aero, dr) +
+         b2v * (cYp(aero, p)  + cYr(aero, r))
+    cL = cL0(aero) + cLα(aero, α) + cLde(aero, de, α) +
+         c2v * (cLαdot(aero, αdot, α) + cLq(aero, q, α))
 
-    cl = clβ(ac, β) + clda(ac, da) + cldr(ac, dr) +
-         b2v * (clp(ac, p) + clr(ac, r))
-    cm = cm0(ac) + cmα(ac, α) + cmde(ac, de) +
-         c2v * (cmαdot(ac, αdot) + cmq(ac, q))
-    cn = cnβ(ac, β) + cnda(ac, da) + cndr(ac, dr) +
-         b2v * (cnp(ac, p) + cnr(ac, r))
+    cl = clβ(aero, β) + clda(aero, da) + cldr(aero, dr) +
+         b2v * (clp(aero, p) + clr(aero, r))
+    cm = cm0(aero) + cmα(aero, α) + cmde(aero, de) +
+         c2v * (cmαdot(aero, αdot) + cmq(aero, q))
+    cn = cnβ(aero, β) + cnda(aero, da) + cndr(aero, dr) +
+         b2v * (cnp(aero, p) + cnr(aero, r))
 
     pfm_wind = PointForcesMoments(ARP,
                                   qinf*Sw*[-cD, cY, -cL],

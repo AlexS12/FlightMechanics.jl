@@ -10,3 +10,4 @@ end
 @testset "coordinates" begin include("coordinates.jl") end
 @testset "anemometry" begin include("anemometry.jl") end
 @testset "mechanics" begin include("mechanics.jl") end
+@testset "c310" begin include("c310.jl") end

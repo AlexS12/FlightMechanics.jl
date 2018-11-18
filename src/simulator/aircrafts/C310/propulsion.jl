@@ -1,7 +1,14 @@
 using FlightMechanics.Simulator.Models
 
-export C310Engine, C310EngineLeft, C310EngineRight
+import FlightMechanics.Simulator.Models:
+    get_pfm, get_cj, get_power, get_efficiency, get_tanks,
+    get_engine_position, get_engine_orientation,
+    calculate_engine
 
+export C310Engine, C310EngineLeft, C310EngineRight,
+    get_pfm, get_cj, get_power, get_efficiency, get_tanks,
+    get_engine_position, get_engine_orientation, get_default_fuel_tanks,
+    calculate_engine
 
 abstract type C310Engine<:Engine end
 
@@ -60,32 +67,34 @@ function calculate_engine_power(eng::C310Engine, fcs::FCS,
 end
 
 function calculate_propeller_thrust(eng::C310Engine, fcs::FCS,
-                                    aerostate::AeroState, state::State, Pm)
+    aerostate::AeroState, state::State, Pm::Number)
    # Assume constant propulsive efficiency
    ηp = 0.75
    # Calculate thrust
-   thrust = ηp * Pm / aero.tas
+   thrust = ηp * Pm / get_tas(aerostate)
    return thrust, ηp
 end
 
 
-function calculate(eng::C310Engine, fcs::FCS, aerostate::AeroState, state::State;
-                   consume_fuel=false)
-    Pm, cj = calculate_engine_power(eng, fcs, aeroste)
-    thrust, ηp = calculate_propeller_thrust(eng, fcs, aerostate, state)
+function calculate_engine(eng::C310Engine, fcs::FCS, aerostate::AeroState,
+                          state::State; consume_fuel=false)
+    Pm, cj = calculate_engine_power(eng, fcs, aerostate, state)
+    thrust, ηp = calculate_propeller_thrust(eng, fcs, aerostate, state, Pm)
 
     if consume_fuel==true
         error("fuel consumption not implemented")
     else
         tanks = get_tanks(eng)
+    end
 
     # TODO: Torque calcualtion is missing
-    pfm = PointForcesMoments(get_engine_position(prop),
+    pfm = PointForcesMoments(get_engine_position(eng),
                              [thrust, 0, 0],
                              [0, 0, 0]
                              )
 
-    return typeof(eng)(pfm, cj, power, ηp, tanks)
+    return typeof(eng)(pfm, cj, Pm, ηp, tanks)
+end
 
 
 get_thrust_setting(eng::C310EngineLeft, fcs::FCS) = get_value(fcs.t1)

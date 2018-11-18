@@ -2,7 +2,7 @@ using FlightMechanics
 using FlightMechanics.Simulator.Models
 
 export AeroState,
-    get_alpha, get_beta, get_aero_angles,
+    get_alpha, get_beta, get_aero_angles, get_alpha_dot,
     get_tas, get_eas, get_cas, get_ias, get_aero_speeds,
     get_qinf, get_mach
 
@@ -65,6 +65,7 @@ end
 get_alpha(aerost::AeroState) = aerost.alpha
 get_beta(aerost::AeroState) = aerost.beta
 get_aero_angles(aerost::AeroState) = [aerost.alpha, aerost.beta]
+get_alpha_dot(aerost::AeroState) = aerost.alpha_dot
 
 get_aero_speeds(aerost::AeroState) = [aerost.tas, aerost.eas, aerost.cas, aerost.ias]
 get_tas(aerost::AeroState) = aerost.tas
