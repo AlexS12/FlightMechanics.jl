@@ -48,9 +48,7 @@ end
 
 function AeroState(tas::Number, alpha::Number, beta::Number, height::Number)
 
-    p = get_pressure(env)
-    ρ = get_density(env)
-    a = get_sound_velocity(env)
+    T, p, ρ, a = atmosphere_isa(height)
 
     cas = tas2cas(tas, ρ, p)
     ias = tas

@@ -4,14 +4,14 @@ export six_dof_euler_fixed_mass
 """
     six_dof_euler_fixed_mass(state, mass, inertia, forces, moments)
 
-Six degrees of freedom dynamic system using Euler angles for attitude 
-representation and assuming fixed mass. 
+Six degrees of freedom dynamic system using Euler angles for attitude
+representation and assuming fixed mass.
 
 Flat Earth hypothesis is applied and Earth reference frame is considered
 inertial.
 
 It is considered that the aircraft xb-zb plane is a plane of symmetry so that
-Jxy and Jyz cross-product of inertia are zero and will not be taken into 
+Jxy and Jyz cross-product of inertia are zero and will not be taken into
 account.
 
 # Arguments
@@ -34,24 +34,24 @@ account.
  dynamics, controls design, and autonomous systems. John Wiley & Sons.
  (Section 1.5, equations 1.5-4, page 46)
 
-- [2] Etkin, B. (2005). Dynamics of atmospheric flight. Dover Publications 
+- [2] Etkin, B. (2005). Dynamics of atmospheric flight. Dover Publications
  (Section 5.8, page 148, formulas 5.8,1 to 5.8,7)
 
 - [3] Zipfel, P. H. (2007). Modeling and simulation of aerospace vehicle
  dynamics. American Institute of Aeronautics and Astronautics.
- (page 368, figure 10.2, not taking into account quaternions in angular 
+ (page 368, figure 10.2, not taking into account quaternions in angular
  kinematic equations)
 """
 function six_dof_euler_fixed_mass(state, mass, inertia, forces, moments)
 
     m = mass
-    Ix = inertia[0, 0]
-    Iy = inertia[1, 1]
-    Iz = inertia[2, 2]
-    Jxz = -inertia[0, 2]
+    Ix = inertia[1, 1]
+    Iy = inertia[2, 2]
+    Iz = inertia[3, 3]
+    Jxz = -inertia[1, 3]
 
     u, v, w, p, q, r, ψ, θ, ϕ, xe, ye, ze = state
-    
+
     Fx, Fy, Fz = forces
     L, M, N = moments
 

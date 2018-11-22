@@ -2,8 +2,10 @@ using FlightMechanics.Simulator.Models
 
 
 export C310FCS,
-    set_stick_long, set_stick_lat, set_pedals,
-    set_thrust1, set_thrust2, set_thrust
+    set_stick_lon, set_stick_lat, set_pedals,
+    set_thrust1, set_thrust2, set_thrust,
+    set_controls_trimmer, get_controls_trimmer,
+    get_controls_ranges_trimmer
 
 
 struct C310FCS<:FCS
@@ -37,7 +39,7 @@ C310FCS() = C310FCS(# Cabin Inputs
                     RangeControl(0.0, [0.0, 1.0])                 # t1
                     )
 
-function set_stick_long(fcs::C310FCS, value)
+function set_stick_lon(fcs::C310FCS, value)
     set_value(fcs.stick_longitudinal, value)
     min, max = get_value_range(fcs.de)
     range = max - min
@@ -75,4 +77,25 @@ end
 function set_thrust(fcs::C310FCS, value)
     set_thrust1(fcs, value)
     set_thrust2(fcs, value)
+end
+
+function set_controls_trimmer(fcs::C310FCS, slong, slat, ped, thrust)
+    set_stick_lat(fcs, slong)
+    set_stick_lon(fcs, slat)
+    set_pedals(fcs, ped)
+    set_thrust(fcs, thrust)
+end
+
+function get_controls_trimmer(fcs::C310FCS)
+    [get_value(fcs.stick_longitudinal),
+     get_value(fcs.stick_lateral),
+     get_value(fcs.pedals),
+     get_value(fcs.thrust1)]
+ end
+
+function get_controls_ranges_trimmer(fcs::C310FCS)
+    [get_value_range(fcs.stick_longitudinal),
+     get_value_range(fcs.stick_lateral),
+     get_value_range(fcs.pedals),
+     get_value_range(fcs.thrust1)]
 end

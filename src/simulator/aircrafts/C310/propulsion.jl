@@ -21,6 +21,17 @@ struct C310EngineLeft<:C310Engine
     tanks::Array{RigidSolid, 1}
 end
 
+function C310EngineLeft()
+    C310EngineLeft(
+        PointForcesMoments(zeros(3), zeros(3), zeros(3)),
+        0,
+        0,
+        0,
+        [PointMass(225 * LB2KG, [35, -209.8, 28.3] .* IN2M),
+         PointMass(95 * LB2KG, [35, -41.6, 11.7] .* IN2M)]
+        )
+end
+
 
 struct C310EngineRight<:C310Engine
     pfm::PointForcesMoments
@@ -30,6 +41,17 @@ struct C310EngineRight<:C310Engine
     tanks::Array{RigidSolid, 1}
 end
 
+function C310EngineRight()
+    C310EngineRight(
+        PointForcesMoments(zeros(3), zeros(3), zeros(3)),
+        0,
+        0,
+        0,
+        [PointMass(225 * LB2KG, [35, 209.8, 28.3] .* IN2M),
+         PointMass(95 * LB2KG, [35, 41.6, 11.7] .* IN2M)]
+        )
+end
+
 #Getters
 get_pfm(eng::C310Engine) = eng.pfm
 get_cj(eng::C310Engine) = eng.cj
@@ -37,21 +59,10 @@ get_power(eng::C310Engine) = eng.power
 get_efficiency(eng::C310Engine) = eng.efficiency
 get_tanks(eng::C310Engine) = eng.tanks
 
-
 get_engine_position(prop::C310EngineLeft) = [-27.5, -70, 15.5] .* IN2M
 get_engine_position(prop::C310EngineRight) = [-27.5, 70, 15.5] .* IN2M
 get_engine_orientation(prop::C310Engine) = [0, 0, 0] .* DEG2RAD
 
-# Fuel tanks
-function get_default_fuel_tanks(prop::C310EngineLeft)
-   [PointMass(225 * LB2KG, [35, -209.8, 28.3] .* IN2M),
-    PointMass(95 * LB2KG, [35, -41.6, 11.7] .* IN2M)]
-end
-
-function get_default_fuel_tanks(prop::C310EngineRight)
-   [PointMass(225 * LB2KG, [35, 209.8, 28.3] .* IN2M),
-    PointMass(95 * LB2KG, [35, 41.6, 11.7] .* IN2M)]
-end
 
 function calculate_engine_power(eng::C310Engine, fcs::FCS,
                                 aerostate::AeroState, state::State)

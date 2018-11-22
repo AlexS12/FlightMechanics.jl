@@ -8,9 +8,9 @@ export EarthConstantGravity, calculate_gravity
 export Environment, DefaultEnvironment, calculate_environment,
     get_temperature, get_pressure, get_density, get_sound_velocity,
     get_wind, get_wind_NED, get_wind_direction, get_wind_intensity, get_wind_vertical,
-    get_gravity_accel
+    get_gravity_accel, get_grav_body_vector, get_grav_body_versor
 
-
+    
 # -------- ATMOSPHERE --------
 abstract type Atmosphere end
 

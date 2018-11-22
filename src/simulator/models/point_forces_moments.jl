@@ -1,4 +1,6 @@
 import Base: +
+using LinearAlgebra
+
 
 export PointForcesMoments, translate_forces_moments, +
 
@@ -13,7 +15,7 @@ end
 
 function translate_forces_moments(pfm::PointForcesMoments, point::Array{T, 1}) where T<:Number
     r = pfm.point - point
-    if isapprox(r, zeros(r))
+    if isapprox(r, [0., 0., 0.])
         return pfm
     else
         f = pfm.forces

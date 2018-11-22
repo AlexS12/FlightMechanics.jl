@@ -27,25 +27,25 @@ end
 
 
 function C310()
-    mass_props0 = RigidSolid(0, zeros(3), zeros(3, 3))
     pfm0 = PointForcesMoments(zeros(3), zeros(3), zeros(3))
-
-    aero_state0 = AeroState(zeros(9)...)
     aero0 = C310Aerodynamics(pfm0)
+    engine_right = C310EngineRight()
+    engine_left = C310EngineLeft()
+    propulsion0 = Propulsion(
+            PointForcesMoments(zeros(3), zeros(3), zeros(3)),
+            0, 0, 0,
+            [engine_right, engine_left]
+            )
 
-    engine_right = C310EngineRight(pfm0, 0, 0, 0,
-                                   [PointMass(225 * LB2KG, [35, 209.8, 28.3] .* IN2M),
-                                    PointMass(95 * LB2KG, [35, 41.6, 11.7] .* IN2M)
-                                    ]
-                                   )
-    engine_left = C310EngineLeft(pfm0, 0, 0, 0,
-                                 [PointMass(225 * LB2KG, [35, -209.8, 28.3] .* IN2M),
-                                  PointMass(95 * LB2KG, [35, -41.6, 11.7] .* IN2M)
-                                 ]
-                                )
-    propulsion0 = Propulsion(pfm0, 0, 0, 0, [engine_right, engine_left])
-
-    C310(mass_props0, pfm0, aero0, propulsion0)
+    # mass properties cannot be retrieved until ac is created... so:
+    ac = C310(RigidSolid(0, zeros(3), zeros(3, 3)),
+              pfm0,
+              aero0,
+              propulsion0)
+    mass = get_fuel_mass_props(get_propulsion(ac)) +
+           get_empty_mass_props(ac) +
+           get_payload_mass_props(ac)
+    C310(mass, pfm0, aero0, propulsion0)
 end
 
 
@@ -79,7 +79,7 @@ get_pilot_mass_props(ac::C310) = PointMass(180 * LB2KG, [37, -14, 24] .* IN2M)
 get_copilot_mass_props(ac::C310) = PointMass(180 * LB2KG, [37, 14, 24] .* IN2M)
 get_lugage_mass_props(ac::C310) = PointMass(100 * LB2KG, [90, -0, 24] .* IN2M)
 
-get_payload_mass_props(ac::Aircraft) = (get_pilot_mass_props(ac) +
-                                        get_copilot_mass_props(ac) +
-                                        get_lugage_mass_props(ac)
-                                        )
+get_payload_mass_props(ac::C310) = (get_pilot_mass_props(ac) +
+                                    get_copilot_mass_props(ac) +
+                                    get_lugage_mass_props(ac)
+                                    )
