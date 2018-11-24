@@ -17,23 +17,25 @@ end
 
 get_value_range(c::RangeControl) = c.value_range
 
-# function set_value(c::RangeControl, val)
-#     min, max = get_value_range(c)
-#     if min <= val <= max
-#         c.value = val
-#     elseif val < min
-#         c.value = min
-#     else
-#         c.value = max
-#         #throw(DomainError(val, "val must be between min and max"))
-#     end
-# end
-
 # TODO: for trimmer to work, values out of the domain are allowed.
 # an optimization method with boundaries must be sought
-function set_value(c::RangeControl, val)
-    c.value = val
-        #throw(DomainError(val, "val must be between min and max"))
+function set_value(c::RangeControl, val, allow_out_of_range=false, throw_error=false)
+    if allow_out_of_range
+        c.value = val
+    else
+        min, max = get_value_range(c)
+        if min <= val <= max
+            c.value = val
+        else
+            if throw_error
+                throw(DomainError(val, "val must be between min and max"))
+            elseif val < min
+                c.value = min
+            else
+                c.value = max
+            end
+        end
+    end
 end
 
 
