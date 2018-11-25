@@ -10,12 +10,26 @@ end
 # translate_forces_moments
 pfm1 = PointForcesMoments([0, 0 ,0], [1, 0, 0], [0, 0, 0])
 trans_pfm1 = translate_forces_moments(pfm1, [0, 0, 1])
-exp_pfm = PointForcesMoments([0, 0, 1], [1, 0, 0], [0, -1, 0])
+exp_pfm1 = PointForcesMoments([0, 0, 1], [1, 0, 0], [0, -1, 0])
 
-@test isapprox(trans_pfm1.point, exp_pfm.point)
-@test isapprox(trans_pfm1.forces, exp_pfm.forces)
-@test isapprox(trans_pfm1.moments, exp_pfm.moments)
+@test isapprox(trans_pfm1.point, exp_pfm1.point)
+@test isapprox(trans_pfm1.forces, exp_pfm1.forces)
+@test isapprox(trans_pfm1.moments, exp_pfm1.moments)
+
+pfm2 = PointForcesMoments([0, 0 ,0], [1, 0, 0], [1, 0, 0])
+trans_pfm2 = translate_forces_moments(pfm2, [0, 0, 1])
+exp_pfm2 = PointForcesMoments([0, 0, 1], [1, 0, 0], [1, -1, 0])
+
+@test isapprox(trans_pfm2.point, exp_pfm2.point)
+@test isapprox(trans_pfm2.forces, exp_pfm2.forces)
+@test isapprox(trans_pfm2.moments, exp_pfm2.moments)
 
 # isapprox
 @test isapprox(pfm1, trans_pfm1)
 @test ≈(pfm1, trans_pfm1)
+@test isapprox(pfm2, trans_pfm2)
+@test ≈(pfm2, trans_pfm2)
+
+# +
+exp_pfm_sum = PointForcesMoments([0, 0, 0], [2, 0, 0], [0, 0, 0])
+@test isapprox(pfm1 + pfm1, exp_pfm_sum)
