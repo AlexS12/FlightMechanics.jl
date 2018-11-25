@@ -18,3 +18,4 @@ exp_pfm = PointForcesMoments([0, 0, 1], [1, 0, 0], [0, -1, 0])
 
 # isapprox
 @test isapprox(pfm1, trans_pfm1)
+@test ≈(pfm1, trans_pfm1)
