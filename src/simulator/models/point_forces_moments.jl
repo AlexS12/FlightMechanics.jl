@@ -1,4 +1,4 @@
-import Base: +
+import Base: +, isapprox
 using LinearAlgebra
 
 
@@ -33,6 +33,13 @@ end
 
 function +(pfm1::PointForcesMoments, pfm2::PointForcesMoments)
     +(pfm1, pfm2, pfm1.point)
+end
+
+function isapprox(pfm1::PointForcesMoments, pfm2::PointForcesMoments; kwargs...)
+    trans_pfm2 = translate_forces_moments(pfm2, pfm1.point)
+    cond = isapprox(pfm1.forces, trans_pfm2.forces; kwargs...) &
+           isapprox(pfm1.moments, trans_pfm2.moments; kwargs...)
+    return cond
 end
 
 function rotate(pfm::PointForcesMoments, psi, theta, phi)
