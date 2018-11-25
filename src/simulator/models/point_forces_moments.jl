@@ -1,4 +1,4 @@
-import Base: +, isapprox
+import Base: +, -, *, isapprox
 using LinearAlgebra
 
 
@@ -33,6 +33,20 @@ end
 
 function +(pfm1::PointForcesMoments, pfm2::PointForcesMoments)
     +(pfm1, pfm2, pfm1.point)
+end
+
+function *(pfm::PointForcesMoments, n::Number)
+    PointForcesMoments(pfm.point, n*pfm.forces, n*pfm.moments)
+end
+
+*(n::Number, pfm::PointForcesMoments) = *(pfm, n)
+
+function -(pfm1::PointForcesMoments, pfm2::PointForcesMoments, point::Array{T, 1}) where T<:Number
+    +(pfm1, (-1) * pfm2, point)
+end
+
+function -(pfm1::PointForcesMoments, pfm2::PointForcesMoments)
+    -(pfm1, pfm2, pfm1.point)
 end
 
 function isapprox(pfm1::PointForcesMoments, pfm2::PointForcesMoments; kwargs...)

@@ -33,3 +33,9 @@ exp_pfm2 = PointForcesMoments([0, 0, 1], [1, 0, 0], [1, -1, 0])
 # +
 exp_pfm_sum = PointForcesMoments([0, 0, 0], [2, 0, 0], [0, 0, 0])
 @test isapprox(pfm1 + pfm1, exp_pfm_sum)
+# -
+exp_pfm_sub = PointForcesMoments([0, 0, 0], [0, 0, 0], [0, 0, 0])
+@test isapprox(pfm2 - pfm2, exp_pfm_sub)
+# *
+exp_pfm_mul = PointForcesMoments([0, 0, 1], [2, 0, 0], [2, -2, 0])
+@test isapprox(2 * exp_pfm2, exp_pfm_mul)
