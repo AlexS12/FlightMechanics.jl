@@ -2,7 +2,7 @@ import Base: +, -, *, isapprox
 using LinearAlgebra
 
 
-export PointForcesMoments, translate_forces_moments, +
+export PointForcesMoments, translate_forces_moments, +, -, *, isapprox, rotate
 
 
 # TODO: provide outer constructor checking dimensions?
