@@ -39,3 +39,19 @@ exp_pfm_sub = PointForcesMoments([0, 0, 0], [0, 0, 0], [0, 0, 0])
 # *
 exp_pfm_mul = PointForcesMoments([0, 0, 1], [2, 0, 0], [2, -2, 0])
 @test isapprox(2 * exp_pfm2, exp_pfm_mul)
+
+# rotate
+pfm3 = PointForcesMoments([0, 0, 0], [1, -1, 1], [-1, 1, 1])
+rot_pfm3 = rotate(pfm3, 0, 0, 0)
+exp_rot_pfm3 = PointForcesMoments([0, 0, 0], [1, -1, 1], [-1, 1, 1])
+@test isapprox(rot_pfm3, exp_rot_pfm3)
+
+pfm3 = PointForcesMoments([0, 0, 0], [0, 1, 0], [-1, 0, 0])
+rot_pfm3 = rotate(pfm3, -π/2, 0, 0)
+exp_rot_pfm3 = PointForcesMoments([0, 0, 0], [1, 0, 0], [0, 1, 0])
+@test isapprox(rot_pfm3, exp_rot_pfm3, atol=1e-15)
+
+pfm3 = PointForcesMoments([0, 0, 0], [0, 1, 0], [-1, 0, 0])
+rot_pfm3 = rotate(pfm3, 0, π/2, 0)
+exp_rot_pfm3 = PointForcesMoments([0, 0, 0], [0, 1, 0], [0, 0, 1])
+@test isapprox(rot_pfm3, exp_rot_pfm3, atol=1e-15)
