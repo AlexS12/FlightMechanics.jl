@@ -19,6 +19,11 @@ struct RigidSolid
     inertia::Array{T, 2} where T<:Number
 end
 
+# Getters
+get_mass(rs::RigidSolid) = rs.mass
+get_cg(rs::RigidSolid) = rs.cg
+get_inertia(rs::RigidSolid) = rs.inertia
+
 
 """
     PointMass(mass::Number, position::Array{T, 1})
