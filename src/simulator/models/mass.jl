@@ -3,7 +3,7 @@ import Base: +
 
 
 export RigidSolid, PointMass,
-    get_inertia, +
+    get_mass, get_cg, get_inertia, +
 
 
 # TODO: provide outer constructor checking dimensions?
