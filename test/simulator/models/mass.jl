@@ -35,8 +35,30 @@ inertia = [1 0 0;
 rs = RigidSolid(mass, point0, inertia)
 point1 = [10, 0, 0]
 inertia_p1 = get_inertia(rs, point1)
-
 exp_inertia = [0       0     0;
                0    1000     0;
                0       0  1000] + inertia
 @test isapprox(inertia_p1, exp_inertia)
+
+# composition
+m1, m2 = 10.0, 100.0
+p1 = [1.0, 2.0, 3.0]
+inertia = Matrix(1.0I, 3, 3)
+
+rs1 = RigidSolid(m1, p1, inertia)
+rs2 = RigidSolid(m2, p1, inertia)
+
+rs = rs1 + rs2
+@test isapprox(m1 + m2, get_mass(rs))
+@test isapprox(p1, get_cg(rs))
+@test isapprox(2*inertia, get_inertia(rs))
+
+p2 = [-1.0, -2.0, -3.0]
+rs2 = RigidSolid(m2, p2, inertia)
+
+rs = rs1 + rs2
+@test isapprox(m1 + m2, get_mass(rs))
+@test isapprox((p1*m1 + p2*m2) / (m1 + m2), get_cg(rs))
+@test isapprox(get_inertia(rs1, get_cg(rs)) + get_inertia(rs2, get_cg(rs)),
+               get_inertia(rs)
+               )
