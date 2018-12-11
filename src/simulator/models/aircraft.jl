@@ -1,6 +1,3 @@
-using FlightMechanics.Simulator.Models
-
-
 export Aerodynamics
 export Aircraft,
     get_mass_props, get_pfm, get_aerodynamics, get_propulsion,

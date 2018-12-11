@@ -1,5 +1,4 @@
 using FlightMechanics
-using FlightMechanics.Simulator.Models
 
 
 export Engine,

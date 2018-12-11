@@ -1,5 +1,4 @@
 using FlightMechanics
-using FlightMechanics.Simulator.Models
 
 export AeroState,
     get_alpha, get_beta, get_aero_angles, get_alpha_dot,
