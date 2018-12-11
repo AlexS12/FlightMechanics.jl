@@ -53,11 +53,6 @@ function calculate_aircraft(ac::Aircraft, fcs::FCS, aerostate::AeroState,
     α = get_alpha(aerostate)
     pfm = grav_pfm + get_pfm(prop) + rotate(get_pfm(aero), β, α, 0.)
 
-    # println("prop:", get_pfm(prop))
-    # println("aero:", get_pfm(aero))
-    # println("grav:", grav_pfm)
-    println([fcs.de.value, fcs.da.value, fcs.dr.value, fcs.t1.value, fcs.t2.value])
-
     # TODO: where to discount fuel consumption?
     # Here and produce an aircraft with a mass and grav forces "not coherent"
     # or before calculating grav forces?
