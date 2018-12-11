@@ -17,7 +17,7 @@ end
 
 
 function steady_state_trim(ac::Aircraft, fcs::FCS, env::Environment,
-    tas::Number, height::Number, psi::Number, gamma::Number, turn_rate::Number)
+    tas::Number, pos::Position, psi::Number, gamma::Number, turn_rate::Number)
 
     alpha0 = 3 * DEG2RAD
     beta0 = 0 * DEG2RAD
@@ -29,15 +29,16 @@ function steady_state_trim(ac::Aircraft, fcs::FCS, env::Environment,
     att  = Attitude(psi, theta, phi)
 
     # Create initial aero and initial state
-    aerostate = AeroState(tas, alpha0, beta0, height)
+    aerostate = AeroState(tas, alpha0, beta0, get_height(pos))
 
     # TODO: take into account wind in inertial velocity
-    state = EarthBodyState(
-        0, 0, -height,
-        wind2body([aerostate.tas, 0, 0]..., aerostate.alpha, aerostate.beta)...,
-        p, q, r,
+    state = State(
+        pos,
         att,
-        zeros(6)...
+        wind2body([aerostate.tas, 0, 0]..., aerostate.alpha, aerostate.beta),
+        [p, q, r],
+        zeros(3),  # acceleration
+        zeros(3)   # angular acceleration
     )
 
     env = calculate_environment(env, state)
@@ -66,7 +67,7 @@ function steady_state_trim(ac::Aircraft, fcs::FCS, env::Environment,
                       Optim.Options(
                         g_tol=1e-25,
                         iterations=1000,
-                        show_trace=true, show_every=25
+                        show_trace=true, show_every=50
                         );
                       )
 
@@ -86,9 +87,9 @@ function trim_cost_function(trimming_variables, trimmer::Trimmer)
     alpha, beta = trimming_variables[1:2]
 
     tr = trimmer.turn_rate
-    tas = trimmer.aerostate.tas
+    tas = get_tas(trimmer.aerostate)
     gamma = trimmer.gamma
-    psi = trimmer.state.att.psi
+    psi = get_euler_angles(trimmer.state)[1]
 
     # Impose constrains
     phi = coordinated_turn_bank(tr, alpha, beta, tas, gamma)
@@ -96,14 +97,16 @@ function trim_cost_function(trimming_variables, trimmer::Trimmer)
     p, q, r = turn_rate_angular_velocity(tr, theta, phi)
 
     # Generate new state
-    att  = Attitude(psi, theta, phi)
+    att = Attitude(psi, theta, phi)
+    pos = get_position(trimmer.state)
     # TODO: take into account wind in inertial velocity
-    state = EarthBodyState(
-        get_earth_position(trimmer.state)...,
-        wind2body([tas, 0, 0]..., alpha, beta)...,
-        p, q, r,
+    state = State(
+        pos,
         att,
-        zeros(6)...
+        wind2body([tas, 0, 0]..., alpha, beta),
+        [p, q, r],
+        zeros(3),
+        zeros(3)
     )
 
     aerostate = AeroState(tas, alpha, beta, get_height(state))

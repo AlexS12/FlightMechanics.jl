@@ -31,7 +31,8 @@ println(get_payload_mass_props(ac))
 println(ac.mass_props)
 
 att = Attitude(1/180*pi, 0, 0)
-state = EarthBodyState(0, 0, -1000, 65, 0, 3, 0, 0, 0, att, 0, 0, 0, 0, 0, 0)
+pos = PositionEarth(0, 0, -1000)
+state = State(pos, att, [65., 0., 3.], [0., 0., 0.], [0., 0., 0.], [0., 0., 0.])
 aerostate = AeroState(state, env)
 env = calculate_environment(env, state)
 grav = env.grav
@@ -51,5 +52,5 @@ psi = pi/3  # rad
 gamma = 11 * DEG2RAD
 turn_rate = 0.0
 
-trimmer = steady_state_trim(ac, fcs, env, tas, h, psi, gamma, turn_rate)
+trimmer = steady_state_trim(ac, fcs, env, tas, pos, psi, gamma, turn_rate)
 println(trimmer.ac.pfm)
