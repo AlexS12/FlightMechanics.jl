@@ -1,5 +1,6 @@
 module Models
     include("attitude.jl")
+    include("position.jl")
     include("state.jl")
     include("mass.jl")
     include("point_forces_moments.jl")
