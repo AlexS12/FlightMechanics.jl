@@ -7,6 +7,20 @@ export AeroState,
     get_qinf, get_mach
 
 
+"""
+    AeroState(alpha, beta, alpha_dot, tas, eas, cas, ias, qinf, mach)
+
+Aerodynamic state struct storing relevant aerodynamic data.
+
+# Constructors
+
+Different constructors are provided:
+
+    AeroState(alpha, beta, alpha_dot, tas, eas, cas, ias, qinf, mach)
+    AeroState(state::State, env::Environment)
+    AeroState(tas::Number, alpha::Number, beta::Number, height::Number)
+
+"""
 struct AeroState
     alpha :: Number  # AOA [rad]
     beta :: Number  # AOS [rad]
