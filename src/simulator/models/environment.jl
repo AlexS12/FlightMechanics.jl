@@ -75,7 +75,7 @@ EarthConstantGravity() = EarthConstantGravity(GRAVITY_ACCEL, [0, 0, GRAVITY_ACCE
 
 function EarthConstantGravity(state::State)
     grav = EarthConstantGravity()
-    calculate(grav, state)
+    calculate_gravity(grav, state)
 end
 
 get_gravity_accel(grav::Gravity) = grav.value
@@ -83,8 +83,8 @@ get_grav_body_vector(grav::Gravity) = grav.body_vector
 get_grav_body_versor(grav::Gravity) = grav.body_vector / grav.value
 
 function calculate_gravity(grav::EarthConstantGravity, state::State)
-    grav.body_vector[:] = hor2body(0, 0, grav.value, get_euler_angles(state)...)
-    return grav
+    g = GRAVITY_ACCEL
+    EarthConstantGravity(g, (0, 0, g, get_euler_angles(state)...))
 end
 
 # -------- ENVRIONMENT --------
