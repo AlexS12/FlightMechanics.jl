@@ -84,7 +84,7 @@ get_grav_body_versor(grav::Gravity) = grav.body_vector / grav.value
 
 function calculate_gravity(grav::EarthConstantGravity, state::State)
     g = GRAVITY_ACCEL
-    EarthConstantGravity(g, (0, 0, g, get_euler_angles(state)...))
+    EarthConstantGravity(g, hor2body(0, 0, g, get_euler_angles(state)...))
 end
 
 # -------- ENVRIONMENT --------
