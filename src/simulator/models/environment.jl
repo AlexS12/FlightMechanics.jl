@@ -56,6 +56,11 @@ function get_wind_NED(wind::Wind)
     return [wind_N, wind_E, wind_D]
 end
 
+function get_wind_body(wind::Wind, state::State)
+    wind_ned = get_wind_NED(wind)
+    hor2body(wind_ned..., get_quaternion(state)...)
+end
+
 calculate_wind(wind::ConstantWind, state::State) = wind
 
 # -------- GRAVITY --------
@@ -98,6 +103,7 @@ get_sound_velocity(env::Environment) = get_sound_velocity(env.atmos)
 
 get_wind(env::Environment) = get_wind(env.wind)
 get_wind_NED(env::Environment) = get_wind_NED(env.wind)
+get_wind_body(env::Environment, state::State) = get_wind_body(env.wind, state)
 get_wind_direction(env::Environment) = get_wind_direction(env.wind)
 get_wind_intensity(env::Environment) = get_wind_intensity(env.wind)
 get_wind_vertical(env::Environment) = get_wind_vertical(env.wind)
