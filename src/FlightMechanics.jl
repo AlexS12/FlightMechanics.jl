@@ -5,6 +5,7 @@ include("atmosphere.jl")
 include("coordinates.jl")
 include("anemometry.jl")
 include("mechanics.jl")
+include("flight_mechanics.jl")
 
 # 6 DOF dynamic models
 include("dynamics/sixdof_euler_fixed_mass.jl")
