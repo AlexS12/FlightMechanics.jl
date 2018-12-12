@@ -31,11 +31,14 @@ function steady_state_trim(ac::Aircraft, fcs::FCS, env::Environment,
     # Create initial aero and initial state
     aerostate = AeroState(tas, alpha0, beta0, get_height(pos))
 
-    # TODO: take into account wind in inertial velocity
+    aero_vel_body = wind2body([aerostate.tas, 0, 0]..., aerostate.alpha, aerostate.beta)
+    wind_vel_body = hor2body(get_wind_NED(env)..., get_euler_angles(att)...)
+    vel = aero_vel_body - wind_vel_body
+
     state = State(
         pos,
         att,
-        wind2body([aerostate.tas, 0, 0]..., aerostate.alpha, aerostate.beta),
+        vel,
         [p, q, r],
         zeros(3),  # acceleration
         zeros(3)   # angular acceleration
@@ -100,13 +103,17 @@ function trim_cost_function(trimming_variables, trimmer::Trimmer)
     att = Attitude(psi, theta, phi)
     pos = get_position(trimmer.state)
     # TODO: take into account wind in inertial velocity
+    aero_vel_body = wind2body([aerostate.tas, 0, 0]..., aerostate.alpha, aerostate.beta)
+    wind_vel_body = hor2body(get_wind_NED(env)..., get_euler_angles(att)...)
+    vel = aero_vel_body - wind_vel_body
+
     state = State(
         pos,
         att,
-        wind2body([tas, 0, 0]..., alpha, beta),
+        vel,
         [p, q, r],
-        zeros(3),
-        zeros(3)
+        zeros(3),  # acceleration
+        zeros(3)   # angular acceleration
     )
 
     aerostate = AeroState(tas, alpha, beta, get_height(state))
