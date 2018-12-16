@@ -4,6 +4,16 @@ export Attitude,
        get_euler_angles,
        get_quaternions
 
+
+"""
+    Attitude(psi, theta, phi, q0, q1, q2, q3)
+
+Attiude objects that contains Euler angles and quaternions.
+
+# Constructors
+    Attitude(psi, theta, phi)
+    Attitude(q0, q1, q2, q3)
+"""
 struct Attitude
     # Euler angles
     psi::Number
