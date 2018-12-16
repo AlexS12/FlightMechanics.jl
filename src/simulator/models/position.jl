@@ -5,6 +5,19 @@ export State,
        get_position, get_llh, get_xyz_earth, get_xyz_ecef, get_height
 
 
+"""
+    Position(llh, xzy_earth, xyz_ecef)
+
+Position information:
+    - llh (latitude, longitude, height) [rad, rad, m]
+    - Earth (x, y, z) [m]
+    - ECEF (x, y, z) [m]
+
+# Constructors
+    PositionLLH(lat, lon, h, xe=0., ye=0., ze=0.)
+    PositionECEF(x, y, z, xe=0., ye=0., ze=0.)
+    PositionEarth(x, y, z, lat=0., lon=0., h=0.)
+"""
 struct Position
     # latitude [rad], longitude [rad], height [m]
     llh::Array{T, 1} where T<:Number
