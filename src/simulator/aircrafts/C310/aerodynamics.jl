@@ -7,8 +7,12 @@ import FlightMechanics.Simulator.Models: calculate_aerodynamics
 export C310Aerodynamics, calculate_aerodynamics
 
 
+# TODO: CDα, CLα, CYβ... could be included here
 struct C310Aerodynamics<:Aerodynamics
-    pfm::PointForcesMoments
+    wind_pfm::PointForcesMoments
+    wind_coeff_pfm::PointForcesMoments
+    body_pfm::PointForcesMoments
+    body_coeff_pfm::PointForcesMoments
 end
 
 
@@ -190,5 +194,10 @@ function calculate_aerodynamics(ac::Aircraft, aero::C310Aerodynamics, fcs::FCS,
                                   qinf*Sw*[-cD, cY, -cL],
                                   qinf*Sw*[b*cl, c*cm, b*cn])
 
-    return C310Aerodynamics(pfm_wind)
+    adim_pfm_wind = PointForcesMoments(ARP, [-cD, cY, -cL], [cl, cm, cn])
+
+    pfm_body = rotate(pfm_wind, β, α, 0)
+    adim_pfm_body = rotate(adim_pfm_wind, β, α, 0)
+
+    return C310Aerodynamics(pfm_wind, adim_pfm_wind, pfm_body, adim_pfm_body)
 end

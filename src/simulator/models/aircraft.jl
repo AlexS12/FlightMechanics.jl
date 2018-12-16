@@ -1,18 +1,9 @@
-export Aerodynamics
 export Aircraft,
     get_mass_props, get_pfm, get_aerodynamics, get_propulsion,
     get_name, get_wing_area, get_wing_span, get_chord, get_arp,
     get_empty_mass_props, get_payload_mass_props,
     calculate_aircraft
 
-
-abstract type Aerodynamics end
-
-get_pfm(aero::Aerodynamics) = aero.pfm
-function calculate_aerodynamics(aero::Aerodynamics, fcs::FCS,
-    aerostate::AeroState, state::State)
-    error("abstract method")
-end
 
 abstract type Aircraft end
 
@@ -48,7 +39,7 @@ function calculate_aircraft(ac::Aircraft, fcs::FCS, aerostate::AeroState,
 
     β = get_beta(aerostate)
     α = get_alpha(aerostate)
-    pfm = grav_pfm + get_pfm(prop) + rotate(get_pfm(aero), β, α, 0.)
+    pfm = grav_pfm + get_pfm(prop) + get_pfm(aero)
 
     # TODO: where to discount fuel consumption?
     # Here and produce an aircraft with a mass and grav forces "not coherent"

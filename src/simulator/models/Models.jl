@@ -9,5 +9,6 @@ module Models
     include("controls.jl")
     include("fcs.jl")
     include("propulsion.jl")
+    include("aerodynamics.jl")
     include("aircraft.jl")
 end

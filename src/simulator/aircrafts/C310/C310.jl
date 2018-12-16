@@ -28,7 +28,7 @@ end
 
 function C310()
     pfm0 = PointForcesMoments(zeros(3), zeros(3), zeros(3))
-    aero0 = C310Aerodynamics(pfm0)
+    aero0 = C310Aerodynamics(pfm0, pfm0, pfm0, pfm0)
     engine_right = C310EngineRight()
     engine_left = C310EngineLeft()
     propulsion0 = Propulsion(
