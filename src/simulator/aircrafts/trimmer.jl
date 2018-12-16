@@ -16,6 +16,40 @@ mutable struct Trimmer
 end
 
 
+"""
+    steady_state_trim(ac::Aircraft, fcs::FCS, env::Environment, tas::Number,
+        pos::Position, psi::Number, gamma::Number, turn_rate::Number)
+
+Find a steady state flight condition.
+
+# Inputs
+ac: aircraft to be trimmed.
+fcs: flight control system for that aircraft. Controls given by
+    `get_controls_trimmer` will be used to trim the aircraft while the rest
+    will remain constant.
+env: environment variables (atmospheric values, wind and gravity).
+tas: true airspeed [m/s].
+pos: position of the aircraft.
+psi: heading of the aircraft [rad].
+gamma: aerodynamic rate of climb of the aircraft [rad].
+turn_rate: heading rate of change [rad/s].
+
+# Returns
+ac: trimmed aircraft.
+aerostate: trimmed aerostate.
+state: trimmed state.
+env: environment.
+fcs: trimmed FCS.
+
+# References
+
+See section 2.5 in [1] for the definition of steady-state flight condition.
+See section 3.4 in [1] for the algorithm description.
+
+- [1] Stevens, B. L., Lewis, F. L., (1992). Aircraft control and simulation:
+ dynamics, controls design, and autonomous systems. John Wiley & Sons.
+ (page 41, formula 1.4-23)
+"""
 function steady_state_trim(ac::Aircraft, fcs::FCS, env::Environment,
     tas::Number, pos::Position, psi::Number, gamma::Number, turn_rate::Number)
 
@@ -49,6 +83,7 @@ function steady_state_trim(ac::Aircraft, fcs::FCS, env::Environment,
     # Store every necessary variable in the trimmer
     trimmer = Trimmer(ac, aerostate, state, env, fcs, turn_rate, gamma)
 
+    # Varibles in the trimming loop are alpha, beta, and controls.
     trim_vars0 = [alpha0, beta0] # append not fixed controls
     lower_bounds = [-15 * DEG2RAD, -15 * DEG2RAD]
     upper_bounds = [ 15 * DEG2RAD,  15 * DEG2RAD]
@@ -78,7 +113,7 @@ function steady_state_trim(ac::Aircraft, fcs::FCS, env::Environment,
     println(Optim.minimizer(result))
 
     # Return trimmed variables
-    trimmer
+    trimmer.ac, trimmer.aerostate, trimmer.state, trimmer.env, trimmer.fcs
 end
 
 

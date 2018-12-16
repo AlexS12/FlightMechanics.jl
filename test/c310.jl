@@ -52,5 +52,5 @@ psi = pi/3  # rad
 gamma = 11 * DEG2RAD
 turn_rate = 0.0
 
-trimmer = steady_state_trim(ac, fcs, env, tas, pos, psi, gamma, turn_rate)
-println(trimmer.ac.pfm)
+ac, aerostate, state, env, fcs = steady_state_trim(ac, fcs, env, tas, pos, psi, gamma, turn_rate)
+println(ac.pfm)
