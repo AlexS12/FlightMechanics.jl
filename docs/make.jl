@@ -13,6 +13,11 @@ makedocs(authors="Alejandro Saez Mollejo",
            "anemometry.md",
            "kinematics.md"
          ],
+         "Simulator" => [
+           "models.md",
+           "aircrafts.md",
+           "trimmer.md"
+         ]
          ])
 
 deploydocs(
