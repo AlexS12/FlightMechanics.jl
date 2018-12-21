@@ -6,9 +6,7 @@ export Attitude,
 
 
 """
-    Attitude(psi, theta, phi, q0, q1, q2, q3)
-
-Attiude objects that contains Euler angles and quaternions.
+Attitude objects that contains Euler angles and quaternions.
 
 # Constructors
     Attitude(psi, theta, phi)

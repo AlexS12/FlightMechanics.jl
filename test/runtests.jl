@@ -12,5 +12,6 @@ end
 @testset "mechanics" begin include("mechanics.jl") end
 @testset "point forces moments" begin include("simulator/models/point_forces_moments.jl") end
 @testset "mass" begin include("simulator/models/mass.jl") end
+@testset "attitude" begin include("simulator/models/attitude.jl") end
 
 @testset "c310" begin include("c310.jl") end
