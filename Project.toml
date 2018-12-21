@@ -1,7 +1,7 @@
 name = "FlightMechanics"
 uuid = "b53c057e-b8f7-52b0-b891-15a01c28915a"
 authors = ["Álex Sáez <alex.saez.12@gmail.com>"]
-version = "0.0.0"
+version = "0.1.0"
 
 [deps]
 Dierckx = "39dd38d3-220a-591b-8e3c-4c3a8c710a94"
