@@ -17,9 +17,6 @@ export body2hor, rot_matrix_body2hor,
        ecef2llh
 
 
-const WGS84 = EarthConstants.WGS84
-
-
 """
     body2hor(xb, yb, zb, psi, theta, phi)
 
@@ -82,7 +79,7 @@ Transform body coordinates to local horizon.
 """
 function body2hor(xb, yb, zb, q0, q1, q2, q3)
     q02, q12, q22, q32 = q0*q0, q1*q1, q2*q2, q3*q3
-    
+
     xh = (q02+q12-q22-q32) * xb + 2*(q1*q2 - q0*q3) * yb + 2*(q1*q3 + q0*q2) * zb
     yh = 2*(q1*q2 + q0*q3) * xb + (q02-q12+q22-q32) * yb + 2*(q2*q3 - q0*q1) * zb
     zh = 2*(q1*q3 - q0*q2) * xb + 2*(q2*q3 + q0*q1) * yb + (q02-q12-q22+q32) * zb
@@ -104,7 +101,7 @@ Rotation matrix to transform from body to local horizon.
  (page 41, formula 1.4-23)
 """
 function rot_matrix_body2hor(q0, q1, q2, q3)
-    
+
     q02, q12, q22, q32 = q0*q0, q1*q1, q2*q2, q3*q3
 
     r = [(q02+q12-q22-q32)    2*(q1*q2 - q0*q3)    2*(q1*q3 + q0*q2);
@@ -125,9 +122,9 @@ Transform local horizon corrdinates to body coordinates.
 * `q0, q1, q2, q3`: quaternions.
 """
 function hor2body(xh, yh, zh, q0, q1, q2, q3)
-    
+
     q02, q12, q22, q32 = q0*q0, q1*q1, q2*q2, q3*q3
-    
+
     xb = (q02+q12-q22-q32) * xh + 2*(q1*q2 + q0*q3) * yh + 2*(q1*q3 - q0*q2) * zh
     yb = 2*(q1*q2 - q0*q3) * xh + (q02-q12+q22-q32) * yh + 2*(q2*q3 + q0*q1) * zh
     zb = 2*(q1*q3 + q0*q2) * xh + 2*(q2*q3 - q0*q1) * yh + (q02-q12-q22+q32) * zh
@@ -298,7 +295,7 @@ function wind2body(xw, yw, zw, alpha, beta)
     s_beta,  c_beta  = sin(beta),  cos(beta)
 
     xb = c_alpha*c_beta * xw - c_alpha*s_beta * yw - s_alpha * zw
-    yb = s_beta         * xw + c_beta         * yw 
+    yb = s_beta         * xw + c_beta         * yw
     zb = s_alpha*c_beta * xw - s_alpha*s_beta * yw + c_alpha * zw
 
     return [xb, yb, zb]
@@ -327,7 +324,7 @@ coordinates using geodetic latitude and longitude.
  X, Y, Z ECEF are defined in a different way in [1]. In order to reproduce this
  transformation substitute in [1] Y->X, Z->Y, X->Z
 
- [1] Only defines the opposite transformation. However this must be the 
+ [1] Only defines the opposite transformation. However this must be the
  transpose of hor2ecef.
 """
 function ecef2hor(xecef, yecef, zecef, lat, lon)
@@ -335,7 +332,7 @@ function ecef2hor(xecef, yecef, zecef, lat, lon)
     clon, slon = cos(lon), sin(lon)
 
     xh = -slat*clon * xecef - slat*slon * yecef + clat * zecef
-    yh = -slon      * xecef + clon      * yecef              
+    yh = -slon      * xecef + clon      * yecef
     zh = -clat*clon * xecef - clat*slon * yecef - slat * zecef
 
     return [xh, yh, zh]
@@ -356,7 +353,7 @@ Rotation matrix to transform from ECEF to local horizon.
  (page 36, formula 1.4-9)
 
 # Notes
- 
+
  X, Y, Z ECEF are defined in a different way in [1]. In order to reproduce this
  transformation substitute in [1] Y->X, Z->Y, X->Z
 """
@@ -369,7 +366,7 @@ end
 """
     hor2ecef(xh, yh, zh, lat, lon)
 
-Transform local horizon coordinates to ECEF (Earth Centered Earth Fixed) 
+Transform local horizon coordinates to ECEF (Earth Centered Earth Fixed)
 coordinates using geodetic latitude and longitude.
 
 # Arguments
@@ -611,7 +608,7 @@ function euler2quaternion(psi, theta, phi)
     q1 = c_psi2*c_theta2*s_phi2 - s_psi2*s_theta2*c_phi2
     q2 = c_psi2*s_theta2*c_phi2 + s_psi2*c_theta2*s_phi2
     q3 = s_psi2*c_theta2*c_phi2 - c_psi2*s_theta2*s_phi2
-    
+
     return [q0, q1, q2, q3]
 end
 
@@ -667,11 +664,11 @@ end
 """
     ecef2llh(xecef, yecef, zecef; ellipsoid=WGS84)
 
-Transform ECEF coordinates to geodetic latitude, longitude and ellipsoidal 
+Transform ECEF coordinates to geodetic latitude, longitude and ellipsoidal
 height for the given ellipsoid (default ellipsoid is WGS84)
 
 # References
-- [1] Bowring, B. R. (1976). Transformation from spatial to geographical 
+- [1] Bowring, B. R. (1976). Transformation from spatial to geographical
  coordinates. Survey review, 23(181), 323-327.
 - [2] Bowring, B. R. (1985). The accuracy of geodetic latitude and height
  equations. Survey Review, 28(218), 202-206.
@@ -716,12 +713,12 @@ function ecef2llh(xecef, yecef, zecef; ellipsoid=WGS84)
 
     # [2] equation (18)
     lat = atan( (z + ϵ2 * b * sin(u)^3) / (p - e2 * a * cos(u)^3) )
-    
+
     # [2] after equation (1)
     v = a / sqrt(1.0 - e2*sin(lat)^2)
     # [2] equation (7)
     # height = p*cos(lat) + z*sin(lat) - a*a / v
-    # equivalent to [2] equation (8) 
+    # equivalent to [2] equation (8)
     height = R * cos(lat - θ) - a*a / v
     # which is insensitive to the error in latitude calculation (The influence
     # is of order 2 [2] equation (12))

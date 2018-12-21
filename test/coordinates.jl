@@ -16,7 +16,7 @@ end
 
     euler = quaternion2euler(quat...)
     @test isapprox(euler, euler_exp)
-    
+
     quat_exp = [quat...]
     quat = euler2quaternion(euler_exp...)
     @test isapprox(quat, quat_exp)
@@ -26,7 +26,7 @@ end
 
     euler = quaternion2euler(quat...)
     @test isapprox(euler, euler_exp)
-    
+
     quat_exp = [quat...]
     quat = euler2quaternion(euler_exp...)
     @test isapprox(quat, quat_exp / norm(quat_exp))
@@ -40,7 +40,7 @@ end
     quat = quat / norm(quat)
     euler = quaternion2euler(quat...)
     quat3 = euler2quaternion(euler...)
-    @test isapprox(quat, quat3)   
+    @test isapprox(quat, quat3)
 end
 
 
@@ -50,7 +50,7 @@ end
     # body2hor Euler
     # no rotation
     @test ones_ ≈ body2hor(ones_..., 0., 0., 0.)
-    
+
     angles1 = [0., 45*pi/180., 0.]
     angles2 = [0., 0., 45*pi/180]
     angles3 = [45*pi/180, 0., 0.]
@@ -61,24 +61,24 @@ end
     @test exp_b2h_1 ≈ body2hor(ones_..., angles1...)
     @test exp_b2h_2 ≈ body2hor(ones_..., angles2...)
     @test exp_b2h_3 ≈ body2hor(ones_..., angles3...)
-    
+
     # hor2body Euler
     @test ones_ ≈ hor2body(ones_..., 0., 0., 0.)
     @test ones_ ≈ hor2body(exp_b2h_1..., angles1...)
     @test ones_ ≈ hor2body(exp_b2h_2..., angles2...)
     @test ones_ ≈ hor2body(exp_b2h_3..., angles3...)
-    
+
     # body2hor quaternion
     @test ones_ ≈ body2hor(ones_..., 0., 0., 0.)
-    
+
     quat1 = euler2quaternion(angles1...)
     quat2 = euler2quaternion(angles2...)
     quat3 = euler2quaternion(angles3...)
-    
+
     @test exp_b2h_1 ≈ body2hor(ones_..., quat1...)
     @test exp_b2h_2 ≈ body2hor(ones_..., quat2...)
     @test exp_b2h_3 ≈ body2hor(ones_..., quat3...)
-    
+
     # hor2body quaternionr
     @test ones_ ≈ hor2body(ones_..., 0., 0., 0.)
     @test ones_ ≈ hor2body(exp_b2h_1...,  quat1...)
@@ -131,20 +131,20 @@ end
     psi, theta, phi = pi/4.0, pi/6.0, pi/12.0
     quat = euler2quaternion(psi, theta, phi)
     xh, yh, zh = 100.0, 10.0, -1.0
-    
+
     xyz_b_e = hor2body(xh, yh, zh, psi, theta, phi)
     xyz_b_q = hor2body(xh, yh, zh, quat...)
-    
+
     @test isapprox(xyz_b_e, xyz_b_q)
 
     xyz_h_e = body2hor(xyz_b_e..., psi, theta, phi)
     xyz_h_q = body2hor(xyz_b_e..., quat...)
-    
+
     @test isapprox(xyz_h_e, xyz_h_q)
 end
 
 
-@testset "wind <-> hor/body" begin 
+@testset "wind <-> hor/body" begin
     ones_ = [1.0, 1.0, 1.0]
     angles1 = [0., 45*pi/180., 0.]
     angles2 = [0., 0., 45*pi/180]
@@ -177,65 +177,65 @@ end
     xecef, yecef, zecef = 1.0, 10.0, 100.0
     lat, lon = 0.0, 0.0
     exp_xyz_hor = [100.0, 10.0 ,-1.0]
-    
+
     xyz_hor =  ecef2hor(xecef, yecef, zecef, lat, lon)
     @test isapprox(xyz_hor, exp_xyz_hor)
-    
+
     r_hecef = rot_matrix_ecef2hor(lat, lon)
     @test isapprox(exp_xyz_hor, r_hecef * [xecef, yecef, zecef])
-    
+
     exp_xyz_ecef = [xecef, yecef, zecef]
     xyz_ecef = hor2ecef(exp_xyz_hor..., lat, lon)
     @test isapprox(xyz_ecef, exp_xyz_ecef)
-    
+
     r_ecefh = rot_matrix_hor2ecef(lat, lon)
     @test isapprox(exp_xyz_ecef, r_ecefh * exp_xyz_hor)
 
     lat, lon = pi/2.0, 0.0
     exp_xyz_hor = [-1.0, 10.0 ,-100.0]
-    
+
     xyz_hor =  ecef2hor(xecef, yecef, zecef, lat, lon)
     @test isapprox(xyz_hor, exp_xyz_hor)
-    
+
     r_hecef = rot_matrix_ecef2hor(lat, lon)
     @test isapprox(exp_xyz_hor, r_hecef * [xecef, yecef, zecef])
-    
+
     exp_xyz_ecef = [xecef, yecef, zecef]
     xyz_ecef = hor2ecef(exp_xyz_hor..., lat, lon)
     @test isapprox(xyz_ecef, exp_xyz_ecef)
-    
+
     r_ecefh = rot_matrix_hor2ecef(lat, lon)
     @test isapprox(exp_xyz_ecef, r_ecefh * exp_xyz_hor)
 
     lat, lon = 0.0, pi/2.0
     exp_xyz_hor = [100.0, -1.0 ,-10.0]
-    
+
     xyz_hor =  ecef2hor(xecef, yecef, zecef, lat, lon)
     @test isapprox(xyz_hor, exp_xyz_hor)
-    
+
     r_hecef = rot_matrix_ecef2hor(lat, lon)
     @test isapprox(exp_xyz_hor, r_hecef * [xecef, yecef, zecef])
-    
+
     exp_xyz_ecef = [xecef, yecef, zecef]
     xyz_ecef = hor2ecef(exp_xyz_hor..., lat, lon)
     @test isapprox(xyz_ecef, exp_xyz_ecef)
-    
+
     r_ecefh = rot_matrix_hor2ecef(lat, lon)
     @test isapprox(exp_xyz_ecef, r_ecefh * exp_xyz_hor)
 
     lat, lon = pi/2.0, pi/2.0
     exp_xyz_hor = [-10.0, -1.0 ,-100.0]
-    
+
     xyz_hor =  ecef2hor(xecef, yecef, zecef, lat, lon)
     @test isapprox(xyz_hor, exp_xyz_hor)
-    
+
     r_hecef = rot_matrix_ecef2hor(lat, lon)
     @test isapprox(exp_xyz_hor, r_hecef * [xecef, yecef, zecef])
-    
+
     exp_xyz_ecef = [xecef, yecef, zecef]
     xyz_ecef = hor2ecef(exp_xyz_hor..., lat, lon)
     @test isapprox(xyz_ecef, exp_xyz_ecef)
-    
+
     r_ecefh = rot_matrix_hor2ecef(lat, lon)
     @test isapprox(exp_xyz_ecef, r_ecefh * exp_xyz_hor)
 end
@@ -251,27 +251,27 @@ end
 
     xyz_body = ecef2body(xecef, yecef, zecef, lat, lon , psi, theta, phi)
     @test isapprox(xyz_body, exp_xyz_b)
-    
+
     r_becef = rot_matrix_ecef2body(lat, lon , psi, theta, phi)
     @test isapprox(r_becef * [xecef, yecef, zecef], exp_xyz_b)
-    
+
     xyz_body = ecef2body(xecef, yecef, zecef, lat, lon , quat...)
     @test isapprox(xyz_body, exp_xyz_b)
-    
+
     r_becef_q = rot_matrix_ecef2body(lat, lon , quat...)
     @test isapprox(r_becef_q * [xecef, yecef, zecef], exp_xyz_b)
 
     exp_xyz_ecef = [xecef, yecef, zecef]
-   
+
     xyz_ecef = body2ecef(exp_xyz_b..., lat, lon, psi, theta, phi)
     @test isapprox(xyz_ecef, exp_xyz_ecef)
-    
+
     r_ecefb = rot_matrix_body2ecef(lat, lon , psi, theta, phi)
     @test isapprox(r_ecefb * exp_xyz_b, exp_xyz_ecef)
-    
+
     xyz_ecef = body2ecef(exp_xyz_b..., lat, lon, quat...)
     @test isapprox(xyz_ecef, exp_xyz_ecef)
-    
+
     r_ecefb_q = rot_matrix_body2ecef(lat, lon , quat...)
     @test isapprox(r_ecefb_q * exp_xyz_b, exp_xyz_ecef)
 end
@@ -279,9 +279,9 @@ end
 
 @testset "llh <-> ECEF" begin
     # llh ECEF (using data from
-    # - [1] Bowring, B. R. (1976). Transformation from spatial to geographical 
+    # - [1] Bowring, B. R. (1976). Transformation from spatial to geographical
     # coordinates. Survey review, 23(181), 323-327.)
-    import FlightMechanics.EarthConstants: Ellipsoid
+    using FlightMechanics: Ellipsoid
 
     # From [1] Example 1 (page 325)
     x = 4114496.258  # m

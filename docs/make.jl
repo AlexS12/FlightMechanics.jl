@@ -3,6 +3,7 @@ using FlightMechanics
 
 
 makedocs(authors="Alejandro Saez Mollejo",
+         sitename = "FlightMechanics.jl",
          pages = [
          "Home" => "index.md",
          "API Reference" => ["api-reference.md"],
@@ -13,6 +14,11 @@ makedocs(authors="Alejandro Saez Mollejo",
            "anemometry.md",
            "kinematics.md"
          ],
+         "Simulator" => [
+           "models.md",
+           "aircrafts.md",
+           "trimmer.md"
+         ]
          ])
 
 deploydocs(

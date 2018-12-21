@@ -3,14 +3,14 @@ export six_dof_quaternion_fixed_mass
 """
     six_dof_quaternion_fixed_mass(state, mass, inertia, forces, moments; k=0.0)
 
-Six degrees of freedom dynamic system using quaternions for attitude 
-representation and assuming fixed mass. 
+Six degrees of freedom dynamic system using quaternions for attitude
+representation and assuming fixed mass.
 
 Flat Earth hypothesis is applied and Earth reference frame is considered
 inertial.
 
 It is considered that the aircraft xb-zb plane is a plane of symmetry so that
-Jxy and Jyz cross-product of inertia are zero and will not be taken into 
+Jxy and Jyz cross-product of inertia are zero and will not be taken into
 account.
 
 # Arguments
@@ -23,7 +23,7 @@ account.
 - `inertia::3×3 Array{Number,2}`: inertia tensor (kg·m²)
 - `forces::3-element Array{Number,1}`: total forces expressed in body axis. (N)
 - `moments::3-element Array{Number,1}`: total moments expressed in body axis.(N·m)
-- `k::Number`: orthonormality error factor. 
+- `k::Number`: orthonormality error factor.
 
 # Returns
 - `state_dot`: state vector derivative according to the equation of motion,
@@ -36,7 +36,7 @@ account.
   in angular kinematic equations. Let λ = k * (1 - q0² - q1² - q2² - q3²) be
   the orthonormality error. The term k·λ·q is added to the angular kinematic
   equations in order to reduce the numerical integration error. According to
-  reference [2] k·Δt ≤ 1. See [2] (page 372) for more information on 
+  reference [2] k·Δt ≤ 1. See [2] (page 372) for more information on
   orthonormality error factor.
 
 # References
@@ -57,12 +57,12 @@ function six_dof_quaternion_fixed_mass(state, mass, inertia, forces, moments; k=
     Jxz = -inertia[0, 2]
 
     u, v, w, p, q, r, q0, q1, q2, q3, xe, ye, ze = state
-    
+
     Fx, Fy, Fz = forces
     L, M, N = moments
 
     q02, q12, q22, q32 = q0*q0, q1*q1, q2*q2, q3*q3
-    
+
     # Normalization λ*t < 1 (See Zipfel Chapter 4.3.3.4 p.126)
     # Zipfel, P. H. (2007). Modeling and simulation of aerospace vehicle dynamics.
     # American Institute of Aeronautics and Astronautics.

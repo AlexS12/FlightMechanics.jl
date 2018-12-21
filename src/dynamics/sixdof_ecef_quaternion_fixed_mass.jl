@@ -2,21 +2,20 @@ using FlightMechanics
 
 export six_dof_ecef_quaternion_fixed_mass
 
-const ωe = EarthConstants.ROT_VELOCITY
-const WGS84 = EarthConstants.WGS84
+const ωe = ROT_VELOCITY
 
 """
     six_dof_ecef_quaternion_fixed_mass(state, mass, inertia, forces, moments;
     k=0.0, ellipsoid=WGS84)
 
-Six degrees of freedom dynamic system using quaternions for attitude 
-representation and assuming fixed mass. 
+Six degrees of freedom dynamic system using quaternions for attitude
+representation and assuming fixed mass.
 
 Ellipsoidal Earth Model is used and the ECEF reference frame is considered
 inertial.
 
 It is considered that the aircraft xb-zb plane is a plane of symmetry so that
-Jxy and Jyz cross-product of inertia are zero and will not be taken into 
+Jxy and Jyz cross-product of inertia are zero and will not be taken into
 account.
 
 # Arguments
@@ -30,7 +29,7 @@ account.
 - `forces::3-element Array{Number,1}`: total forces expressed in body axis. (N)
 - `moments::3-element Array{Number,1}`: total moments expressed in body axis.(N·m)
 - `k::Number`: orthonormality error factor.
-- `ellipsoid::Ellipsoid`: ellipsoid model to be used. 
+- `ellipsoid::Ellipsoid`: ellipsoid model to be used.
 
 # Returns
 - `state_dot`: state vector derivative according to the equation of motion,
@@ -43,7 +42,7 @@ account.
   in angular kinematic equations. Let λ = k * (1 - q0² - q1² - q2² - q3²) be
   the orthonormality error. The term k·λ·q is added to the angular kinematic
   equations in order to reduce the numerical integration error. According to
-  reference [2] k·Δt ≤ 1. See [2] (page 372) for more information on 
+  reference [2] k·Δt ≤ 1. See [2] (page 372) for more information on
   orthonormality error factor.
 - Implementation based on [1]. However, [2] can also be read.
 
@@ -63,7 +62,7 @@ function six_dof_ecef_quaternion_fixed_mass(state, mass, inertia, forces, moment
     ωb = state[4:6]    # p, q, r
     q  = state[7:10]   # q0, q1, q2, q3
     p  = state[11:13]  # px, py, pz (ecef)
-    
+
     Fb = forces
     J  = inertia
     Tb = moments
