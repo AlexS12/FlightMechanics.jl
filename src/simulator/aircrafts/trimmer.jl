@@ -51,7 +51,8 @@ See section 3.4 in [1] for the algorithm description.
  (page 41, formula 1.4-23)
 """
 function steady_state_trim(ac::Aircraft, fcs::FCS, env::Environment,
-    tas::Number, pos::Position, psi::Number, gamma::Number, turn_rate::Number)
+    tas::Number, pos::Position, psi::Number, gamma::Number, turn_rate::Number,
+    show_trace=false)
 
     alpha0 = 3 * DEG2RAD
     beta0 = 0 * DEG2RAD
@@ -105,12 +106,13 @@ function steady_state_trim(ac::Aircraft, fcs::FCS, env::Environment,
                       Optim.Options(
                         g_tol=1e-25,
                         iterations=1000,
-                        show_trace=true, show_every=50
+                        show_trace=show_trace, show_every=50
                         );
                       )
-
-    println(result)
-    println(Optim.minimizer(result))
+    if show_trace
+        println(result)
+        println(Optim.minimizer(result))
+    end
 
     # Return trimmed variables
     trimmer.ac, trimmer.aerostate, trimmer.state, trimmer.env, trimmer.fcs

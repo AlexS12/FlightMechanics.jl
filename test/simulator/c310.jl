@@ -7,50 +7,41 @@ else
     using Test
 end
 
-env = DefaultEnvironment()
-
-
+# Integration test for aircraft just making sure everything runs
 ac = C310()
-fcs = C310FCS()
 
 @test typeof(ac)<:Aircraft
 @test get_name(ac) == "Cessna 310"
 
 @test typeof(ac.propulsion)<:Propulsion
 
-# GEOMETRIC PROPERTIES
-println(get_wing_area(ac))
-println(get_wing_span(ac))
-println(get_chord(ac))
-println(get_arp(ac))
-
-# MASS PROPERTIES
-println(get_empty_mass_props(ac))
-println(get_payload_mass_props(ac))
-# println(get_fuel_mass_props(ac))
-println(ac.mass_props)
+@test isapprox(get_wing_area(ac), 16.258032)
 
 att = Attitude(1/180*pi, 0, 0)
 pos = PositionEarth(0, 0, -1000)
 state = State(pos, att, [65., 0., 3.], [0., 0., 0.], [0., 0., 0.], [0., 0., 0.])
+
+env = DefaultEnvironment()
 aerostate = AeroState(state, env)
 env = calculate_environment(env, state)
 grav = env.grav
 
-println(grav)
-
+fcs = C310FCS()
 set_stick_lon(fcs, 0.43)
 set_stick_lat(fcs, 0.562)
 set_pedals(fcs, 0.5)
 set_thrust(fcs, 0.68)
+
 ac = calculate_aircraft(ac, fcs, aerostate, state, grav; consume_fuel=false)
-println(ac.pfm)
 
 tas = 50  # m/s
 h = 300  # m
 psi = pi/3  # rad
-gamma = 11 * DEG2RAD
+gamma = 5 * DEG2RAD
 turn_rate = 0.0
 
 ac, aerostate, state, env, fcs = steady_state_trim(ac, fcs, env, tas, pos, psi, gamma, turn_rate)
-println(ac.pfm)
+@test isapprox(ac.pfm.forces, zeros(3), atol=1e-5)
+@test isapprox(ac.pfm.moments, zeros(3), atol=1e-5)
+@test isapprox(get_tas(aerostate), tas, atol=1e-5)
+@test isapprox(get_beta(aerostate), 0.0, atol=1e-5)
