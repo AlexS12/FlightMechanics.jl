@@ -8,7 +8,7 @@
   
   <meta name="author" content="Alex Saez">
   <link rel="shortcut icon" href="../img/favicon.ico">
-  <title>Isa - FlightMechanics.jl</title>
+  <title>Anemometry - FlightMechanics.jl</title>
   <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
 
   <link rel="stylesheet" href="../css/theme.css" type="text/css" />
@@ -18,9 +18,9 @@
   
   <script>
     // Current page data
-    var mkdocs_page_name = "Isa";
-    var mkdocs_page_input_path = "isa.md";
-    var mkdocs_page_url = "/isa/";
+    var mkdocs_page_name = "Anemometry";
+    var mkdocs_page_input_path = "anemometry.md";
+    var mkdocs_page_url = "/anemometry/";
   </script>
   
   <script src="../js/jquery-2.1.1.min.js"></script>
@@ -62,15 +62,9 @@
 		
     <span class="caption-text">Basics</span>
     <ul class="subnav">
-                <li class=" current">
+                <li class="">
                     
-    <a class="current" href="./">Isa</a>
-    <ul class="subnav">
-            
-    <li class="toctree-l3"><a href="#international-standard-atmosphere">International Standard Atmosphere</a></li>
-    
-
-    </ul>
+    <a class="" href="../isa/">Isa</a>
                 </li>
                 <li class="">
                     
@@ -80,9 +74,29 @@
                     
     <a class="" href="../dynamic_models/">Dynamic models</a>
                 </li>
-                <li class="">
+                <li class=" current">
                     
-    <a class="" href="../anemometry/">Anemometry</a>
+    <a class="current" href="./">Anemometry</a>
+    <ul class="subnav">
+            
+    <li class="toctree-l3"><a href="#anemometry">Anemometry</a></li>
+    
+        <ul>
+        
+            <li><a class="toctree-l4" href="#tas">TAS</a></li>
+        
+            <li><a class="toctree-l4" href="#cas">CAS</a></li>
+        
+            <li><a class="toctree-l4" href="#eas">EAS</a></li>
+        
+            <li><a class="toctree-l4" href="#ias">IAS</a></li>
+        
+            <li><a class="toctree-l4" href="#asi">ASI</a></li>
+        
+        </ul>
+    
+
+    </ul>
                 </li>
                 <li class="">
                     
@@ -117,10 +131,10 @@
         
       
     
-    <li>Isa</li>
+    <li>Anemometry</li>
     <li class="wy-breadcrumbs-aside">
       
-        <a href="https://github.com/AlexS12/FlightMechanics.jl/edit/master/docs/isa.md"
+        <a href="https://github.com/AlexS12/FlightMechanics.jl/edit/master/docs/anemometry.md"
           class="icon icon-github"> Edit on GitHub</a>
       
     </li>
@@ -130,83 +144,19 @@
           <div role="main">
             <div class="section">
               
-                <p><a id='International-Standard-Atmosphere-1'></a></p>
-<h1 id="international-standard-atmosphere">International Standard Atmosphere</h1>
-<p><a id='FlightMechanics.atmosphere_isa-Tuple{Real}' href='#FlightMechanics.atmosphere_isa-Tuple{Real}'>#</a>
-<strong><code>FlightMechanics.atmosphere_isa</code></strong> &mdash; <em>Method</em>.</p>
-<pre><code>atmosphere_isa(height)
-</code></pre>
-
-<p>Calculate temperature, pressure, density and sound velocity for the given geopotential height according to International Standard Atmosphere 1976.</p>
-<p><strong>References</strong></p>
-<ul>
-<li>[1] U.S. Standard Atmosphere, 1976, U.S. Government Printing Office,       Washington, D.C., 1976</li>
-</ul>
-<p>From: https://en.wikipedia.org/wiki/U.S.<em>Standard</em>Atmosphere</p>
-<table>
-<thead>
-<tr>
-<th align="right">Layer</th>
-<th align="right">h (m)</th>
-<th align="right">p (Pa)</th>
-<th align="right">T (K)</th>
-<th align="right">$α$ (K/m)</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">101325</td>
-<td align="right">288.15</td>
-<td align="right">-0.0065</td>
-</tr>
-<tr>
-<td align="right">1</td>
-<td align="right">11000</td>
-<td align="right">22632.1</td>
-<td align="right">216.65</td>
-<td align="right">0</td>
-</tr>
-<tr>
-<td align="right">2</td>
-<td align="right">20000</td>
-<td align="right">5474.89</td>
-<td align="right">216.65</td>
-<td align="right">0.001</td>
-</tr>
-<tr>
-<td align="right">3</td>
-<td align="right">32000</td>
-<td align="right">868.019</td>
-<td align="right">228.65</td>
-<td align="right">0.0028</td>
-</tr>
-<tr>
-<td align="right">4</td>
-<td align="right">47000</td>
-<td align="right">110.906</td>
-<td align="right">270.65</td>
-<td align="right">0</td>
-</tr>
-<tr>
-<td align="right">5</td>
-<td align="right">51000</td>
-<td align="right">66.9389</td>
-<td align="right">270.65</td>
-<td align="right">-0.0028</td>
-</tr>
-<tr>
-<td align="right">6</td>
-<td align="right">71000</td>
-<td align="right">3.95642</td>
-<td align="right">214.65</td>
-<td align="right">-0.002</td>
-</tr>
-</tbody>
-</table>
-<p><a target='_blank' href='https://github.com/AlexS12/FlightMechanics.jl/blob/c3c2ec764963a555992ae9edfe4b2bd6bda2eb8b/src/atmosphere.jl#L8-L30' class='documenter-source'>source</a><br></p>
+                <p><a id='Anemometry-1'></a></p>
+<h1 id="anemometry">Anemometry</h1>
 <p>TBD...</p>
+<p><a id='TAS-1'></a></p>
+<h2 id="tas">TAS</h2>
+<p><a id='CAS-1'></a></p>
+<h2 id="cas">CAS</h2>
+<p><a id='EAS-1'></a></p>
+<h2 id="eas">EAS</h2>
+<p><a id='IAS-1'></a></p>
+<h2 id="ias">IAS</h2>
+<p><a id='ASI-1'></a></p>
+<h2 id="asi">ASI</h2>
               
             </div>
           </div>
@@ -214,10 +164,10 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="../coordinate-systems/" class="btn btn-neutral float-right" title="Coordinate systems">Next <span class="icon icon-circle-arrow-right"></span></a>
+        <a href="../kinematics/" class="btn btn-neutral float-right" title="Kinematics">Next <span class="icon icon-circle-arrow-right"></span></a>
       
       
-        <a href="../api-reference/" class="btn btn-neutral" title="API Reference"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../dynamic_models/" class="btn btn-neutral" title="Dynamic models"><span class="icon icon-circle-arrow-left"></span> Previous</a>
       
     </div>
   
@@ -245,10 +195,10 @@
           <a href="https://github.com/AlexS12/FlightMechanics.jl/" class="fa fa-github" style="float: left; color: #fcfcfc"> GitHub</a>
       
       
-        <span><a href="../api-reference/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+        <span><a href="../dynamic_models/" style="color: #fcfcfc;">&laquo; Previous</a></span>
       
       
-        <span style="margin-left: 15px"><a href="../coordinate-systems/" style="color: #fcfcfc">Next &raquo;</a></span>
+        <span style="margin-left: 15px"><a href="../kinematics/" style="color: #fcfcfc">Next &raquo;</a></span>
       
     </span>
 </div>

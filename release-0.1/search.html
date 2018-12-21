@@ -5,23 +5,16 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Flight Mechanics Utils">
+  
   <meta name="author" content="Alex Saez">
   <link rel="shortcut icon" href="./img/favicon.ico">
-  <title>Home - FlightMechanics.jl</title>
+  <title>FlightMechanics.jl</title>
   <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
 
   <link rel="stylesheet" href="./css/theme.css" type="text/css" />
   <link rel="stylesheet" href="./css/theme_extra.css" type="text/css" />
   <link rel="stylesheet" href="./css/highlight.css">
   <link href="./assets/Documenter.css" rel="stylesheet">
-  
-  <script>
-    // Current page data
-    var mkdocs_page_name = "Home";
-    var mkdocs_page_input_path = "index.md";
-    var mkdocs_page_url = "/";
-  </script>
   
   <script src="./js/jquery-2.1.1.min.js"></script>
   <script src="./js/modernizr-2.8.3.min.js"></script>
@@ -48,25 +41,9 @@
 	<ul class="current">
 	  
           
-            <li class="toctree-l1 current">
+            <li class="toctree-l1">
 		
-    <a class="current" href=".">Home</a>
-    <ul class="subnav">
-            
-    <li class="toctree-l2"><a href="#home">Home</a></li>
-    
-        <ul>
-        
-            <li><a class="toctree-l3" href="#overview">Overview</a></li>
-        
-            <li><a class="toctree-l3" href="#installing-flightmechanicsjl">Installing FlightMechanics.jl</a></li>
-        
-            <li><a class="toctree-l3" href="#contributing">Contributing</a></li>
-        
-        </ul>
-    
-
-    </ul>
+    <a class="" href=".">Home</a>
 	    </li>
           
             <li class="toctree-l1">
@@ -121,13 +98,8 @@
   <ul class="wy-breadcrumbs">
     <li><a href=".">Docs</a> &raquo;</li>
     
-      
     
-    <li>Home</li>
     <li class="wy-breadcrumbs-aside">
-      
-        <a href="https://github.com/AlexS12/FlightMechanics.jl/edit/master/docs/index.md"
-          class="icon icon-github"> Edit on GitHub</a>
       
     </li>
   </ul>
@@ -136,57 +108,22 @@
           <div role="main">
             <div class="section">
               
-                <p><a id='Home-1'></a></p>
-<h1 id="home">Home</h1>
-<p><a id='Overview-1'></a></p>
-<h2 id="overview">Overview</h2>
-<p>This package is intended to provide utils for Flight Mechanics computations in Julia. Its purpose is to provide reliable, documented, efficient and tested Julia implementations for common calculations in Flight Mechanics such as:</p>
-<ul>
-<li>International Standard Atmosphere: get pressure, temperature, density, sound velocity for a given altitude.</li>
-<li>Conversion between different coordinate systems: body/ABC, horizon/NED, wind, ECEF (Earth Cenetered Earth Fixed), LLH (Latitude, Longitude, Height for various ellipsoids models).</li>
-<li>Support for various attitude representations: Euler angles, quaternions.</li>
-<li>Anemometry calculations: conversions between TAS, CAS, EAS; velocity calculation from airspeed indicator (ASI) pressure difference; dynamic pressure calculation, TAS, $\alpha$, $\beta$ from body velocity.</li>
-<li>
-<p>6 DOF Dynamic fixed mass models:</p>
-<ul>
-<li>Flat Earth Euler angles</li>
-<li>Flat Earth quaternions</li>
-<li>Ellipsoidal Earth ECEF model quaternion</li>
-</ul>
-</li>
-</ul>
-<p>For the sake of reliability and reproducibility, several references are listed in the documentation of the different methods so they can be consulted and studied.</p>
-<p><a id='Installing-FlightMechanics.jl-1'></a></p>
-<h2 id="installing-flightmechanicsjl">Installing FlightMechanics.jl</h2>
-<p>This package is still in its initial development phase and has not been registered in the Julia official repository.</p>
-<p>You can install this package cloning it:</p>
-<pre><code>Pkg&gt; add git@github.com:AlexS12/FlightMechanics.jl.git
-</code></pre>
 
-<p>You can read more about adding unregistered pakcages in <a href="https://docs.julialang.org/en/latest/stdlib/Pkg/#Adding-unregistered-packages-1.">Julia documentation</a></p>
-<p>or if you are planning to make a contribution and want the dev version:</p>
-<pre><code>Pkg&gt; dev git@github.com:AlexS12/FlightMechanics.jl.git
-</code></pre>
+  <h1 id="search">Search Results</h1>
 
-<p>Once you have installed the package, it is highly recommended to run the tests:</p>
-<pre><code>Pkg&gt; test FlightMechanics
-</code></pre>
+  <form id="content_search" action="search.html">
+    <span role="status" aria-live="polite" class="ui-helper-hidden-accessible"></span>
+    <input name="q" id="mkdocs-search-query" type="text" class="search_input search-query ui-autocomplete-input" placeholder="Search the Docs" autocomplete="off" autofocus>
+  </form>
 
-<p><a id='Contributing-1'></a></p>
-<h2 id="contributing">Contributing</h2>
-<p>If you used this package and have any suggestion or found a bug, please <a href="https://github.com/AlexS12/FlightMechanics.jl/issues">open an issue</a>.</p>
-<p>If this package is useful for you and want to join efforts don't hesitate to let me know: <a href="https://github.com/AlexS12">https://github.com/AlexS12</a></p>
-              
+  <div id="mkdocs-search-results" class="search-results">
+    Searching...
+  </div>
+
+
             </div>
           </div>
           <footer>
-  
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="api-reference/" class="btn btn-neutral float-right" title="API Reference">Next <span class="icon icon-circle-arrow-right"></span></a>
-      
-      
-    </div>
   
 
   <hr/>
@@ -213,8 +150,6 @@
       
       
       
-        <span style="margin-left: 15px"><a href="api-reference/" style="color: #fcfcfc">Next &raquo;</a></span>
-      
     </span>
 </div>
     <script>var base_url = '.';</script>
@@ -226,8 +161,3 @@
 
 </body>
 </html>
-
-<!--
-MkDocs version : 0.17.5
-Build Date UTC : 2018-12-21 23:41:38
--->
