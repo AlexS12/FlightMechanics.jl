@@ -2,6 +2,8 @@
 
 # C310
 
-Aerodynamics: explain where model is obtained from.
-Propulsion: explain the oversimplified model that is implemented.
-FCS: reversible control system.
+- Aerodynamic data obtained from JSBSim model.
+
+- Propulsion: engine is supposed to provide power proportional to the stick position and propeller has constant efficiency.
+
+- FCS: reversible control system.
