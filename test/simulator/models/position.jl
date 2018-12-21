@@ -32,3 +32,10 @@ pecef = PositionECEF(xyz_ecef...)
 @test isapprox(get_xyz_earth(pecef), xyz_earth)
 @test isapprox(get_xyz_ecef(pecef), xyz_ecef)
 @test isapprox(get_height(pecef), llh[3], atol=0.17)
+
+pzero = Position()
+
+@test isapprox(get_llh(pzero), [0, 0, 0])
+@test isapprox(get_xyz_earth(pzero), [0, 0, 0])
+@test isapprox(get_xyz_ecef(pzero), llh2ecef(0, 0, 0))
+@test isapprox(get_height(pzero), 0)

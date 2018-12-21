@@ -31,6 +31,7 @@ end
 PositionLLH(lat, lon, h, xe=0., ye=0., ze=0.) = Position([lat, lon, h], [xe, ye, ze], llh2ecef(lat, lon, h))
 PositionECEF(x, y, z, xe=0., ye=0., ze=0.) = Position(ecef2llh(x, y, z), [xe, ye, ze], [x, y, z])
 PositionEarth(x, y, z, lat=0., lon=0., h=0.) = Position([lat, lon, h], [x, y, z], llh2ecef(lat, lon, h))
+Position() = Position([0, 0, 0], [0, 0, 0], llh2ecef(0, 0, 0))
 
 get_llh(pos::Position) = pos.llh
 get_xyz_earth(pos::Position) = pos.xyz_earth
