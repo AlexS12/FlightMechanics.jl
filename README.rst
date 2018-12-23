@@ -5,17 +5,17 @@ FlightMechanics
 
 .. |license| image:: https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square
    :target: https://github.com/AlexS12/FlightMechanics.jl/blob/master/LICENSE.md
-   
+
 .. |codecov| image:: https://codecov.io/gh/AlexS12/FlightMechanics.jl/branch/master/graph/badge.svg
   :target: https://codecov.io/gh/AlexS12/FlightMechanics.jl
-  
+
 .. |docs| image:: https://img.shields.io/badge/docs-latest-brightgreen.svg?style=flat-square
    :target: https://alexs12.github.io/FlightMechanics.jl/latest/
-   
+
 .. |logo| image:: https://github.com/AlexS12/FlightMechanics.jl/blob/master/docs/src/logo.png
    :target: https://github.com/AlexS12/FlightMechanics.jl/blob/master/docs/src/logo.png
-   
-|license| |docs| |travisci| |codecov| 
+
+|license| |docs| |travisci| |codecov|
 
 |logo|
 
@@ -24,7 +24,7 @@ Flight Mechanics utils :airplane:
 
 \:warning: This package is in its initial development phase :construction:
 
-This package is intended to provide utils for Flight Mechanics computations. It runs on julia ≥ 0.7.0. 
+This package is intended to provide utils for Flight Mechanics computations. It runs on julia ≥ 1.0
 
 * International Standard Atmosphere: get pressure, temperature, density, sound velocity for a given altitude.
 
@@ -35,21 +35,27 @@ This package is intended to provide utils for Flight Mechanics computations. It 
   * wind
   * ECEF
   * llh (latitude, longitude, height) over various ellipsoid models
-  
+
 * Quaternion and euler angles conversions
-  
+
 * Anemometry:
 
   * conversion between tas, cas, eas.
   * velocity calculation from airspeed indicator (ASI) pressure difference
   * dynamic pressure calculation (compressible and incompressible cases)
   * tas, alpha, beta from body velocity
-  
+
 * 6 DOF Dynamic fixed mass models:
 
   * Flat Earth Euler angles
   * Flat Earth quaternions
   * Ellipsoidal Earth ECEF model quaternion
+
+* An experimental version of the simulator has been started. At the moment it comprises:
+
+  * C310 aerodynamics model obtained from JSBSim. Oversimplified engine model for this aircraft.
+  * A preliminary version of the trimmer.
+  * Some base models serving as a for the development of the simulator: state, position, attitude, aerostate, mass, propulsion...
 
 Install :rocket:
 ----------------
@@ -57,7 +63,7 @@ Install :rocket:
 You can install this package cloning it::
 
   Pkg> add git@github.com:AlexS12/FlightMechanics.jl.git
-  
+
 or if you want the dev version::
 
   Pkg> dev git@github.com:AlexS12/FlightMechanics.jl.git
@@ -82,6 +88,6 @@ If this package is useful for you and want to join efforts don't hesitate to `le
 
 .. |Open Source Love svg2| image:: https://badges.frapsoft.com/os/v2/open-source.svg?v=103
    :target: https://github.com/ellerbrock/open-source-badges/
-   
+
 .. |Ask Me Anything !| image:: https://img.shields.io/badge/Ask%20me-anything-1abc9c.svg
    :target: https://github.com/AlexS12
