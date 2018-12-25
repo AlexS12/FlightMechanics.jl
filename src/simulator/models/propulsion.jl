@@ -18,6 +18,13 @@ get_engine_position(eng::Engine) = [0, 0, 0]
 get_engine_orientation(eng::Engine) = [0, 0, 0]
 calculate_engine(eng::Engine) = error("abstract method")
 
+#Getters
+get_pfm(eng::Engine) = eng.pfm
+get_cj(eng::Engine) = eng.cj
+get_power(eng::Engine) = eng.power
+get_efficiency(eng::Engine) = eng.efficiency
+get_tanks(eng::Engine) = eng.tanks
+
 
 struct Propulsion
     pfm::PointForcesMoments
