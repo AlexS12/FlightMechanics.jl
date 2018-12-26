@@ -56,7 +56,7 @@ get_wing_area(ac::F16) = 300.0 * FT2M^2
 get_wing_span(ac::F16) = 30. * FT2M
 get_chord(ac::F16) = 11.32 * FT2M
 # Aerodynamic Reference Point
-get_arp(ac::F16) = [0.35 * get_chord(ac), 0.0, 0.0] .* IN2M
+get_arp(ac::F16) = [0.35 * get_chord(ac), 0.0, 0.0]
 
 # MASS PROPERTIES
 function get_empty_mass_props(ac::F16)
