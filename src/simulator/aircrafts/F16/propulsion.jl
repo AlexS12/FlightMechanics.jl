@@ -151,7 +151,7 @@ function calculate_thrust(pow, alt, rmach)
         m = 4
     end
 
-    dm = rm - m
+    dm = rm - float(m)
     cdh = 1.0 - float(dh)
 
     i=i+1;
