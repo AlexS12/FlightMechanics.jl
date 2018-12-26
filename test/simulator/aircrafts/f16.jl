@@ -155,7 +155,8 @@ end
             @test isapprox(get_tas(aerostate), tas, atol=1e-5)
             @test isapprox(get_beta(aerostate), 0.0, atol=1e-5)
 
-            @test isapprox(fcs.thtl.value, exp_thtl, atol=10.0^(-length(split(string(exp_thtl), ".")[2])))
+            @test isapprox(fcs.cpl.value/100, exp_thtl, atol=10.0^(-length(split(string(exp_thtl), ".")[2])))
+            # @test isapprox(fcs.thtl.value, exp_thtl, atol=10.0^(-length(split(string(exp_thtl), ".")[2])))
             @test isapprox(aerostate.alpha*RAD2DEG, exp_α, atol=10.0^(-length(split(string(exp_α), ".")[2])))
             @test isapprox(fcs.de.value*RAD2DEG, exp_de, atol=10.0^(-length(split(string(exp_de), ".")[2])))
         end
