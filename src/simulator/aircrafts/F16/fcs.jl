@@ -3,7 +3,7 @@ using FlightMechanics.Simulator.Models
 
 export F16FCS,
     set_stick_lon, set_stick_lat, set_pedals,
-    set_thrust,
+    set_thtl,
     set_controls_trimmer, get_controls_trimmer,
     get_controls_ranges_trimmer
 
@@ -61,7 +61,7 @@ function set_pedals(fcs::F16FCS, value, allow_out_of_range=false, throw_error=fa
     set_value(fcs.dr, min + range * value, allow_out_of_range, throw_error)
 end
 
-function set_thrust(fcs::F16FCS, value, allow_out_of_range=false, throw_error=false)
+function set_thtl(fcs::F16FCS, value, allow_out_of_range=false, throw_error=false)
     set_value(fcs.thtl, value)
     min, max = get_value_range(fcs.thtl)
     range = max - min
@@ -73,7 +73,7 @@ function set_controls_trimmer(fcs::F16FCS, slong, slat, ped, thtl,
     set_stick_lat(fcs, slong, allow_out_of_range, throw_error)
     set_stick_lon(fcs, slat, allow_out_of_range, throw_error)
     set_pedals(fcs, ped, allow_out_of_range, throw_error)
-    set_thrust(fcs, thtl, allow_out_of_range, throw_error)
+    set_thtl(fcs, thtl, allow_out_of_range, throw_error)
 end
 
 function get_controls_trimmer(fcs::F16FCS)

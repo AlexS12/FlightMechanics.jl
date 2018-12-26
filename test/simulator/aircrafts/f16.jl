@@ -104,7 +104,7 @@ end
     set_stick_lon(fcs, 0.0)
     set_stick_lat(fcs, 0.5)
     set_pedals(fcs, 0.5)
-    set_thrust(fcs, 0.8)
+    set_thtl(fcs, 0.8)
 
     # ac = calculate_aircraft(ac, fcs, aerostate, state, grav; consume_fuel=false)
 

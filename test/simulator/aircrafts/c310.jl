@@ -30,7 +30,7 @@ fcs = C310FCS()
 set_stick_lon(fcs, 0.43)
 set_stick_lat(fcs, 0.562)
 set_pedals(fcs, 0.5)
-set_thrust(fcs, 0.68)
+set_thtl(fcs, 0.68)
 
 ac = calculate_aircraft(ac, fcs, aerostate, state, grav; consume_fuel=false)
 
