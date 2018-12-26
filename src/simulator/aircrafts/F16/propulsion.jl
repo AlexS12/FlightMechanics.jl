@@ -32,7 +32,7 @@ function F16Engine()
 end
 
 # TODO: Engine position and orientation
-get_engine_position(prop::F16Engine) = [0., 0., 0.] .* IN2M
+get_engine_position(prop::F16Engine) = [0.35 * 11.32 * FT2M, 0.0, 0.0]
 get_engine_orientation(prop::F16Engine) = [0., 0., 0.] .* DEG2RAD
 
 
