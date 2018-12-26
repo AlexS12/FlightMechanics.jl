@@ -105,8 +105,8 @@ function steady_state_trim(ac::Aircraft, fcs::FCS, env::Environment,
                       #ParticleSwarm(;lower=lower_bounds, upper=upper_bounds, n_particles=250),
                       Optim.Options(
                         g_tol=1e-25,
-                        iterations=1000,
-                        show_trace=show_trace, show_every=50
+                        iterations=5000,
+                        show_trace=show_trace, show_every=100
                         );
                       )
     if show_trace
