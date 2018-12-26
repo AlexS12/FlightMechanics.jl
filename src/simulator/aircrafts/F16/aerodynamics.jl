@@ -35,6 +35,17 @@ function get_interp_idx(val, coeff, min_, max_)
    return k, l, da
 end
 
+function get_interp_idx2(val, coeff, min_, max_)
+   s = abs(val) * coeff
+   k = floor(Int, s)
+   k = max(min_, k)
+   k = min(k, max_)
+   da = s - float(k)
+   k += 1
+   l = k + Int(sign(da))
+   return k, l, da
+end
+
 function interp1d(val, coeff, min, max, data)
    k, l, da = get_interp_idx(val, coeff, min, max)
    res = data[k] + abs(da) * (data[l] - data[k])
@@ -50,18 +61,21 @@ function interp2d(val1, val2, coeff1, coeff2, min1, min2, max1, max2, data)
    v = t + abs(da) * (data[l, m] - t)
    w = u + abs(da) * (data[l, n] - u)
    res = v + (w - v) * abs(de)
+
    return res
 end
 
 function interp2d2(val1, val2, coeff1, coeff2, min1, min2, max1, max2, data)
    k, l, da = get_interp_idx(val1, coeff1, min1, max1)
-   m, n, de = get_interp_idx(abs(val2), coeff2, min2, max2)
+   m, n, de = get_interp_idx2(val2, coeff2, min2, max2)
 
    t = data[k, m]
    u = data[k, n]
    v = t + abs(da) * (data[l, m] - t)
    w = u + abs(da) * (data[l, n] - u)
-   res = v + (w - v) * abs(de) + sign(val2)
+   res = v + (w - v) * abs(de)
+   res *= sign(val2)
+
    return res
 end
 
@@ -136,13 +150,14 @@ cldr_data = cldr_data'
 
 # Cn
 # rows: beta columns: alpha
-Cn_data = [0.018  0.019  0.018  0.019  0.019  0.018  0.013  0.007 0.004 -0.014 -0.017 -0.033;
+Cn_data = [0.000  0.000  0.000  0.000  0.000  0.000  0.000  0.000 0.000  0.000  0.000  0.000;
+           0.018  0.019  0.018  0.019  0.019  0.018  0.013  0.007 0.004 -0.014 -0.017 -0.033;
            0.038  0.042  0.042  0.042  0.043  0.039  0.030  0.017 0.004 -0.035 -0.047 -0.057;
            0.056  0.057  0.059  0.058  0.058  0.053  0.032  0.012 0.002 -0.046 -0.071 -0.073;
            0.064  0.077  0.076  0.074  0.073  0.057  0.029  0.007 0.012 -0.034 -0.065 -0.041;
            0.074  0.086  0.093  0.089  0.080  0.062  0.049  0.022 0.028 -0.012 -0.002 -0.013;
            0.079  0.090  0.106  0.106  0.096  0.080  0.068  0.030 0.064  0.015  0.011 -0.001]
-Cn_Data = Cn_data'
+Cn_data = Cn_data'
 # rows: beta columns=alpha
 cnda_data = [ 0.001 -0.027 -0.017 -0.013 -0.012 -0.016  0.001  0.017  0.011  0.017  0.008  0.016;
               0.002 -0.014 -0.016 -0.016 -0.014 -0.019 -0.021  0.002  0.012  0.015  0.015  0.011;
@@ -189,7 +204,7 @@ Cn_da(aero::F16Aerodynamics, α, β) = interp2d(α, β, 0.2, 0.1, -1, -2, 8, 2, 
 Cn_dr(aero::F16Aerodynamics, α, β) = interp2d(α, β, 0.2, 0.1, -1, -2, 8, 2, cndr_data)
 
 
-CXαde(aero::F16Aerodynamics, α, de) = interp2d(α, de, .2, 1.0/DE_MAX, -1, -1, 8, 1, CX_data)
+CXαde(aero::F16Aerodynamics, α, de) = interp2d(α, de, .2, 1.0/12, -1, -1, 8, 1, CX_data)
 
 CYdr(aero::F16Aerodynamics, dr) = 0.086 / DR_MAX * dr
 CYda(aero::F16Aerodynamics, da) = 0.021 / DA_MAX * da
@@ -203,7 +218,7 @@ Clαβ(aero::F16Aerodynamics, α, β) = interp2d2(α, β, .2, .2, -1, 1, 8, 5, C
 Cldr(aero::F16Aerodynamics, α, β, dr) = Cl_dr(aero, α, β) * dr
 Clda(aero::F16Aerodynamics, α, β, da) = Cl_da(aero, α, β) * da
 
-Cmαde(aero::F16Aerodynamics, α, de) = interp2d(α, de, .2, 1.0/DE_MAX, -1, -1, 8, 1, Cm_data)
+Cmαde(aero::F16Aerodynamics, α, de) = interp2d(α, de, .2, 1.0/12, -1, -1, 8, 1, Cm_data)
 
 Cnαβ(aero::F16Aerodynamics, α, β) = interp2d2(α, β, .2, .2, -1, 1, 8, 5, Cn_data)
 Cndr(aero::F16Aerodynamics, α, β, dr) = Cn_dr(aero, α, β) * dr
