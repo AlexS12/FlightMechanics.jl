@@ -1,6 +1,6 @@
 using FlightMechanics
 
-export AeroState,
+export AeroState, state_aerostate,
     get_alpha, get_beta, get_aero_angles, get_alpha_dot,
     get_tas, get_eas, get_cas, get_ias, get_aero_speeds,
     get_qinf, get_mach
@@ -71,6 +71,21 @@ function AeroState(tas::Number, alpha::Number, beta::Number, height::Number)
     mach = tas / a
 
     AeroState(alpha, beta, 0, tas, eas, cas, ias, qinf, mach)
+end
+
+
+function state_aerostate(pos, att, tas, alpha, beta, env=DefaultEnvironment(),
+                         ang_vel=[0.0, 0.0, 0.0], accel=[0.0, 0.0, 0.0],
+                         ang_accel=[0.0, 0.0, 0.0])
+
+    aerostate = AeroState(tas, alpha, beta, get_height(pos))
+
+    aero_vel_body = wind2body([tas, 0, 0]..., alpha, beta)
+    wind_vel_body = hor2body(get_wind_NED(env)..., get_euler_angles(att)...)
+    vel = aero_vel_body - wind_vel_body
+
+    state = State(pos, att, vel, ang_vel, accel, ang_accel)
+    return state, aerostate
 end
 
 get_alpha(aerost::AeroState) = aerost.alpha

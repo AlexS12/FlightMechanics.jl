@@ -59,25 +59,16 @@ function steady_state_trim(ac::Aircraft, fcs::FCS, env::Environment,
 
     phi = coordinated_turn_bank(turn_rate, alpha0, beta0, tas, gamma)
     theta = climb_theta(gamma, alpha0, beta0, phi)
-    p, q, r = turn_rate_angular_velocity(turn_rate, theta, phi)
-
     att  = Attitude(psi, theta, phi)
 
-    # Create initial aero and initial state
-    aerostate = AeroState(tas, alpha0, beta0, get_height(pos))
+    p, q, r = turn_rate_angular_velocity(turn_rate, theta, phi)
+    ang_vel = [p, q, r]
 
-    aero_vel_body = wind2body([aerostate.tas, 0, 0]..., aerostate.alpha, aerostate.beta)
-    wind_vel_body = hor2body(get_wind_NED(env)..., get_euler_angles(att)...)
-    vel = aero_vel_body - wind_vel_body
+    accel = [0., 0., 0.]
+    ang_accel = [0., 0., 0.]
 
-    state = State(
-        pos,
-        att,
-        vel,
-        [p, q, r],
-        zeros(3),  # acceleration
-        zeros(3)   # angular acceleration
-    )
+    state, aerostate = state_aerostate(pos, att, tas, alpha0, beta0, env, ang_vel,
+                                       accel, ang_accel)
 
     env = calculate_environment(env, state)
 
@@ -134,28 +125,19 @@ function trim_cost_function(trimming_variables, trimmer::Trimmer)
     # Impose constrains
     phi = coordinated_turn_bank(tr, alpha, beta, tas, gamma)
     theta = climb_theta(gamma, alpha, beta, phi)
-    p, q, r = turn_rate_angular_velocity(tr, theta, phi)
-
-    # Generate new state
     att = Attitude(psi, theta, phi)
+    p, q, r = turn_rate_angular_velocity(tr, theta, phi)
+    ang_vel = [p, q, r]
     pos = get_position(trimmer.state)
     aerostate = trimmer.aerostate
+    accel = [0., 0., 0.]
+    ang_accel = [0., 0., 0.]
+
     env = trimmer.env
 
-    aero_vel_body = wind2body([aerostate.tas, 0, 0]..., aerostate.alpha, aerostate.beta)
-    wind_vel_body = hor2body(get_wind_NED(env)..., get_euler_angles(att)...)
-    vel = aero_vel_body - wind_vel_body
+    state, aerostate = state_aerostate(pos, att, tas, alpha, beta, env, ang_vel,
+                                       accel, ang_accel)
 
-    state = State(
-        pos,
-        att,
-        vel,
-        [p, q, r],
-        zeros(3),  # acceleration
-        zeros(3)   # angular acceleration
-    )
-
-    aerostate = AeroState(tas, alpha, beta, get_height(state))
     env = calculate_environment(trimmer.env, trimmer.state)
 
     # Set trimmer attributes

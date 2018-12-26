@@ -167,6 +167,7 @@ Environment information composed of atmosphere, wind and gravity.
 # Constructors
     DefatultEnvironment(): ISA atomosphere, Constant zero wind, and Constant gravity.
 """
+# TODO: every environment must be initialized with a state
 struct Environment
     atmos::Atmosphere
     wind::Wind
