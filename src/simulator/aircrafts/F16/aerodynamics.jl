@@ -268,8 +268,8 @@ function calculate_aerodynamics(ac::Aircraft, aero::F16Aerodynamics, fcs::FCS,
    adim_pfm_body = PointForcesMoments(ARP, [CX, CY, CZ], [Cl, Cm, Cn])
    pfm_body = PointForcesMoments(ARP, qinf*Sw*[CX, CY, CZ],
                                       qinf*Sw*[b*Cl, c*Cm, b*Cn])
-   α = get_alpha(aerostate) * RAD2DEG
-   β = get_beta(aerostate) * RAD2DEG
+   α = get_alpha(aerostate)
+   β = get_beta(aerostate)
 
    pfm_wind = rotate(pfm_body, -β, -α, 0)
    adim_pfm_wind = rotate(adim_pfm_body, -β, -α, 0)
