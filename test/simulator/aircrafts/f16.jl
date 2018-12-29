@@ -113,9 +113,9 @@ end
     gamma = 0.0
     turn_rate = 0.0
 
-#  Stevens, B. L., Lewis, F. L., & Johnson, E. N. (2015). Aircraft control
-#  and simulation: dynamics, controls design, and autonomous systems. John Wiley
-#  & Sons. (page 193)
+    #  Stevens, B. L., Lewis, F. L., & Johnson, E. N. (2015). Aircraft control
+    #  and simulation: dynamics, controls design, and autonomous systems. John Wiley
+    #  & Sons. (page 193 table 3.6-2)
     trim_test_data = [
     #   TAS   thtl    AOA     DE
     #   ft/s  unit    deg     deg
@@ -142,13 +142,18 @@ end
         @testset "trim tas=$tas_fts ft/s" begin
 
             tas =  tas_fts * FT2M
-            # TODO: think if last trim is used as initial condition for the next
-            ac, aerostate, state, env, fcs = steady_state_trim(
-                ac, fcs, env, tas, pos, psi, gamma, turn_rate, true)
 
             exp_thtl = trim_test_data[ii, 2]
             exp_α    = trim_test_data[ii, 3]
             exp_de   = trim_test_data[ii, 4]
+
+            set_stick_lon(fcs, exp_de/25.0)
+            set_thtl(fcs, 0.5)
+
+            # TODO: think if last trim is used as initial condition for the next
+            ac, aerostate, state, env, fcs = steady_state_trim(
+                ac, fcs, env, tas, pos, psi, gamma, turn_rate,
+                exp_α*DEG2RAD, 0.0, true)
 
             @test isapprox(ac.pfm.forces, zeros(3), atol=1e-5)
             @test isapprox(ac.pfm.moments, zeros(3), atol=1e-5)

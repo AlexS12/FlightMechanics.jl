@@ -52,10 +52,10 @@ See section 3.4 in [1] for the algorithm description.
 """
 function steady_state_trim(ac::Aircraft, fcs::FCS, env::Environment,
     tas::Number, pos::Position, psi::Number, gamma::Number, turn_rate::Number,
-    show_trace=false)
+    α0::Number, β0::Number, show_trace=false)
 
-    alpha0 = 3 * DEG2RAD
-    beta0 = 0 * DEG2RAD
+    alpha0 = α0
+    beta0 = β0
 
     phi = coordinated_turn_bank(turn_rate, alpha0, beta0, tas, gamma)
     theta = climb_theta(gamma, alpha0, beta0, phi)
