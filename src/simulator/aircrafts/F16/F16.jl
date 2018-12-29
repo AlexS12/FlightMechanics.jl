@@ -63,9 +63,9 @@ function get_empty_mass_props(ac::F16)
     RigidSolid(
         20500 * LB2KG,                                # Empty mass
         get_arp(ac::F16),                             # Empty CG
-        [9456.       0.     982.;                     # Empty inertia
-            0.   55814.       0.;
-          982.       0.   63100.]  .* SLUGFT2_2_KGM2
+        [9456.        0.    -982.;                     # Empty inertia
+            0.    55814.       0.;
+          -982.       0.   63100.]  .* SLUGFT2_2_KGM2
     )
 end
 
