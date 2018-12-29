@@ -244,7 +244,7 @@ end
             exp_de   = trim_test_data[ii, 4]
 
             set_stick_lon(fcs, exp_de/25.0)
-            set_thtl(fcs, 0.5)
+            set_thtl(fcs, exp_thtl)
 
             # TODO: think if last trim is used as initial condition for the next
             ac, aerostate, state, env, fcs = steady_state_trim(
@@ -256,8 +256,8 @@ end
             @test isapprox(get_tas(aerostate), tas, atol=1e-5)
             @test isapprox(get_beta(aerostate), 0.0, atol=1e-5)
 
-            @test isapprox(fcs.cpl.value/100, exp_thtl, atol=10.0^(-length(split(string(exp_thtl), ".")[2])))
-            # @test isapprox(fcs.thtl.value, exp_thtl, atol=10.0^(-length(split(string(exp_thtl), ".")[2])))
+            # @test isapprox(fcs.cpl.value/100, exp_thtl, atol=10.0^(-length(split(string(exp_thtl), ".")[2])))
+            @test isapprox(fcs.thtl.value, exp_thtl, atol=10.0^(-length(split(string(exp_thtl), ".")[2])))
             @test isapprox(aerostate.alpha*RAD2DEG, exp_α, atol=10.0^(-length(split(string(exp_α), ".")[2])))
             @test isapprox(fcs.de.value*RAD2DEG, exp_de, atol=10.0^(-length(split(string(exp_de), ".")[2])))
         end
