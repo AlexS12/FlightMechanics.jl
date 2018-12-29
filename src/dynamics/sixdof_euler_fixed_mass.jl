@@ -42,14 +42,10 @@ account.
  (page 368, figure 10.2, not taking into account quaternions in angular
  kinematic equations)
 """
-function six_dof_euler_fixed_mass(state, mass, inertia, forces, moments)
+function six_dof_euler_fixed_mass(state, mass, inertia, forces, moments,
+                                  eng_h=[0.0, 0.0, 0.0])
 
     m = mass
-    Ix = inertia[1, 1]
-    Iy = inertia[2, 2]
-    Iz = inertia[3, 3]
-    Jxz = -inertia[1, 3]
-
     u, v, w, p, q, r, ψ, θ, ϕ, xe, ye, ze = state
 
     Fx, Fy, Fz = forces
@@ -65,17 +61,39 @@ function six_dof_euler_fixed_mass(state, mass, inertia, forces, moments)
     w_dot = Fz / m + q * u - p * v
 
     # Angular momentum equations
+    Ix = inertia[1, 1]
+    Iy = inertia[2, 2]
+    Iz = inertia[3, 3]
+    Jxz = -inertia[1, 3]
+
     Jxz2 = Jxz*Jxz
-    den = (Ix*Iz - Jxz2)
+    Γ = (Ix*Iz - Jxz2)
     temp = (Ix + Iz - Iy)
 
-    p_dot = (L*Iz + N*Jxz - q*r*(Iz*Iz - Iz*Iy + Jxz2) + p*q * Jxz * temp) / den
-    q_dot = (M + (Iz - Ix) * p*r - Jxz * (p*p - r*r)) / Iy
-    r_dot = (L*Jxz + N*Ix + p*q * (Ix*Ix - Ix*Iy + Jxz2) - q*r * Jxz * temp) / den
+    # Engine angular momentum contribution
+    hx, hy, hz = eng_h
+
+    rhy_qhz = (r*hy - q*hz)
+    qhx_phy = (q*hx - p*hy)
+
+    pe_dot = Iz * rhy_qhz + Jxz * qhx_phy
+    qe_dot = -r*hx + p*hz
+    re_dot = Jxz * rhy_qhz + Ix * qhx_phy
+
+    # Angular momentum equations
+    p_dot = L*Iz + N*Jxz - q*r*(Iz*Iz - Iz*Iy + Jxz2) + p*q * Jxz * temp + pe_dot
+    p_dot /= Γ
+
+    q_dot = M + (Iz - Ix) * p*r - Jxz * (p*p - r*r) + qe_dot
+    q_dot /= Iy
+
+    r_dot = L*Jxz + N*Ix + p*q * (Ix*Ix - Ix*Iy + Jxz2) - q*r * Jxz * temp + re_dot
+    r_dot /= Γ
 
     # Angular Kinematic equations
     ψ_dot = (q * sϕ + r * cϕ) / cθ
     θ_dot = q * cϕ - r * sϕ
+    # TODO: ϕ_dot = p + ψ_dot * sθ
     ϕ_dot = p + (q * sϕ + r * cϕ) * tan(θ)
 
     # Linear kinematic equations
