@@ -34,7 +34,8 @@ function C310()
     propulsion0 = Propulsion(
             PointForcesMoments(zeros(3), zeros(3), zeros(3)),
             0, 0, 0,
-            [engine_right, engine_left]
+            [engine_right, engine_left],
+            [0., 0., 0.]
             )
 
     # mass properties cannot be retrieved until ac is created... so:

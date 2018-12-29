@@ -3,7 +3,7 @@ using FlightMechanics.Simulator.Models
 
 import FlightMechanics.Simulator.Models:
     get_pfm, get_cj, get_power, get_efficiency, get_tanks,
-    get_engine_position, get_engine_orientation,
+    get_engine_position, get_engine_orientation, get_engine_gyro_effects,
     calculate_engine
 
 export F16Engine
@@ -18,6 +18,7 @@ struct F16Engine<:Engine
     power::Number
     efficiency::Number
     tanks::Array{RigidSolid, 1}
+    h::Array{T, 1} where T<:Number  # angular momentum [kg·m²/s]
 end
 
 function F16Engine()
@@ -27,13 +28,16 @@ function F16Engine()
         0,
         0,
         # TODO: Fuel tanks
-        [PointMass(0 * LB2KG, [0., 0., 0.] .* IN2M)]
+        [PointMass(0 * LB2KG, [0., 0., 0.] .* IN2M)],
+        [160.0*SLUGFT2_2_KGM2, 0.0, 0.0]
         )
+
 end
 
 # TODO: Engine position and orientation
 get_engine_position(prop::F16Engine) = [0.35 * 11.32 * FT2M, 0.0, 0.0]
 get_engine_orientation(prop::F16Engine) = [0., 0., 0.] .* DEG2RAD
+get_engine_gyro_effects(prop::F16Engine) = [160.0*SLUGFT2_2_KGM2, 0.0, 0.0]  # [kg·m²/s]
 
 
 # ENGINE DATA
@@ -221,5 +225,5 @@ function calculate_engine(eng::F16Engine, fcs::FCS, aerostate::AeroState,
                              [0, 0, 0]
                              )
 
-    return typeof(eng)(pfm, cj, Pm, ηp, tanks)
+    return typeof(eng)(pfm, cj, Pm, ηp, tanks, get_engine_gyro_effects(eng))
 end

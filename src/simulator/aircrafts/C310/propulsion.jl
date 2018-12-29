@@ -2,7 +2,7 @@ using FlightMechanics.Simulator.Models
 
 import FlightMechanics.Simulator.Models:
     get_pfm, get_cj, get_power, get_efficiency, get_tanks,
-    get_engine_position, get_engine_orientation,
+    get_engine_position, get_engine_orientation, get_engine_gyro_effects,
     calculate_engine
 
 export C310Engine, C310EngineLeft, C310EngineRight,
@@ -19,6 +19,7 @@ struct C310EngineLeft<:C310Engine
     power::Number
     efficiency::Number
     tanks::Array{RigidSolid, 1}
+    h::Array{T, 1} where T<:Number  # angular momentum [kg·m²/s]
 end
 
 function C310EngineLeft()
@@ -28,7 +29,8 @@ function C310EngineLeft()
         0,
         0,
         [PointMass(225 * LB2KG, [35, -209.8, 28.3] .* IN2M),
-         PointMass(95 * LB2KG, [35, -41.6, 11.7] .* IN2M)]
+         PointMass(95 * LB2KG, [35, -41.6, 11.7] .* IN2M)],
+        [0.0, 0.0, 0.0]
         )
 end
 
@@ -39,6 +41,7 @@ struct C310EngineRight<:C310Engine
     power::Number
     efficiency::Number
     tanks::Array{RigidSolid, 1}
+    h::Array{T, 1} where T<:Number  # angular momentum [kg·m²/s]
 end
 
 function C310EngineRight()
@@ -48,7 +51,8 @@ function C310EngineRight()
         0,
         0,
         [PointMass(225 * LB2KG, [35, 209.8, 28.3] .* IN2M),
-         PointMass(95 * LB2KG, [35, 41.6, 11.7] .* IN2M)]
+         PointMass(95 * LB2KG, [35, 41.6, 11.7] .* IN2M)],
+        [0.0, 0.0, 0.0]
         )
 end
 
@@ -104,7 +108,7 @@ function calculate_engine(eng::C310Engine, fcs::FCS, aerostate::AeroState,
                              [0, 0, 0]
                              )
 
-    return typeof(eng)(pfm, cj, Pm, ηp, tanks)
+    return typeof(eng)(pfm, cj, Pm, ηp, tanks, get_engine_gyro_effects(eng))
 end
 
 

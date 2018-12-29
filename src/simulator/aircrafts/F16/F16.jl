@@ -32,7 +32,8 @@ function F16()
     propulsion0 = Propulsion(
             PointForcesMoments(zeros(3), zeros(3), zeros(3)),
             0, 0, 0,
-            [engine]
+            [engine],
+            get_gyro_effects(engine)
             )
 
     # mass properties cannot be retrieved until ac is created... so:
