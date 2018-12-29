@@ -170,7 +170,7 @@ function calculate_thrust(pow, alt, rmach)
         s = max_data[i, m] * cdh + max_data[i+1, m] * dh
         t = max_data[i, m+1] * cdh + max_data[i+1, m+1] * dh
         tmax = s + (t-s) * dm
-        thrst = tmil + (tmax - tmil) * (pow-50) * 0.02
+        thrst = tmil + (tmax - tmil) * (pow-50.) * 0.02
     end
 
     return thrst
