@@ -83,6 +83,102 @@ end
 
 end
 
+
+@testset "model test case" begin
+    #  Stevens, B. L., Lewis, F. L., & Johnson, E. N. (2015). Aircraft control
+    #  and simulation: dynamics, controls design, and autonomous systems. John Wiley
+    #  & Sons. (page 185 table 3.5-2)
+
+    # INPUTS
+    # U(1) = THTL =   0.9  [-]
+    # U(2) = ELEV =  20    [DEG]
+    # U(3) = DAIL = -15    [DEG]
+    # U(4) = RDR  = -20    [DEG]
+
+    # STATE
+    # IDX     name      X        UNITS        XDOT
+    # 1       VT       500       [ft/s]      -75.23724
+    # 2       ALPHA      0.5     [DEG]       -0.8813491
+    # 3       BETA      -0.2     [DEG]       -0.4759990
+    # 4       PHI       -1       [RAD]        2.505734
+    # 5       THETA      1       [RAD]        0.3250820
+    # 6       PSI       -1       [RAD]        2.145926
+    # 7       P          0.7     [DEG/S]     12.62679
+    # 8       Q         -0.8     [DEG/S]      0.9649671
+    # 9       R          0.9     [DEG/S]      0.5809759
+    # 10      X       1000       [FT]       342.4439
+    # 11      Y        900       [FT]      -266.7707
+    # 12      ALT    10000       [FT]       248.1241
+    # 13      POW       90       [%]        -58.6899
+
+    # Integration test for aircraft just making sure everything runs
+    ac = F16()
+
+    att = Attitude(-1, 1, -1)
+    pos = PositionEarth(1000*FT2M, 900*FT2M, -10000*FT2M)
+    u, v, w = wind2body(500*FT2M, 0, 0, 0.5, -0.2)
+    state = State(pos,
+                  att,
+                  [u, v, w],
+                  [0.7, -0.8, 0.9], #.*DEG2RAD,
+                  [0., 0., 0.],
+                  [0., 0., 0.]
+                 )
+
+    fcs = F16FCS()
+    # set_stick_lon(fcs, 0.5+20.0/25.0)
+    set_value(fcs.de, 20.0*DEG2RAD)
+    # set_stick_lat(fcs, 15.0/21.5)
+    set_value(fcs.da, -15.0*DEG2RAD)
+    # set_pedals(fcs, 20.0/30.0)
+    set_value(fcs.dr, -20*DEG2RAD)
+    # set_thtl(fcs, 0.9)
+    set_value(fcs.cpl, 90.0)
+
+    env = DefaultEnvironment()
+    aerostate = AeroState(state, env)
+    env = calculate_environment(env, state)
+
+    grav = env.grav
+
+    ac = calculate_aircraft(ac, fcs, aerostate, state, grav; consume_fuel=false)
+    pfm = ac.pfm
+    mass_props = get_mass_props(ac)
+    mass = mass_props.mass
+    inertia = mass_props.inertia
+
+    state = get_sixdof_euler_fixed_mass_state(state)
+
+    r = six_dof_euler_fixed_mass(state, mass, inertia, pfm.forces, pfm.moments,
+                                 [160.0*SLUGFT2_2_KGM2, 0.0, 0.0])
+
+    # [RAD/S]
+    ψ_dot = 2.145926
+    θ_dot = 0.3250820
+    ϕ_dot = 2.505734
+    p_dot = 12.62679
+    q_dot = 0.9649671
+    r_dot = 0.5809759
+    # [FT/S]
+    x_dot = 342.4439
+    y_dot = -266.7707
+    z_dot = 248.1241
+
+    @test isapprox(r[7], ψ_dot, atol=1e-6)  # ψ_dot [rad/s]
+    @test isapprox(r[8], θ_dot, atol=1e-7)  # θ_dot [rad/s]
+    @test isapprox(r[9], ϕ_dot, atol=1e-6)  # ϕ_dot [rad/s]
+
+    @test isapprox(r[4], p_dot)   # p_dot [rad/s]
+    @test isapprox(r[5], q_dot)  # q_dot [rad/s]
+    @test isapprox(r[6], r_dot)  # r_dot [rad/s]
+
+    @test isapprox(r[10]*M2FT, x_dot, atol=1e-4)   # x_dot (ft/s)
+    @test isapprox(r[11]*M2FT, y_dot, atol=1e-4)  # y_dot (ft/s)
+    @test isapprox(-r[12]*M2FT, z_dot, atol=1e-4)   # z_dot (ft/s)
+
+end
+
+
 @testset "trim test" begin
     # Integration test for aircraft just making sure everything runs
     ac = F16()
@@ -167,4 +263,4 @@ end
         end
     end
 
-    end
+end
