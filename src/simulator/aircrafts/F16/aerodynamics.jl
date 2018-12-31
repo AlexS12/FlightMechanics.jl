@@ -24,13 +24,13 @@ const DA_MAX = 20.0  # deg  #XXX: In Stevens' book says 21.5 deg (Appendix A Sec
 const DR_MAX = 30.0  # deg
 
 # UTILS for interpolations
-function get_interp_idx(val, coeff, min_, max_)
+function get_interp_idx(val, coeff, min_, max_, off_=3)
    s = val * coeff
    k = floor(Int, s)
    k = max(min_, k)
    k = min(k, max_)
    da = s - float(k)
-   k += 3
+   k += off_
    l = k + Int(sign(da))
    return k, l, da
 end
@@ -52,9 +52,9 @@ function interp1d(val, coeff, min, max, data)
    return res
 end
 
-function interp2d(val1, val2, coeff1, coeff2, min1, min2, max1, max2, data)
-   k, l, da = get_interp_idx(val1, coeff1, min1, max1)
-   m, n, de = get_interp_idx(val2, coeff2, min2, max2)
+function interp2d(val1, val2, coeff1, coeff2, min1, min2, max1, max2, data, off1=3, off2=3)
+   k, l, da = get_interp_idx(val1, coeff1, min1, max1, off1)
+   m, n, de = get_interp_idx(val2, coeff2, min2, max2, off2)
 
    t = data[k, m]
    u = data[k, n]
@@ -83,7 +83,7 @@ end
 # DAMPING COEFFICIENTS
 CXq_data = [-0.267 -0.110 0.308 1.340 2.080 2.910 2.760 2.050 1.500 1.490 1.830 1.210]
 CYr_data = [0.882  0.852 0.876 0.958 0.962  0.974  0.819 0.483 0.590 1.210 -0.493 -1.040]
-CYp_data = [-0.108 -0.108 -1.880 0.110 0.258 0.226 0.344 0.362 0.611 0.529 0.298 -2.270]
+CYp_data = [-0.108 -0.108 -0.188 0.110 0.258 0.226 0.344 0.362 0.611 0.529 0.298 -2.270]
 CZq_data = [-8.800 -25.800 -28.900 -31.400 -31.200 -30.700 -27.700 -28.200 -29.000 -29.800 -38.300 -35.300]
 Clr_data = [-0.126 -0.026 0.063 0.113  0.208 0.230 0.319 0.437 0.680 0.100 0.447 -0.330]
 Clp_data = [-0.360 -0.359 -0.443 -0.420 -0.383 -0.375 -0.329 -0.294 -0.230 -0.210 -0.120 -0.100]
@@ -192,16 +192,16 @@ function dampings(aero::F16Aerodynamics, α)
    # TODO: check if vectorized approach is faster than loop (it shouldn't)
    dampings = Array{Float64}(undef, 9)
    for ii in 1:9
-      dampings[ii] = interp1d(α, 0.2, -1, 8, damp_data)
+      dampings[ii] = interp1d(α, 0.2, -1, 8, damp_data[ii, :])
    end
    return dampings
 end
 
 
-Cl_da(aero::F16Aerodynamics, α, β) = interp2d(α, β, 0.2, 0.1, -1, -2, 8, 2, clda_data)
-Cl_dr(aero::F16Aerodynamics, α, β) = interp2d(α, β, 0.2, 0.1, -1, -2, 8, 2, cldr_data)
-Cn_da(aero::F16Aerodynamics, α, β) = interp2d(α, β, 0.2, 0.1, -1, -2, 8, 2, cnda_data)
-Cn_dr(aero::F16Aerodynamics, α, β) = interp2d(α, β, 0.2, 0.1, -1, -2, 8, 2, cndr_data)
+Cl_da(aero::F16Aerodynamics, α, β) = interp2d(α, β, 0.2, 0.1, -1, -2, 8, 2, clda_data, 3, 4)
+Cl_dr(aero::F16Aerodynamics, α, β) = interp2d(α, β, 0.2, 0.1, -1, -2, 8, 2, cldr_data, 3, 4)
+Cn_da(aero::F16Aerodynamics, α, β) = interp2d(α, β, 0.2, 0.1, -1, -2, 8, 2, cnda_data, 3, 4)
+Cn_dr(aero::F16Aerodynamics, α, β) = interp2d(α, β, 0.2, 0.1, -1, -2, 8, 2, cndr_data, 3, 4)
 
 
 CXαde(aero::F16Aerodynamics, α, de) = interp2d(α, de, .2, 1.0/12, -1, -1, 8, 1, CX_data)
