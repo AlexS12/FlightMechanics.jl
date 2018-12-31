@@ -1,7 +1,9 @@
 using FlightMechanics
 
 export Aerodynamics,
-    get_pfm, calculate_aerodynamics
+    get_pfm, calculate_aerodynamics,
+    get_wind_pfm, get_wind_adim_pfm,
+    get_body_pfm, get_body_adim_pfm
 
 
 """
