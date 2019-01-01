@@ -11,6 +11,7 @@ export Propulsion,
        get_propulsion_position,
        get_fuel_mass_props,
        calculate_propulsion,
+       get_engines,
        get_gyro_effects
 
 
