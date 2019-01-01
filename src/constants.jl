@@ -24,7 +24,8 @@ export LB2KG,
       KT2MS, MS2KT,
       DEG2RAD, RAD2DEG,
       HP2WAT, WAT2HP,
-      LBF2N
+      LBF2N,
+      PA2PSF, PSF2PA
 
 const GAMMA_AIR = 1.4  # Adiabatic index or ratio of specific heats (dry air at 20º C)
 const R_AIR = 287.05287  # Specific gas constant for dry air (J/(Kg·K))
@@ -106,3 +107,5 @@ const RAD2DEG = 180 / pi  # radians to degrees
 const HP2WAT = 745.7  # horse power to Watts
 const WAT2HP = 0.00134102  # Wat to horse power
 const LBF2N = 4.44822  # pounds force (lbf) to N (Newton)
+const PA2PSF = 0.02088543  # Pascal to Pounds per square foot
+const PSF2PA = 47.880258  # Pounds per square foot to Pascal
