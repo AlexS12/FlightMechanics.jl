@@ -1,73 +1,14 @@
 using FlightMechanics
 
 
-export ConstantWind, calculate_wind
+
 export EarthConstantGravity, calculate_gravity
 export Environment, DefaultEnvironment, calculate_environment,
     get_temperature, get_pressure, get_density, get_sound_velocity,
-    get_wind, get_wind_NED, get_wind_direction, get_wind_intensity, get_wind_vertical,
     get_gravity_accel, get_grav_body_vector, get_grav_body_versor
 
 
-# -------- WIND --------
-"""
-    Wind
 
-Wind information at a given placement.
-"""
-abstract type Wind end
-
-
-"""
-    ConstantWind(direction, intensity, vertical)
-
-Constant wind structure:
-  - direction: wind blowing from that direction [rad]
-  - intensity: wind speed [m/s]
-  - vertical: vertical wind speed [m/s] positive blowing upwards.
-
- # Constructors
-
-    ConstantWind(): No wind.
-"""
-struct ConstantWind<:Wind
-    direction::Number  # coming from [rad]
-    intensity::Number  # positive blowing to ac [m/s]
-    vertical::Number   # positive blowing to ac [m/s]
-end
-
-ConstantWind() = ConstantWind(0, 0, 0)
-
-get_wind(wind::Wind) = [wind.direction, wind.intensity, wind.vertical]
-get_direction(wind::Wind) = wind.direction
-get_intensity(wind::Wind) = wind.intensity
-get_vertical(wind::Wind) = wind.vertical
-
-
-"""
-    get_wind_NED(wind::Wind)
-
-Express wind in local horizon axis [N, E, D].
-"""
-function get_wind_NED(wind::Wind)
-    # coming from
-    wind_N = wind.intensity * cos(wind.direction + π)
-    wind_E = wind.intensity * sin(wind.direction + π)
-    wind_D = wind.vertical
-    return [wind_N, wind_E, wind_D]
-end
-
-"""
-    get_wind_body(wind::Wind, state::State)
-
-Express wind body axis [N, E, D] given the `Attitude` stored in `State`.
-"""
-function get_wind_body(wind::Wind, state::State)
-    wind_ned = get_wind_NED(wind)
-    hor2body(wind_ned..., get_quaternion(state)...)
-end
-
-calculate_wind(wind::ConstantWind, state::State) = wind
 
 # -------- GRAVITY --------
 abstract type Gravity end
@@ -140,7 +81,7 @@ get_grav_body_versor(env::Environment) = get_grav_body_versor(env.grav)
 
 function calculate_environment(env::Environment, state::State)
     atmos = calculate_atmosphere(env.atmos, state)
-    wind = calculate_wind(env.wind, state)
+    wind = calculate_wind(env.wind, get_position(state))
     grav = calculate_gravity(env.grav, state)
     Environment(atmos, wind, grav)
 end

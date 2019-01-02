@@ -1,7 +1,7 @@
 using FlightMechanics
 
 export get_position, get_llh, get_xyz_earth, get_xyz_ecef, get_height,
-       get_euler_angles, get_quaternion,
+       get_attitude, get_euler_angles, get_quaternion,
        get_body_velocity, get_horizon_velocity,
        get_flight_path_angle,
        get_body_ang_velocity,
@@ -28,6 +28,7 @@ get_xyz_earth(state::State) = get_xyz_earth(state.position)
 get_xyz_ecef(state::State) = get_xyz_ecef(state.position)
 get_height(state::State) = get_height(state.position)
 # Attitude getters
+get_attitude(state::State) = state.attitude
 get_euler_angles(state::State) = get_euler_angles(state.attitude)
 get_quaternion(state::State) = get_quaternion(state.attitude)
 # Velocity getters

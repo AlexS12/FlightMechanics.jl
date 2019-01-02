@@ -5,6 +5,7 @@ module Models
     include("mass.jl")
     include("point_forces_moments.jl")
     include("atmosphere.jl")
+    include("wind.jl")
     include("environment.jl")
     include("aero_state.jl")
     include("controls.jl")
