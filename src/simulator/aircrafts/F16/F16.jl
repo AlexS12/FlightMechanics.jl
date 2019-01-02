@@ -19,7 +19,6 @@ export F16,
 struct F16<:Aircraft
     mass_props::RigidSolid
     pfm::PointForcesMoments
-
     aerodynamics::F16Aerodynamics
     propulsion::Propulsion
 end
@@ -56,14 +55,17 @@ end
 get_wing_area(ac::F16) = 300.0 * FT2M^2
 get_wing_span(ac::F16) = 30. * FT2M
 get_chord(ac::F16) = 11.32 * FT2M
+
 # Aerodynamic Reference Point
-get_arp(ac::F16) = [0.35 * get_chord(ac), 0.0, 0.0]
+# Origin assumed leading edge of CMA
+get_arp(ac::F16) = [-0.35 * get_chord(ac), 0.0, 0.0]
+get_empty_cg(ac::F16) = [-0.35 * get_chord(ac), 0, 0]
 
 # MASS PROPERTIES
 function get_empty_mass_props(ac::F16)
     RigidSolid(
         20500 * LB2KG,                                # Empty mass
-        get_arp(ac::F16),                             # Empty CG
+        get_empty_cg(ac),                             # Empty CG
         [9456.        0.    -982.;                     # Empty inertia
             0.    55814.       0.;
           -982.       0.   63100.]  .* SLUGFT2_2_KGM2
