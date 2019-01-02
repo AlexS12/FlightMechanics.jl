@@ -1,4 +1,5 @@
 using FlightMechanics
+using FlightMechanics.Simulator.Models
 
 export AtmosphereISA,
        get_temperature, get_pressure, get_density, get_sound_velocity,
@@ -52,10 +53,10 @@ struct AtmosphereISA<:Atmosphere
 end
 
 # Sea level
-AtmosphereISA() = AtmosphereISA(T0, P0, RHO0, A0)
+AtmosphereISA(pos::Position) = AtmosphereISA(atmosphere_isa(get_height(pos))...)
 
-function calculate_atmosphere(atmos::AtmosphereISA, state::State)
-    AtmosphereISA(atmosphere_isa(get_height(state))...)
+function calculate_atmosphere(atmos::AtmosphereISA, pos::Position)
+    AtmosphereISA(atmosphere_isa(get_height(pos))...)
 end
 
 # Not exported because it is used only for validation
@@ -81,6 +82,8 @@ struct AtmosphereF16<:Atmosphere
     sound_velocity::Number  # m/s
 end
 
-function calculate_atmosphere(atmos::AtmosphereF16, state::State)
-    AtmosphereF16(atmosphere_f16(get_height(state))...)
+AtmosphereF16(pos::Position) = AtmosphereF16(atmosphere_f16(get_height(pos))...)
+
+function calculate_atmosphere(atmos::AtmosphereF16, pos::Position)
+    AtmosphereF16(atmosphere_f16(get_height(pos))...)
 end

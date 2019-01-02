@@ -13,7 +13,7 @@ Wind information at a given placement.
 """
 abstract type Wind end
 
-get_wind(wind::Wind) = [wind.direction, wind.intensity, wind.vertical]
+get_wind_dir_int_ver(wind::Wind) = [wind.direction, wind.intensity, wind.vertical]
 get_direction(wind::Wind) = wind.direction
 get_intensity(wind::Wind) = wind.intensity
 get_vertical(wind::Wind) = wind.vertical

@@ -70,7 +70,7 @@ function steady_state_trim(ac::Aircraft, fcs::FCS, env::Environment,
     state, aerostate = state_aerostate(pos, att, tas, alpha0, beta0, env, ang_vel,
                                        accel, ang_accel)
 
-    env = calculate_environment(env, state)
+    env = calculate_environment(env, get_position(state))
 
     # Store every necessary variable in the trimmer
     trimmer = Trimmer(ac, aerostate, state, env, fcs, turn_rate, gamma)
@@ -138,7 +138,7 @@ function trim_cost_function(trimming_variables, trimmer::Trimmer)
     state, aerostate = state_aerostate(pos, att, tas, alpha, beta, env, ang_vel,
                                        accel, ang_accel)
 
-    env = calculate_environment(trimmer.env, trimmer.state)
+    env = calculate_environment(trimmer.env, get_position(trimmer.state))
 
     # Set trimmer attributes
     trimmer.state = state

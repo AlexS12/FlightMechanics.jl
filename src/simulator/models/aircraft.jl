@@ -34,7 +34,7 @@ function calculate_aircraft(ac::Aircraft, fcs::FCS, aerostate::AeroState,
     # Calculate aerodynamics
     aero = calculate_aerodynamics(ac, aero, fcs, aerostate, state)
     # Calculate gravity forces
-    grav_force = get_grav_body_vector(grav) * mass_props.mass
+    grav_force = get_gravity_body(grav, get_attitude(state)) * mass_props.mass
     grav_pfm = PointForcesMoments(mass_props.cg, grav_force, [0, 0, 0])
 
     β = get_beta(aerostate)
