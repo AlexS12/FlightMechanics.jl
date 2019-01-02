@@ -1,7 +1,6 @@
 using FlightMechanics
 
 
-export AtmosphereISA, calculate_atmosphere
 export ConstantWind, calculate_wind
 export EarthConstantGravity, calculate_gravity
 export Environment, DefaultEnvironment, calculate_environment,
@@ -9,74 +8,6 @@ export Environment, DefaultEnvironment, calculate_environment,
     get_wind, get_wind_NED, get_wind_direction, get_wind_intensity, get_wind_vertical,
     get_gravity_accel, get_grav_body_vector, get_grav_body_versor
 
-
-# -------- ATMOSPHERE --------
-"""
-    Atmosphere
-
-Atmospheric information at a given altitude.
-"""
-abstract type Atmosphere end
-
-
-"""
-    AtmosphereISA(temperature, pressure, density, sound_velocity)
-
-International Standard Atmosphere 1976.
-
-# See also
-
-    atmosphere_isa(height)
-
-# References
-
-- [1] U.S. Standard Atmosphere, 1976, U.S. Government Printing Office,
-        Washington, D.C., 1976
-
-From: https://en.wikipedia.org/wiki/U.S._Standard_Atmosphere
-
-| Layer | h (m) | p (Pa)  | T (K)  | ``α`` (K/m) |
-|-------|-------|---------|--------|-------------|
-| 0     | 0     | 101325  | 288.15 | -0.0065     |
-| 1     | 11000 | 22632.1 | 216.65 | 0           |
-| 2     | 20000 | 5474.89 | 216.65 | 0.001       |
-| 3     | 32000 | 868.019 | 228.65 | 0.0028      |
-| 4     | 47000 | 110.906 | 270.65 | 0           |
-| 5     | 51000 | 66.9389 | 270.65 | -0.0028     |
-| 6     | 71000 | 3.95642 | 214.65 | -0.002      |
-"""
-struct AtmosphereISA<:Atmosphere
-    temperature::Number  # K
-    pressure::Number  # Pa
-    density::Number  # kg/m³
-    sound_velocity::Number  # m/s
-end
-
-# Sea level
-AtmosphereISA() = AtmosphereISA(T0, P0, RHO0, A0)
-
-function calculate_atmosphere(atmos::AtmosphereISA, state::State)
-    AtmosphereISA(atmosphere_isa(get_height(state))...)
-end
-
-# Not exported because it is used only for validation
-import FlightMechanics: atmosphere_f16
-
-struct AtmosphereF16<:Atmosphere
-    temperature::Number  # K
-    pressure::Number  # Pa
-    density::Number  # kg/m³
-    sound_velocity::Number  # m/s
-end
-
-function calculate_atmosphere(atmos::AtmosphereF16, state::State)
-    AtmosphereF16(atmosphere_f16(get_height(state))...)
-end
-
-get_temperature(atmos::Atmosphere) = atmos.temperature
-get_pressure(atmos::Atmosphere) = atmos.pressure
-get_density(atmos::Atmosphere) = atmos.density
-get_sound_velocity(atmos::Atmosphere) = atmos.sound_velocity
 
 # -------- WIND --------
 """
