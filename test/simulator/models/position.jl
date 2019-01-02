@@ -9,7 +9,7 @@ end
 
 llh = [deg2rad(49.996908), 0.000000, 9907.31]
 xyz_ecef = [4114496.258, 0.0, 4870157.031]
-xyz_earth = [0., 0., 0.]
+xyz_earth = [0., 0., -9907.31]
 
 pllh = PositionLLH(llh...)
 
@@ -18,18 +18,19 @@ pllh = PositionLLH(llh...)
 @test isapprox(get_xyz_ecef(pllh), xyz_ecef)
 @test isapprox(get_height(pllh), llh[3])
 
-pearth = PositionEarth(xyz_earth..., llh...)
+xyz_earth = [0., 0., -9907.31]
+pearth = PositionEarth(xyz_earth..., llh[1:2]...)
 
 @test isapprox(get_llh(pearth), llh)
 @test isapprox(get_xyz_earth(pearth), xyz_earth)
 @test isapprox(get_xyz_ecef(pearth), xyz_ecef)
-@test isapprox(get_height(pearth), llh[3])
+@test isapprox(get_height(pearth), -xyz_earth[3])
 
 
 pecef = PositionECEF(xyz_ecef...)
 
 @test isapprox(get_llh(pecef), llh, rtol=1e-5)
-@test isapprox(get_xyz_earth(pecef), xyz_earth)
+@test isapprox(get_xyz_earth(pecef), xyz_earth, rtol=1e-5)
 @test isapprox(get_xyz_ecef(pecef), xyz_ecef)
 @test isapprox(get_height(pecef), llh[3], atol=0.17)
 
