@@ -20,12 +20,13 @@ export LB2KG,
       FT2M, M2FT,
       IN2M, M2IN,
       SLUG2KG,
-      SLUGFT2_2_KGM2,
+      SLUGFT2_2_KGM2, SLUGFT3_2_KGM3,
       KT2MS, MS2KT,
       DEG2RAD, RAD2DEG,
       HP2WAT, WAT2HP,
       LBF2N,
-      PA2PSF, PSF2PA
+      PA2PSF, PSF2PA,
+      RANK2KEL, KEL2RANK
 
 const GAMMA_AIR = 1.4  # Adiabatic index or ratio of specific heats (dry air at 20º C)
 const R_AIR = 287.05287  # Specific gas constant for dry air (J/(Kg·K))
@@ -100,6 +101,7 @@ const IN2M = 0.0254  # Inches (in) to meters (m)
 const M2IN = 39.37007874  # meters (m) to inches(in)
 const SLUG2KG = 14.5939  # Slug to kilograms (kg)
 const SLUGFT2_2_KGM2 = 1.35581795  # Slug*feet^2 to kilograms*meters^2 (kg*m^2)
+const SLUGFT3_2_KGM3 = SLUG2KG / FT2M^3  # Slug*feet^3 to kilograms*meters^3 (kg*m^3)
 const KT2MS = 0.514444  # knots (kt) to meters/second (m/s)
 const MS2KT = 1.94384  # meters/second (m/s) to knots (kt)
 const DEG2RAD = pi / 180  # degrees to radians
@@ -109,3 +111,5 @@ const WAT2HP = 0.00134102  # Wat to horse power
 const LBF2N = 4.44822  # pounds force (lbf) to N (Newton)
 const PA2PSF = 0.02088543  # Pascal to Pounds per square foot
 const PSF2PA = 47.880258  # Pounds per square foot to Pascal
+const RANK2KEL = 0.555556  # Rankine to Kelvin
+const KEL2RANK = 1.8  # Kelvin to Rankine

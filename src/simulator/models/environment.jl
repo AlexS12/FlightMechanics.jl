@@ -55,14 +55,28 @@ end
 # Sea level
 AtmosphereISA() = AtmosphereISA(T0, P0, RHO0, A0)
 
+function calculate_atmosphere(atmos::AtmosphereISA, state::State)
+    AtmosphereISA(atmosphere_isa(get_height(state))...)
+end
+
+# Not exported because it is used only for validation
+import FlightMechanics: atmosphere_f16
+
+struct AtmosphereF16<:Atmosphere
+    temperature::Number  # K
+    pressure::Number  # Pa
+    density::Number  # kg/m³
+    sound_velocity::Number  # m/s
+end
+
+function calculate_atmosphere(atmos::AtmosphereF16, state::State)
+    AtmosphereF16(atmosphere_f16(get_height(state))...)
+end
+
 get_temperature(atmos::Atmosphere) = atmos.temperature
 get_pressure(atmos::Atmosphere) = atmos.pressure
 get_density(atmos::Atmosphere) = atmos.density
 get_sound_velocity(atmos::Atmosphere) = atmos.sound_velocity
-
-function calculate_atmosphere(atmos::AtmosphereISA, state::State)
-    AtmosphereISA(atmosphere_isa(get_height(state))...)
-end
 
 # -------- WIND --------
 """
