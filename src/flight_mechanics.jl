@@ -41,6 +41,6 @@ function turn_rate_angular_velocity(turn_rate, theta, phi)
     # w = p * i_b + q * j_b + r * k_b
     p = - turn_rate * sin(theta)
     q = turn_rate * sin(phi) * cos(theta)
-    r = turn_rate * cos(theta) * sin(phi)
+    r = turn_rate * cos(theta) * cos(phi)
     return [p, q, r]
 end
