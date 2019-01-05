@@ -299,8 +299,8 @@ end
         set_stick_lon(fcs, stick_lon0)
         set_thtl(fcs, thtl0)
 
-        ac, aerostate, state, env, fcs = steady_state_trim(
-            ac, fcs, env, tas, pos, psi, gamma, turn_rate, α0, 0.0, false
+        ac, aerostate, state, fcs = steady_state_trim(
+            ac, fcs, env, tas, pos, psi, gamma, turn_rate, α0, 0.0, show_trace=false
             )
 
         @test isapprox(ac.pfm.forces, zeros(3), atol=1e-7)
@@ -330,8 +330,8 @@ end
         set_stick_lon(fcs, stick_lon0)
         set_thtl(fcs, thtl0)
 
-        ac, aerostate, state, env, fcs = steady_state_trim(
-            ac, fcs, env, tas, pos, psi, gamma, turn_rate, α0, 0.0, false
+        ac, aerostate, state, fcs = steady_state_trim(
+            ac, fcs, env, tas, pos, psi, gamma, turn_rate, α0, 0.0, show_trace=false
             )
 
         @test isapprox(ac.pfm.forces, zeros(3), atol=1e-7)
@@ -361,8 +361,8 @@ end
         set_stick_lon(fcs, stick_lon0)
         set_thtl(fcs, thtl0)
 
-        ac, aerostate, state, env, fcs = steady_state_trim(
-            ac, fcs, env, tas, pos, psi, gamma, turn_rate, α0, 0.0, false
+        ac, aerostate, state, fcs = steady_state_trim(
+            ac, fcs, env, tas, pos, psi, gamma, turn_rate, α0, 0.0, show_trace=false
             )
 
         @test isapprox(ac.pfm.forces, zeros(3), atol=1e-7)
@@ -426,9 +426,8 @@ end
     set_pedals(fcs, pedals0)
     set_thtl(fcs, thtl0)
 
-    # TODO: think if last trim is used as initial condition for the next
-    ac, aerostate, state, env, fcs = steady_state_trim(
-        ac, fcs, env, tas, pos, psi, gamma, turn_rate, α0, β0, false
+    ac, aerostate, state, fcs = steady_state_trim(
+        ac, fcs, env, tas, pos, psi, gamma, turn_rate, α0, β0, show_trace=false
         )
 
     @test isapprox(get_tas(aerostate), tas)

@@ -18,27 +18,36 @@ end
 
 """
     steady_state_trim(ac::Aircraft, fcs::FCS, env::Environment, tas::Number,
-        pos::Position, psi::Number, gamma::Number, turn_rate::Number)
+        pos::Position, psi::Number, gamma::Number, turn_rate::Number,
+        α0::Number, β0::Number; show_trace=false)
 
-Find a steady state flight condition.
+Find a steady state flight condition. Steady flight is defined as flight where
+the aircraft's linear and angular velocity vectors are constant in a body-fixed
+reference frame (ie. body frame or wind frame).
+
+Three different conditions can be sought:
+- Steady level longitudinal flight: bank angle μ=0 and flight-path angle γ=0.
+- Steady level turns: turn_rate≠0 and flight-path angle γ=0.
+- Steady longitudinal climbs or descents: γ≠0 and bank angle μ=0.
+- Steady turning climbs or descents: γ≠0 and bank angle μ≠0.
 
 # Inputs
 ac: aircraft to be trimmed.
-fcs: flight control system for that aircraft. Controls given by
-    `get_controls_trimmer` will be used to trim the aircraft while the rest
-    will remain constant.
+fcs: flight control system. Controls given by `get_controls_trimmer` will be
+  used to trim the aircraft while the rest will remain constant.
 env: environment variables (atmospheric values, wind and gravity).
 tas: true airspeed [m/s].
 pos: position of the aircraft.
 psi: heading of the aircraft [rad].
 gamma: aerodynamic rate of climb of the aircraft [rad].
 turn_rate: heading rate of change [rad/s].
+α0, β0: Inital AOA and AOS for trimmer algorithm.
+show_trace: show trimming information and algorithm trace. Optional, default=true.
 
 # Returns
 ac: trimmed aircraft.
 aerostate: trimmed aerostate.
 state: trimmed state.
-env: environment.
 fcs: trimmed FCS.
 
 # References
@@ -52,7 +61,7 @@ See section 3.4 in [1] for the algorithm description.
 """
 function steady_state_trim(ac::Aircraft, fcs::FCS, env::Environment,
     tas::Number, pos::Position, psi::Number, gamma::Number, turn_rate::Number,
-    α0::Number, β0::Number, show_trace=false)
+    α0::Number, β0::Number; show_trace=false)
 
     alpha0 = α0
     beta0 = β0
@@ -70,6 +79,7 @@ function steady_state_trim(ac::Aircraft, fcs::FCS, env::Environment,
     state, aerostate = state_aerostate(pos, att, tas, alpha0, beta0, env, ang_vel,
                                        accel, ang_accel)
 
+    # Ensure that environment is calculated at the position given to the trimmer
     env = calculate_environment(env, get_position(state))
 
     # Store every necessary variable in the trimmer
@@ -93,7 +103,6 @@ function steady_state_trim(ac::Aircraft, fcs::FCS, env::Environment,
 
     # Trim
     result = optimize(trimming_function, trim_vars0,
-                      #ParticleSwarm(;lower=lower_bounds, upper=upper_bounds, n_particles=250),
                       Optim.Options(
                         g_tol=1e-25,
                         iterations=5000,
@@ -106,7 +115,7 @@ function steady_state_trim(ac::Aircraft, fcs::FCS, env::Environment,
     end
 
     # Return trimmed variables
-    trimmer.ac, trimmer.aerostate, trimmer.state, trimmer.env, trimmer.fcs
+    trimmer.ac, trimmer.aerostate, trimmer.state, trimmer.fcs
 end
 
 
