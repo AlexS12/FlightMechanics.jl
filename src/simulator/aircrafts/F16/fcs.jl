@@ -33,9 +33,9 @@ F16FCS() = F16FCS(# Cabin Inputs
                     RangeControl(0.0, [0, 1]),  # pedals
                     RangeControl(0.0, [0, 1]),  # thtl
                     # Controls
-                    RangeControl(0.0, [-25.0, 25.0] .* DEG2RAD),  # elevator
-                    RangeControl(0.0, [-21.5, 21.5] .* DEG2RAD),  # ailerons
-                    RangeControl(0.0, [-30.0, 30.0] .* DEG2RAD),  # rudder
+                    RangeControl(0.0, [-DE_MAX, DE_MAX] .* DEG2RAD),  # elevator
+                    RangeControl(0.0, [-DA_MAX, DA_MAX] .* DEG2RAD),  # ailerons
+                    RangeControl(0.0, [-DR_MAX, DR_MAX] .* DEG2RAD),  # rudder
                     # Commanded power level
                     RangeControl(0.0, [0.0, 100.]),                # CPL
                     )
