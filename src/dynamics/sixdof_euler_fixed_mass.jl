@@ -93,8 +93,8 @@ function six_dof_euler_fixed_mass(state, mass, inertia, forces, moments,
     # Angular Kinematic equations
     ψ_dot = (q * sϕ + r * cϕ) / cθ
     θ_dot = q * cϕ - r * sϕ
-    # TODO: ϕ_dot = p + ψ_dot * sθ
-    ϕ_dot = p + (q * sϕ + r * cϕ) * tan(θ)
+    # ϕ_dot = p + (q * sϕ + r * cϕ) * tan(θ)
+    ϕ_dot = p + ψ_dot * sθ
 
     # Linear kinematic equations
     xe_dot =  cθ*cψ * u + (sϕ*sθ*cψ - cϕ*sψ) * v + (cϕ*sθ*cψ + sϕ*sψ) * w
