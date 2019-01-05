@@ -75,17 +75,17 @@ function steady_state_trim(ac::Aircraft, fcs::FCS, env::Environment,
     # Store every necessary variable in the trimmer
     trimmer = Trimmer(ac, aerostate, state, env, fcs, turn_rate, gamma)
 
-    # Varibles in the trimming loop are alpha, beta, and controls.
+    # # Varibles in the trimming loop are alpha, beta, and controls.
     trim_vars0 = [alpha0, beta0] # append not fixed controls
-    lower_bounds = [-15 * DEG2RAD, -15 * DEG2RAD]
-    upper_bounds = [ 15 * DEG2RAD,  15 * DEG2RAD]
-
+    # lower_bounds = [-15 * DEG2RAD, -15 * DEG2RAD]
+    # upper_bounds = [ 15 * DEG2RAD,  15 * DEG2RAD]
+    #
     for (value, range)=zip(get_controls_trimmer(fcs), get_controls_ranges_trimmer(fcs))
-        min, max = range
+    #     min, max = range
         val = value
         append!(trim_vars0, val)
-        append!(lower_bounds, min)
-        append!(upper_bounds, max)
+    #     append!(lower_bounds, min)
+    #     append!(upper_bounds, max)
     end
 
     # Wrapper for trim_cost_function with trimmer
