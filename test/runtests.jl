@@ -16,5 +16,5 @@ end
 @testset "attitude" begin include("simulator/models/attitude.jl") end
 @testset "position" begin include("simulator/models/position.jl") end
 
-@testset "c310 func test" begin include("simulator/aircrafts/c310.jl") end
-@testset "f16 func test" begin include("simulator/aircrafts/f16.jl") end
+@testset "ac: c310" begin include("simulator/aircrafts/c310.jl") end
+@testset "ac: f16" begin include("simulator/aircrafts/f16.jl") end
