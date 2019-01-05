@@ -10,7 +10,8 @@ export Environment, calculate_environment,
 Environment information composed of atmosphere, wind and gravity.
 
 # Constructors
-    DefatultEnvironment(): ISA atomosphere, Constant zero wind, and Constant gravity.
+    Environment(atmos::Atmosphere, wind::Wind, grav::Gravity)
+    Environment(pos::Position; atmos="ISA1978", wind="NoWind", grav="const")
 """
 struct Environment
     atmos::Atmosphere
@@ -19,6 +20,18 @@ struct Environment
 end
 
 
+"""
+    Environment(pos::Position; atmos="ISA1978", wind="NoWind", grav="const")
+
+Create an environment for the given position. Models can be chosen for:
+    - atmos: atmosphere model.
+        - ISA1978: default. International Standard Atmosphere 1978.
+        - ISAF16: International Standard Atmosphere 1978 in F16 Stevens model.
+    - wind: wind model.
+        - NoWind: default.
+    - grav: gravity model.
+        - const: constant vertical gravity.
+"""
 function Environment(pos::Position; atmos="ISA1978", wind="NoWind", grav="const")
     # atm
     atmos = uppercase(atmos)
