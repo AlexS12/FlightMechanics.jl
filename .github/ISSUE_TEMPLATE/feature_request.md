@@ -4,16 +4,20 @@ about: Suggest an idea for this project
 
 ---
 
-**Is your feature request related to a problem? Is it related to a new functionality? Please describe.**
-A clear and concise description of what the problem is.
+**Current situation**
+<!---
+Is your feature request related to a problem? Is it related to a new functionality?
+Give a clear and concise description of what the problem you want to solve is
 Ex. I'm always frustrated when [...]
 Ex. I would be to be able to calculate [...] from these inputs: [...]
+-->
 
-**Describe the solution you'd like**
-A clear and concise description of what you want to happen.
+**Objective**
+<!--- Why is this change important?
+How would you like it to work?
+How would you like to use this functionality?
+-->
 
-**Describe alternatives you've considered**
-A clear and concise description of any alternative solutions or features you've considered.
-
-**Additional context**
-Add any other context or references about the feature request here.
+**Solution proposal**
+<!--- If you have one, describe the solution you'd like with a clear and concise description of what you want to happen.
+-->
