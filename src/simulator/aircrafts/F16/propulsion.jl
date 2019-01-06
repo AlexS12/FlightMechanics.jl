@@ -27,7 +27,7 @@ function F16Engine()
         0,
         0,
         0,
-        # TODO: Fuel tanks
+        # Fuel tanks can be obtained from JSBSim model
         [PointMass(0 * LB2KG, [0., 0., 0.] .* IN2M)],
         [160.0*SLUGFT2_2_KGM2, 0.0, 0.0]
         )
