@@ -34,7 +34,7 @@ get_quaternions(state::State) = get_quaternions(state.attitude)
 # Velocity getters
 get_body_velocity(state::State) = state.velocity
 get_horizon_velocity(state::State) = body2hor(get_body_velocity(state)...,
-                                              get_quaternion(state)...)
+                                              get_quaternions(state)...)
 function get_flight_paht_angle(state::State)
     vn, ve, vz = get_horizon_velocity(state)
     atan(-vz, norm([vn, ve]))
