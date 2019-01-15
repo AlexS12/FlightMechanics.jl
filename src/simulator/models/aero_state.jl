@@ -1,6 +1,6 @@
 using FlightMechanics
 
-export AeroState, state_aerostate,
+export AeroState, state_aerostate, check_state_aerostate_env_coherence,
     get_alpha, get_beta, get_aero_angles, get_alpha_dot,
     get_tas, get_eas, get_cas, get_ias, get_aero_speeds,
     get_qinf, get_mach
@@ -35,6 +35,7 @@ struct AeroState
     mach :: Number  # Mach number
 end
 
+
 function AeroState(state::State, env::Environment)
 
     p = get_pressure(env)
@@ -58,6 +59,7 @@ function AeroState(state::State, env::Environment)
 
     AeroState(alpha, beta, 0, tas, eas, cas, ias, qinf, mach)
 end
+
 
 function AeroState(tas::Number, alpha::Number, beta::Number, height::Number)
 
@@ -87,6 +89,26 @@ function state_aerostate(pos, att, tas, alpha, beta, env=DefaultEnvironment(),
     state = State(pos, att, vel, ang_vel, accel, ang_accel)
     return state, aerostate
 end
+
+
+function check_state_aerostate_env_coherence(state::State, aerost::AeroState,
+                                             env::Environment)
+
+    att = get_attitude(state)
+    # wind vel from environment
+    wind = get_wind_NED(env)
+    # ground speed from state
+    vel = get_horizon_velocity(state)
+    # Composition (wind posititve blowing towards)
+    aero_vel_estimation = vel + wind
+
+    # Transform aerostate velocity to horizon
+    tas, α, β = get_tas(aerost), get_alpha(aerost), get_beta(aerost)
+    aero_vel = body2hor(wind2body(tas, 0, 0, α, β)..., get_euler_angles(state)...)
+
+    isapprox(aero_vel_estimation, aero_vel)
+end
+
 
 get_alpha(aerost::AeroState) = aerost.alpha
 get_beta(aerost::AeroState) = aerost.beta
