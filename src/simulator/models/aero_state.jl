@@ -91,6 +91,13 @@ function state_aerostate(pos, att, tas, alpha, beta, env=DefaultEnvironment(),
 end
 
 
+"""
+    check_state_aerostate_env_coherence(state::State, aerost::AeroState,
+                                        env::Environment)
+
+Check if aerodynamic velocity in aerostate is coherent with inertial velocity in
+state and wind velocity in environment.
+"""
 function check_state_aerostate_env_coherence(state::State, aerost::AeroState,
                                              env::Environment)
 
