@@ -5,8 +5,8 @@ export six_dof_ecef_quaternion_fixed_mass
 const ωe = ROT_VELOCITY
 
 """
-    six_dof_ecef_quaternion_fixed_mass(state, mass, inertia, forces, moments;
-    k=0.0, ellipsoid=WGS84)
+    six_dof_ecef_quaternion_fixed_mass(state, mass, inertia, forces, moments,
+                                       h=[0.0, 0.0, 0.0], k=0.0, ellipsoid=WGS84)
 
 Six degrees of freedom dynamic system using quaternions for attitude
 representation and assuming fixed mass.
@@ -14,9 +14,8 @@ representation and assuming fixed mass.
 Ellipsoidal Earth Model is used and the ECEF reference frame is considered
 inertial.
 
-It is considered that the aircraft xb-zb plane is a plane of symmetry so that
-Jxy and Jyz cross-product of inertia are zero and will not be taken into
-account.
+The effects of the angular momentum produced by spinning rotors is taken into
+account with the optional argument `h`.
 
 # Arguments
 - `state::12-element Array{Number,1}`: state vector.
@@ -28,6 +27,8 @@ account.
 - `inertia::3×3 Array{Number,2}`: inertia tensor (kg·m²)
 - `forces::3-element Array{Number,1}`: total forces expressed in body axis. (N)
 - `moments::3-element Array{Number,1}`: total moments expressed in body axis.(N·m)
+- `h::3-element Array{Number,1}`: Additional angular momentum contributions such
+  as those coming from spinning rotors (kg·m²/s).
 - `k::Number`: orthonormality error factor.
 - `ellipsoid::Ellipsoid`: ellipsoid model to be used.
 
@@ -55,8 +56,8 @@ account.
  dynamics. American Institute of Aeronautics and Astronautics.
  (page 396, figure 10.6)
 """
-function six_dof_ecef_quaternion_fixed_mass(state, mass, inertia, forces, moments;
-     k=0.0, ellipsoid=WGS84)
+function six_dof_ecef_quaternion_fixed_mass(state, mass, inertia, forces,
+      moments, h=[0.0, 0.0, 0.0], k=0.0, ellipsoid=WGS84)
 
     vb = state[1:3]    # u, v, w
     ωb = state[4:6]    # p, q, r
@@ -92,7 +93,8 @@ function six_dof_ecef_quaternion_fixed_mass(state, mass, inertia, forces, moment
     vb_dot = -(ΩB + B*Ωe) * vb + Fb / mass
     # Angular momentum equations
     Jinv = inv(J)
-    ωb_dot = (-Jinv * ΩB * J) * ωb + Jinv * Tb
+    # ωb_dot = (-Jinv * ΩB * J) * ωb + Jinv * Tb  # no gyroscopic effects
+    ωb_dot = Jinv * (-ΩB * (J * ωb + h) + Tb)
     # Angular Kinematic equations
     # Normalization λ*t < 1 (See Zipfel Chapter 4.3.3.4 p.126)
     # Zipfel, P. H. (2007). Modeling and simulation of aerospace vehicle dynamics.
@@ -100,7 +102,5 @@ function six_dof_ecef_quaternion_fixed_mass(state, mass, inertia, forces, moment
     λ = k * (1.0 - q*q)
     q_dot = (-0.5 * Ωq + λ) * q
 
-    state_dot = [vb_dot..., ωb_dot..., q_dot..., p_dot...]
-
-    return state_dot
+    [vb_dot..., ωb_dot..., q_dot..., p_dot...]
 end

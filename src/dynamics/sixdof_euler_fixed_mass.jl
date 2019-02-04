@@ -2,7 +2,8 @@
 export six_dof_euler_fixed_mass
 
 """
-    six_dof_euler_fixed_mass(state, mass, inertia, forces, moments)
+    six_dof_euler_fixed_mass(state, mass, inertia, forces, moments,
+                             h=[0.0, 0.0, 0.0])
 
 Six degrees of freedom dynamic system using Euler angles for attitude
 representation and assuming fixed mass.
@@ -14,6 +15,9 @@ It is considered that the aircraft xb-zb plane is a plane of symmetry so that
 Jxy and Jyz cross-product of inertia are zero and will not be taken into
 account.
 
+The effects of the angular momentum produced by spinning rotors is taken into
+account with the optional argument `h`.
+
 # Arguments
 - `state::12-element Array{Number,1}`: state vector.
     u, v, w: inertial linear velocity expressed in body axis. (m/s)
@@ -24,6 +28,8 @@ account.
 - `inertia::3×3 Array{Number,2}`: inertia tensor (kg·m²)
 - `forces::3-element Array{Number,1}`: total forces expressed in body axis. (N)
 - `moments::3-element Array{Number,1}`: total moments expressed in body axis.(N·m)
+- `h::3-element Array{Number,1}`: Additional angular momentum contributions such
+  as those coming from spinning rotors (kg·m²/s).
 
 # Returns
 - `state_dot`: state vector derivative according to the equation of motion,
@@ -42,14 +48,10 @@ account.
  (page 368, figure 10.2, not taking into account quaternions in angular
  kinematic equations)
 """
-function six_dof_euler_fixed_mass(state, mass, inertia, forces, moments)
+function six_dof_euler_fixed_mass(state, mass, inertia, forces, moments,
+                                  h=[0.0, 0.0, 0.0])
 
     m = mass
-    Ix = inertia[1, 1]
-    Iy = inertia[2, 2]
-    Iz = inertia[3, 3]
-    Jxz = -inertia[1, 3]
-
     u, v, w, p, q, r, ψ, θ, ϕ, xe, ye, ze = state
 
     Fx, Fy, Fz = forces
@@ -65,24 +67,43 @@ function six_dof_euler_fixed_mass(state, mass, inertia, forces, moments)
     w_dot = Fz / m + q * u - p * v
 
     # Angular momentum equations
+    Ix = inertia[1, 1]
+    Iy = inertia[2, 2]
+    Iz = inertia[3, 3]
+    Jxz = -inertia[1, 3]
+
     Jxz2 = Jxz*Jxz
-    den = (Ix*Iz - Jxz2)
+    Γ = (Ix*Iz - Jxz2)
     temp = (Ix + Iz - Iy)
 
-    p_dot = (L*Iz + N*Jxz - q*r*(Iz*Iz - Iz*Iy + Jxz2) + p*q * Jxz * temp) / den
-    q_dot = (M + (Iz - Ix) * p*r - Jxz * (p*p - r*r)) / Iy
-    r_dot = (L*Jxz + N*Ix + p*q * (Ix*Ix - Ix*Iy + Jxz2) - q*r * Jxz * temp) / den
+    # Engine angular momentum contribution
+    hx, hy, hz = h
+
+    rhy_qhz = (r*hy - q*hz)
+    qhx_phy = (q*hx - p*hy)
+
+    pe_dot = Iz * rhy_qhz + Jxz * qhx_phy
+    qe_dot = -r*hx + p*hz
+    re_dot = Jxz * rhy_qhz + Ix * qhx_phy
+
+    # Angular momentum equations
+    p_dot = L*Iz + N*Jxz - q*r*(Iz*Iz - Iz*Iy + Jxz2) + p*q * Jxz * temp + pe_dot
+    p_dot /= Γ
+    q_dot = M + (Iz - Ix) * p*r - Jxz * (p*p - r*r) + qe_dot
+    q_dot /= Iy
+    r_dot = L*Jxz + N*Ix + p*q * (Ix*Ix - Ix*Iy + Jxz2) - q*r * Jxz * temp + re_dot
+    r_dot /= Γ
 
     # Angular Kinematic equations
     ψ_dot = (q * sϕ + r * cϕ) / cθ
     θ_dot = q * cϕ - r * sϕ
-    ϕ_dot = p + (q * sϕ + r * cϕ) * tan(θ)
+    # ϕ_dot = p + (q * sϕ + r * cϕ) * tan(θ)
+    ϕ_dot = p + ψ_dot * sθ
 
     # Linear kinematic equations
     xe_dot =  cθ*cψ * u + (sϕ*sθ*cψ - cϕ*sψ) * v + (cϕ*sθ*cψ + sϕ*sψ) * w
     ye_dot =  cθ*sψ * u + (sϕ*sθ*sψ + cϕ*cψ) * v + (cϕ*sθ*sψ - sϕ*cψ) * w
     ze_dot = -sθ    * u +  sϕ*cθ             * v +  cϕ*cθ             * w
 
-    return [u_dot v_dot w_dot p_dot q_dot r_dot ψ_dot θ_dot ϕ_dot xe_dot ye_dot ze_dot]
-
+    [u_dot v_dot w_dot p_dot q_dot r_dot ψ_dot θ_dot ϕ_dot xe_dot ye_dot ze_dot]
 end

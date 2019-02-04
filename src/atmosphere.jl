@@ -98,3 +98,48 @@ function atmosphere_isa(height)
 
     return [T, p, rho, a]
 end
+
+
+# TODO: document difference in results
+"""
+    atmosphere_f16(height)
+
+Standard Atmosphere implemented in Stevens F16 model.
+
+# Arguments
+- alt: altitude [m].
+
+# Returns
+- T: temperature [K].
+- P: pressure [Pa].
+- RHO: density [kg/m³].
+- a: Speed of sound [m/s].
+
+# Notes
+- This model is implemented just for F16 complete model validation purposes.
+- For ISA 1978 atmospheric model, use atmosphere_isa.
+- Note limited precision in tests against `atmosphere_isa`.
+
+# References
+- [1] Stevens, B. L., Lewis, F. L., & Johnson, E. N. (2015). Aircraft control
+ and simulation: dynamics, controls design, and autonomous systems. John Wiley
+ & Sons. (page 715)
+"""
+function atmosphere_f16(alt)
+
+    # The caluclations are prepared for input in ft
+    ALT = alt * M2FT
+
+    RO = 0.002377  # sluf/ft³
+    TFAC = 1.0 - ALT*0.703E-05
+    T = 519.0*TFAC  # ºR
+
+    if ALT >= 35000.0 T=390.0 end
+    RHO = RO*(TFAC^4.14)
+    # will be calculated in aerostate
+    # RMACH = VT/sqrt(1.4*1716.3*T)
+    # QBAR = 0.5*RHO*VT*VT
+    PS = 1715.0*RHO*T  # psf
+    a = sqrt(1.4*1716.3*T)
+    return [T*RANK2KEL, PS*PSF2PA, RHO*SLUGFT3_2_KGM3, a*FT2M]
+end

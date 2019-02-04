@@ -28,9 +28,9 @@ struct Position
 end
 
 # Constructors
-PositionLLH(lat, lon, h, xe=0., ye=0., ze=0.) = Position([lat, lon, h], [xe, ye, ze], llh2ecef(lat, lon, h))
-PositionECEF(x, y, z, xe=0., ye=0., ze=0.) = Position(ecef2llh(x, y, z), [xe, ye, ze], [x, y, z])
-PositionEarth(x, y, z, lat=0., lon=0., h=0.) = Position([lat, lon, h], [x, y, z], llh2ecef(lat, lon, h))
+PositionLLH(lat, lon, h, xe=0., ye=0.) = Position([lat, lon, h], [xe, ye, -h], llh2ecef(lat, lon, h))
+PositionECEF(x, y, z, xe=0., ye=0.) = Position(ecef2llh(x, y, z), [xe, ye, -ecef2llh(x, y, z)[3]], [x, y, z])
+PositionEarth(x, y, z, lat=0., lon=0.) = Position([lat, lon, -z], [x, y, z], llh2ecef(lat, lon, -z))
 Position() = Position([0, 0, 0], [0, 0, 0], llh2ecef(0, 0, 0))
 
 get_llh(pos::Position) = pos.llh

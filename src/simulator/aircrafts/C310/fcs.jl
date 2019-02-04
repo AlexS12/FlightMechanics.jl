@@ -3,7 +3,7 @@ using FlightMechanics.Simulator.Models
 
 export C310FCS,
     set_stick_lon, set_stick_lat, set_pedals,
-    set_thrust1, set_thrust2, set_thrust,
+    set_thtl1, set_thtl2, set_thtl,
     set_controls_trimmer, get_controls_trimmer,
     get_controls_ranges_trimmer
 
@@ -60,23 +60,23 @@ function set_pedals(fcs::C310FCS, value, allow_out_of_range=false, throw_error=f
     set_value(fcs.dr, min + range * value, allow_out_of_range, throw_error)
 end
 
-function set_thrust1(fcs::C310FCS, value, allow_out_of_range=false, throw_error=false)
+function set_thtl1(fcs::C310FCS, value, allow_out_of_range=false, throw_error=false)
     set_value(fcs.thrust1, value)
     min, max = get_value_range(fcs.t1)
     range = max - min
     set_value(fcs.t1, min + range * value, allow_out_of_range, throw_error)
 end
 
-function set_thrust2(fcs::C310FCS, value, allow_out_of_range=false, throw_error=false)
+function set_thtl2(fcs::C310FCS, value, allow_out_of_range=false, throw_error=false)
     set_value(fcs.thrust2, value)
     min, max = get_value_range(fcs.t2)
     range = max - min
     set_value(fcs.t2, min + range * value, allow_out_of_range, throw_error)
 end
 
-function set_thrust(fcs::C310FCS, value, allow_out_of_range=false, throw_error=false)
-    set_thrust1(fcs, value, allow_out_of_range, throw_error)
-    set_thrust2(fcs, value, allow_out_of_range, throw_error)
+function set_thtl(fcs::C310FCS, value, allow_out_of_range=false, throw_error=false)
+    set_thtl1(fcs, value, allow_out_of_range, throw_error)
+    set_thtl2(fcs, value, allow_out_of_range, throw_error)
 end
 
 function set_controls_trimmer(fcs::C310FCS, slong, slat, ped, thrust,
@@ -84,7 +84,7 @@ function set_controls_trimmer(fcs::C310FCS, slong, slat, ped, thrust,
     set_stick_lat(fcs, slong, allow_out_of_range, throw_error)
     set_stick_lon(fcs, slat, allow_out_of_range, throw_error)
     set_pedals(fcs, ped, allow_out_of_range, throw_error)
-    set_thrust(fcs, thrust, allow_out_of_range, throw_error)
+    set_thtl(fcs, thrust, allow_out_of_range, throw_error)
 end
 
 function get_controls_trimmer(fcs::C310FCS)

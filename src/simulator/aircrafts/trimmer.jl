@@ -18,27 +18,36 @@ end
 
 """
     steady_state_trim(ac::Aircraft, fcs::FCS, env::Environment, tas::Number,
-        pos::Position, psi::Number, gamma::Number, turn_rate::Number)
+        pos::Position, psi::Number, gamma::Number, turn_rate::Number,
+        α0::Number, β0::Number; show_trace=false)
 
-Find a steady state flight condition.
+Find a steady state flight condition. Steady flight is defined as flight where
+the aircraft's linear and angular velocity vectors are constant in a body-fixed
+reference frame (ie. body frame or wind frame).
+
+Three different conditions can be sought:
+- Steady level longitudinal flight: bank angle μ=0 and flight-path angle γ=0.
+- Steady level turns: turn_rate≠0 and flight-path angle γ=0.
+- Steady longitudinal climbs or descents: γ≠0 and bank angle μ=0.
+- Steady turning climbs or descents: γ≠0 and bank angle μ≠0.
 
 # Inputs
 ac: aircraft to be trimmed.
-fcs: flight control system for that aircraft. Controls given by
-    `get_controls_trimmer` will be used to trim the aircraft while the rest
-    will remain constant.
+fcs: flight control system. Controls given by `get_controls_trimmer` will be
+  used to trim the aircraft while the rest will remain constant.
 env: environment variables (atmospheric values, wind and gravity).
 tas: true airspeed [m/s].
 pos: position of the aircraft.
 psi: heading of the aircraft [rad].
 gamma: aerodynamic rate of climb of the aircraft [rad].
 turn_rate: heading rate of change [rad/s].
+α0, β0: Inital AOA and AOS for trimmer algorithm.
+show_trace: show trimming information and algorithm trace. Optional, default=true.
 
 # Returns
 ac: trimmed aircraft.
 aerostate: trimmed aerostate.
 state: trimmed state.
-env: environment.
 fcs: trimmed FCS.
 
 # References
@@ -52,49 +61,41 @@ See section 3.4 in [1] for the algorithm description.
 """
 function steady_state_trim(ac::Aircraft, fcs::FCS, env::Environment,
     tas::Number, pos::Position, psi::Number, gamma::Number, turn_rate::Number,
-    show_trace=false)
+    α0::Number, β0::Number; show_trace=false)
 
-    alpha0 = 3 * DEG2RAD
-    beta0 = 0 * DEG2RAD
+    alpha0 = α0
+    beta0 = β0
 
     phi = coordinated_turn_bank(turn_rate, alpha0, beta0, tas, gamma)
     theta = climb_theta(gamma, alpha0, beta0, phi)
-    p, q, r = turn_rate_angular_velocity(turn_rate, theta, phi)
-
     att  = Attitude(psi, theta, phi)
 
-    # Create initial aero and initial state
-    aerostate = AeroState(tas, alpha0, beta0, get_height(pos))
+    p, q, r = turn_rate_angular_velocity(turn_rate, theta, phi)
+    ang_vel = [p, q, r]
 
-    aero_vel_body = wind2body([aerostate.tas, 0, 0]..., aerostate.alpha, aerostate.beta)
-    wind_vel_body = hor2body(get_wind_NED(env)..., get_euler_angles(att)...)
-    vel = aero_vel_body - wind_vel_body
+    accel = [0., 0., 0.]
+    ang_accel = [0., 0., 0.]
 
-    state = State(
-        pos,
-        att,
-        vel,
-        [p, q, r],
-        zeros(3),  # acceleration
-        zeros(3)   # angular acceleration
-    )
+    state, aerostate = state_aerostate(pos, att, tas, alpha0, beta0, env, ang_vel,
+                                       accel, ang_accel)
 
-    env = calculate_environment(env, state)
+    # Ensure that environment is calculated at the position given to the trimmer
+    env = calculate_environment(env, get_position(state))
 
     # Store every necessary variable in the trimmer
     trimmer = Trimmer(ac, aerostate, state, env, fcs, turn_rate, gamma)
 
-    # Varibles in the trimming loop are alpha, beta, and controls.
+    # # Varibles in the trimming loop are alpha, beta, and controls.
     trim_vars0 = [alpha0, beta0] # append not fixed controls
-    lower_bounds = [-15 * DEG2RAD, -15 * DEG2RAD]
-    upper_bounds = [ 15 * DEG2RAD,  15 * DEG2RAD]
-
+    # lower_bounds = [-15 * DEG2RAD, -15 * DEG2RAD]
+    # upper_bounds = [ 15 * DEG2RAD,  15 * DEG2RAD]
+    #
     for (value, range)=zip(get_controls_trimmer(fcs), get_controls_ranges_trimmer(fcs))
-        min, max = range
+    #     min, max = range
         val = value
         append!(trim_vars0, val)
-        append!(lower_bounds, min)
-        append!(upper_bounds, max)
+    #     append!(lower_bounds, min)
+    #     append!(upper_bounds, max)
     end
 
     # Wrapper for trim_cost_function with trimmer
@@ -102,11 +103,10 @@ function steady_state_trim(ac::Aircraft, fcs::FCS, env::Environment,
 
     # Trim
     result = optimize(trimming_function, trim_vars0,
-                      #ParticleSwarm(;lower=lower_bounds, upper=upper_bounds, n_particles=250),
                       Optim.Options(
                         g_tol=1e-25,
-                        iterations=1000,
-                        show_trace=show_trace, show_every=50
+                        iterations=5000,
+                        show_trace=show_trace, show_every=100
                         );
                       )
     if show_trace
@@ -115,7 +115,7 @@ function steady_state_trim(ac::Aircraft, fcs::FCS, env::Environment,
     end
 
     # Return trimmed variables
-    trimmer.ac, trimmer.aerostate, trimmer.state, trimmer.env, trimmer.fcs
+    trimmer.ac, trimmer.aerostate, trimmer.state, trimmer.fcs
 end
 
 
@@ -134,29 +134,20 @@ function trim_cost_function(trimming_variables, trimmer::Trimmer)
     # Impose constrains
     phi = coordinated_turn_bank(tr, alpha, beta, tas, gamma)
     theta = climb_theta(gamma, alpha, beta, phi)
-    p, q, r = turn_rate_angular_velocity(tr, theta, phi)
-
-    # Generate new state
     att = Attitude(psi, theta, phi)
+    p, q, r = turn_rate_angular_velocity(tr, theta, phi)
+    ang_vel = [p, q, r]
     pos = get_position(trimmer.state)
     aerostate = trimmer.aerostate
+    accel = [0., 0., 0.]
+    ang_accel = [0., 0., 0.]
+
     env = trimmer.env
 
-    aero_vel_body = wind2body([aerostate.tas, 0, 0]..., aerostate.alpha, aerostate.beta)
-    wind_vel_body = hor2body(get_wind_NED(env)..., get_euler_angles(att)...)
-    vel = aero_vel_body - wind_vel_body
+    state, aerostate = state_aerostate(pos, att, tas, alpha, beta, env, ang_vel,
+                                       accel, ang_accel)
 
-    state = State(
-        pos,
-        att,
-        vel,
-        [p, q, r],
-        zeros(3),  # acceleration
-        zeros(3)   # angular acceleration
-    )
-
-    aerostate = AeroState(tas, alpha, beta, get_height(state))
-    env = calculate_environment(trimmer.env, trimmer.state)
+    env = calculate_environment(trimmer.env, get_position(trimmer.state))
 
     # Set trimmer attributes
     trimmer.state = state
