@@ -10,6 +10,7 @@ end
 @testset "coordinates" begin include("coordinates.jl") end
 @testset "anemometry" begin include("anemometry.jl") end
 @testset "mechanics" begin include("mechanics.jl") end
+@testset "flight mechanics" begin include("flight_mechanics.jl") end
 
 @testset "pfm" begin include("simulator/models/point_forces_moments.jl") end
 @testset "mass" begin include("simulator/models/mass.jl") end
