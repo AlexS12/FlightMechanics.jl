@@ -138,16 +138,29 @@
               
                 <p><a id='Dynamic-System-Models-1'></a></p>
 <h1 id="dynamic-system-models">Dynamic System Models</h1>
-<p>TBD...</p>
+<p>Every dynamics system should have a common interface composed of:     - Mandatory: <code>state, mass, inertia, forces, moments</code>     - Optional: additional angular momentum contributions, <code>h</code>, (zero otherwise)     - Method specific: k, ellipsoid...</p>
 <p><a id='Six-Degrees-of-Freedom-(6DOF)-1'></a></p>
 <h2 id="six-degrees-of-freedom-6dof">Six Degrees of Freedom (6DOF)</h2>
-<p>symmetrical aircraft</p>
 <p><a id='Euler-Flat-Earth-Fixed-mass-1'></a></p>
 <h3 id="euler-flat-earth-fixed-mass">Euler Flat Earth Fixed mass</h3>
+<p>Six degrees of freedom dynamic system using Euler angles for attitude representation and assuming fixed mass.</p>
+<p>Flat Earth hypothesis is applied and Earth reference frame is considered inertial.</p>
+<p>It is considered that the aircraft xb-zb plane is a plane of symmetry so that Jxy and Jyz cross-product of inertia are zero and will not be taken into account.</p>
+<p>The effects of the angular momentum produced by spinning rotors is taken into account with the optional argument <code>h</code>.</p>
+<p>TODO: complete with equations and assumptions</p>
 <p><a id='Quaternion-Flat-Earth-Fixed-mass-1'></a></p>
 <h3 id="quaternion-flat-earth-fixed-mass">Quaternion Flat Earth Fixed mass</h3>
+<p>Six degrees of freedom dynamic system using quaternions for attitude representation and assuming fixed mass.</p>
+<p>Flat Earth hypothesis is applied and Earth reference frame is considered inertial.</p>
+<p>It is considered that the aircraft xb-zb plane is a plane of symmetry so that Jxy and Jyz cross-product of inertia are zero and will not be taken into account.</p>
+<p>The effects of the angular momentum produced by spinning rotors is taken into account with the optional argument <code>h</code>.</p>
+<p>TODO: complete with equations and assumptions</p>
 <p><a id='Quaternion-Ellipsoidal-Earth-Fixed-mass-1'></a></p>
 <h3 id="quaternion-ellipsoidal-earth-fixed-mass">Quaternion Ellipsoidal Earth Fixed mass</h3>
+<p>Six degrees of freedom dynamic system using quaternions for attitude representation and assuming fixed mass.</p>
+<p>Ellipsoidal Earth Model is used and the ECEF reference frame is considered inertial.</p>
+<p>The effects of the angular momentum produced by spinning rotors is taken into account with the optional argument <code>h</code>.</p>
+<p>TODO: complete with equations and assumptions</p>
               
             </div>
           </div>
