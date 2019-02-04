@@ -1,4 +1,6 @@
-export coordinated_turn_bank, climb_theta, turn_rate_angular_velocity
+export coordinated_turn_bank, climb_theta, turn_rate_angular_velocity,
+    body_angular_velocity_to_euler_angles_rates,
+    euler_angles_rates_to_body_angular_velocity
 
 
 function coordinated_turn_bank(turn_rate, alpha, beta, tas, gamma)
@@ -35,6 +37,7 @@ function climb_theta(gamma, alpha, beta, phi)
 end
 
 
+# TODO: generelize d(ψ, θ, ϕ)/dt <=> (p, q, r)
 function turn_rate_angular_velocity(turn_rate, theta, phi)
     # w = turn_rate * k_h
     # k_h = sin(theta) i_b + sin(phi) * cos(theta) j_b + cos(theta) * sin(phi)
@@ -42,5 +45,58 @@ function turn_rate_angular_velocity(turn_rate, theta, phi)
     p = - turn_rate * sin(theta)
     q = turn_rate * sin(phi) * cos(theta)
     r = turn_rate * cos(theta) * cos(phi)
+    return [p, q, r]
+end
+
+
+"""
+    body_angular_velocity_to_euler_angles_rates(p, q, r, ψ, θ, ϕ)
+
+Transform body angular velocity (p, q, r) [rad/s] to Euler angles rates
+(ψ_dot, θ_dot, ϕ_dot) [rad/s] given the euler angles (ψ, θ, ϕ) [rad] using
+kinematic angular equations.
+
+# References
+
+- [1] Stevens, B. L., Lewis, F. L., & Johnson, E. N. (2015). Aircraft control
+ and simulation: dynamics, controls design, and autonomous systems. John Wiley
+ & Sons. Equation (1.4-4) (page 20)
+"""
+function body_angular_velocity_to_euler_angles_rates(p, q, r, ψ, θ, ϕ)
+
+    sθ, cθ = sin(θ), cos(θ)
+    sϕ, cϕ = sin(ϕ), cos(ϕ)
+
+    ψ_dot = (q * sϕ + r * cϕ) / cθ
+    θ_dot = q * cϕ - r * sϕ
+    # ϕ_dot = p + (q * sϕ + r * cϕ) * tan(θ)
+    ϕ_dot = p + ψ_dot * sθ
+
+    return [ψ_dot, θ_dot, ϕ_dot]
+end
+
+
+"""
+    euler_angles_rates_to_body_angular_velocity(ψ_dot, θ_dot, ϕ_dot, ψ, θ, ϕ)
+
+Transform Euler angles rates (ψ_dot, θ_dot, ϕ_dot) [rad/s] to body angular
+velocity (p, q, r) [rad/s] given the euler angles (ψ, θ, ϕ) [rad] using
+kinematic angular equations.
+
+# References
+
+- [1] Stevens, B. L., Lewis, F. L., & Johnson, E. N. (2015). Aircraft control
+ and simulation: dynamics, controls design, and autonomous systems. John Wiley
+ & Sons. Equation (1.4-3) (page 20)
+"""
+function euler_angles_rates_to_body_angular_velocity(ψ_dot, θ_dot, ϕ_dot, ψ, θ, ϕ)
+
+    sθ, cθ = sin(θ), cos(θ)
+    sϕ, cϕ = sin(ϕ), cos(ϕ)
+
+    p = ϕ_dot - sθ * ψ_dot
+    q = cϕ * θ_dot + sϕ*cθ * ψ_dot
+    r = -sϕ * θ_dot + cϕ*cθ * ψ_dot
+
     return [p, q, r]
 end
