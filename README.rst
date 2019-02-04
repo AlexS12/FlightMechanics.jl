@@ -55,12 +55,11 @@ This package is intended to provide utils for Flight Mechanics computations. It 
 
   * C310 aerodynamics model obtained from JSBSim with an oversimplified engine model.
   * F16 aerodynamics and engine (except for engine lag) model from ([1]).
-  * A preliminary version of the trimmer able to trim both aircrafts and
-  validated for F16 with text book examples.
+  * A preliminary version of the trimmer able to trim both aircrafts and validated for F16 with text book examples.
   * Some base models serving as a for the development of the simulator: state, position, attitude, aerostate, mass, propulsion...
 
 
-> [1] Stevens, B. L., Lewis, F. L., & Johnson, E. N. (2015). Aircraft control and simulation: dynamics, controls design, and autonomous systems. John Wiley & Sons. (page 715)
+ > [1] Stevens, B. L., Lewis, F. L., & Johnson, E. N. (2015). Aircraft control and simulation: dynamics, controls design, and autonomous systems. John Wiley & Sons. (page 715)
 
 Install :rocket:
 ----------------
