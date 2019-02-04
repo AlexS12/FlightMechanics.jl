@@ -60,9 +60,7 @@ This package is intended to provide utils for Flight Mechanics computations. It 
   * Some base models serving as a for the development of the simulator: state, position, attitude, aerostate, mass, propulsion...
 
 
-> [1] Stevens, B. L., Lewis, F. L., & Johnson, E. N. (2015). Aircraft control
-  and simulation: dynamics, controls design, and autonomous systems. John Wiley
-  & Sons. (page 715)
+> [1] Stevens, B. L., Lewis, F. L., & Johnson, E. N. (2015). Aircraft control and simulation: dynamics, controls design, and autonomous systems. John Wiley & Sons. (page 715)
 
 Install :rocket:
 ----------------
