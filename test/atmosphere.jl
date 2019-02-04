@@ -110,6 +110,13 @@ end
     import FlightMechanics: atmosphere_f16
     # Test sea level
     T, p, rho, a = atmosphere_f16(0.0)
+
+    # Passing for ISA1978
+    @test_broken isapprox(T, 288.15)
+    @test_broken isapprox(p, 101325)
+    @test_broken isapprox(rho, 1.225)
+    @test_broken isapprox(a, 340.29398, rtol=1e-7)
+
     @test isapprox(T, 288.15, atol=0.5)
     @test isapprox(p, 101325, atol=30)
     @test isapprox(rho, 1.225, atol=1e-4)
@@ -126,6 +133,12 @@ end
     p = rv_arr[2, :]
     rho = rv_arr[3, :]
     a = rv_arr[4, :]
+
+    # Passing for ISA1978
+    @test_broken isapprox(T, [288.150, 287.825, 284.575, 245.900, 223.150, 216.650])
+    @test_broken isapprox(rho, [1.2250, 1.2191, 1.1616, 0.62384, 0.41271, 0.36392], rtol=1e-4)
+    @test_broken isapprox(a, [340.29, 340.10, 338.18, 314.36, 299.46, 295.07], rtol=1e-5)
+
     @test isapprox(T, [288.150, 287.825, 284.575, 245.900, 223.150, 216.650], rtol=0.1)
     @test isapprox(rho, [1.2250, 1.2191, 1.1616, 0.62384, 0.41271, 0.36392], rtol=1e-2)
     @test isapprox(a, [340.29, 340.10, 338.18, 314.36, 299.46, 295.07], rtol=1e-2)
@@ -138,6 +151,12 @@ end
     p = rv_arr[2, :]
     rho = rv_arr[3, :]
     a = rv_arr[4, :]
+
+    # Passing for ISA1978
+    @test_broken isapprox(T, [216.650, 216.650, 216.650, 216.650])
+    @test_broken isapprox(rho, [0.31083, 0.21971, 0.13058, 0.088035], rtol=1e-4)
+    @test_broken isapprox(a, [295.07, 295.07, 295.07, 295.07], rtol=1e-5)
+
     @test isapprox(T, [216.650, 216.650, 216.650, 216.650], rtol=0.1)
     @test isapprox(rho, [0.31083, 0.21971, 0.13058, 0.088035], rtol=6*1e-2)
     @test isapprox(a, [295.07, 295.07, 295.07, 295.07], rtol=1e-2)
