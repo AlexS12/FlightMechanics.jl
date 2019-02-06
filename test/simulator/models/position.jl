@@ -1,4 +1,4 @@
-using FlightMechanics.Simulator.Models
+using FlightMechanics.Models
 
 
 @static if VERSION < v"0.7.0-DEV.2005"

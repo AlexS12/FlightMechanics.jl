@@ -1,6 +1,6 @@
-using FlightMechanics.Simulator.Models
+using FlightMechanics.Models
 
-import FlightMechanics.Simulator.Models:
+import FlightMechanics.Models:
     get_pfm, get_cj, get_power, get_efficiency, get_tanks,
     get_engine_position, get_engine_orientation, get_engine_gyro_effects,
     calculate_engine

@@ -1,8 +1,8 @@
 using Dierckx
 
 using FlightMechanics
-using FlightMechanics.Simulator.Models
-import FlightMechanics.Simulator.Models: calculate_aerodynamics
+using FlightMechanics.Models
+import FlightMechanics.Models: calculate_aerodynamics
 
 export C310Aerodynamics, calculate_aerodynamics
 

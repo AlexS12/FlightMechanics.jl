@@ -1,6 +1,6 @@
 using Optim
 using FlightMechanics
-using FlightMechanics.Simulator.Models
+using FlightMechanics.Models
 
 
 export steady_state_trim

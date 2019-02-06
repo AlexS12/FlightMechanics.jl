@@ -1,5 +1,5 @@
 using FlightMechanics
-using FlightMechanics.Simulator.Models
+using FlightMechanics.Models
 
 export AtmosphereISA,
        get_temperature, get_pressure, get_density, get_sound_velocity,

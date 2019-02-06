@@ -1,6 +1,6 @@
 using Test
 using FlightMechanics
-using FlightMechanics.Simulator.Models
+using FlightMechanics.Models
 
 
 # TEST check_state_aerostate_env_coherence

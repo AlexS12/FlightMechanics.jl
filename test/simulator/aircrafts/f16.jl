@@ -2,8 +2,8 @@ using Test
 using LinearAlgebra
 
 using FlightMechanics
-using FlightMechanics.Simulator.Aircrafts
-using FlightMechanics.Simulator.Models
+using FlightMechanics.Aircrafts
+using FlightMechanics.Models
 
 
 @testset "aerodynamics utils" begin
@@ -13,7 +13,7 @@ using FlightMechanics.Simulator.Models
     @test get_name(ac) == "F16"
     @test typeof(ac.aerodynamics) == F16Aerodynamics
 
-    import FlightMechanics.Simulator.Aircrafts: get_interp_idx
+    import FlightMechanics.Aircrafts: get_interp_idx
     k, l, da = get_interp_idx(2.5, 0.2, -1, 8)
     @test (k, l) == (3, 4)
     @test isapprox(da, 0.5)
@@ -38,7 +38,7 @@ using FlightMechanics.Simulator.Models
     @test (k, l) == (11, 12)
     @test isapprox(da, 1.0)
 
-    import FlightMechanics.Simulator.Aircrafts: interp1d, CXq_data
+    import FlightMechanics.Aircrafts: interp1d, CXq_data
     r = interp1d(0.0, 0.2, -1, 8, CXq_data)
     @test isapprox(r, 0.308)
 
@@ -48,7 +48,7 @@ using FlightMechanics.Simulator.Models
     r = interp1d(-10, 0.2, -1, 8, CXq_data)
     @test isapprox(r, -0.267)
 
-    import FlightMechanics.Simulator.Aircrafts: interp2d, CX_data
+    import FlightMechanics.Aircrafts: interp2d, CX_data
     r = interp2d(0.0, 0.0, 0.2, 1/12., -1, -1, 8, 1, CX_data)
     @test isapprox(r, -0.021)
 
@@ -58,7 +58,7 @@ using FlightMechanics.Simulator.Models
     r = interp2d(-10.0, -24.0, 0.2, 1/12., -1, -1, 8, 1, CX_data)
     @test isapprox(r, -0.099)
 
-    import FlightMechanics.Simulator.Aircrafts: interp2d2, Cl_data, Cn_data
+    import FlightMechanics.Aircrafts: interp2d2, Cl_data, Cn_data
     r = interp2d2(0.0, 0.0, .2, .2, -1, 1, 8, 5, Cl_data)
     @test isapprox(r, 0.0)
 
@@ -455,7 +455,7 @@ end
     # Note: empty CG cannot be modified as a parameter so the only option is to
     # modify the getter which has its value hardcoded
     # TODO: modify when ac structure is refactored to do this
-    FlightMechanics.Simulator.Aircrafts.get_empty_cg(ac::F16) = [-0.40 * get_chord(ac), 0, 0]
+    FlightMechanics.Aircrafts.get_empty_cg(ac::F16) = [-0.40 * get_chord(ac), 0, 0]
 
     # INPUTS
     # U(1) = THTL =   0.9  [-]

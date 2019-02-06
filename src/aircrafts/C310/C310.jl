@@ -1,8 +1,8 @@
 using FlightMechanics
-using FlightMechanics.Simulator.Models
-using FlightMechanics.Simulator.Aircrafts
+using FlightMechanics.Models
+using FlightMechanics.Aircrafts
 
-import FlightMechanics.Simulator.Models:
+import FlightMechanics.Models:
     get_name, get_wing_area, get_wing_span, get_chord, get_arp,
     get_empty_mass_props, get_payload_mass_props
 

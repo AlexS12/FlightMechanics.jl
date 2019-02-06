@@ -1,6 +1,6 @@
 using FlightMechanics
-using FlightMechanics.Simulator.Models
-using FlightMechanics.Simulator.Aircrafts
+using FlightMechanics.Models
+using FlightMechanics.Aircrafts
 using Test
 
 

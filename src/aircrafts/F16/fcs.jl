@@ -1,4 +1,4 @@
-using FlightMechanics.Simulator.Models
+using FlightMechanics.Models
 
 
 export F16FCS,
