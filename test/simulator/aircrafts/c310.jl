@@ -1,11 +1,7 @@
-using FlightMechanics.Aircrafts
+using Test
 using FlightMechanics.Models
+using FlightMechanics.Aircrafts
 
-@static if VERSION < v"0.7.0-DEV.2005"
-    using Base.Test
-else
-    using Test
-end
 
 # Integration test for aircraft just making sure everything runs
 ac = C310()

@@ -1,6 +1,5 @@
 using Test
 using LinearAlgebra
-
 using FlightMechanics
 using FlightMechanics.Aircrafts
 using FlightMechanics.Models

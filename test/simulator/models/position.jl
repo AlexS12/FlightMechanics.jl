@@ -1,11 +1,6 @@
+using Test
 using FlightMechanics.Models
 
-
-@static if VERSION < v"0.7.0-DEV.2005"
-    using Base.Test
-else
-    using Test
-end
 
 llh = [deg2rad(49.996908), 0.000000, 9907.31]
 xyz_ecef = [4114496.258, 0.0, 4870157.031]

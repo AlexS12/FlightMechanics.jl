@@ -1,10 +1,5 @@
+using Test
 using FlightMechanics.Models
-
-@static if VERSION < v"0.7.0-DEV.2005"
-    using Base.Test
-else
-    using Test
-end
 
 
 # translate_forces_moments
