@@ -1,6 +1,6 @@
 using FlightMechanics
-using FlightMechanics.Simulator.Models
-import FlightMechanics.Simulator.Models: calculate_aerodynamics
+using FlightMechanics.Models
+import FlightMechanics.Models: calculate_aerodynamics
 
 export F16Aerodynamics, calculate_aerodynamics
 

@@ -1,7 +1,7 @@
-using FlightMechanics
-using FlightMechanics.Simulator.Models
-using FlightMechanics.Simulator.Aircrafts
 using Test
+using FlightMechanics
+using FlightMechanics.Models
+using FlightMechanics.Aircrafts
 
 
 qinf = 10.
