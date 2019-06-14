@@ -75,8 +75,10 @@ function AeroState(tas::Number, alpha::Number, beta::Number, height::Number)
     AeroState(alpha, beta, 0, tas, eas, cas, ias, qinf, mach)
 end
 
-
-function state_aerostate(pos, att, tas, alpha, beta, env=DefaultEnvironment(),
+"""
+gives both states and aerostates from the inputs provided
+"""
+function state_aerostate(pos, att, tas, alpha, beta, env::Environment,   # =DefaultEnvironment(), # not defind
                          ang_vel=[0.0, 0.0, 0.0], accel=[0.0, 0.0, 0.0],
                          ang_accel=[0.0, 0.0, 0.0])
 
