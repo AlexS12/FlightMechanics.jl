@@ -1,4 +1,6 @@
 using FlightMechanics.Models
+using FlightMechanics
+using FlightMechanics.Aircrafts
 
 
 export F16FCS,
@@ -26,6 +28,11 @@ end
 
 # TODO: Move to FCS in models
 get_thrust(fcs::F16FCS) = get_value(fcs.cpl)
+
+# TODO: move this constants to aircraft parameters
+const DE_MAX = 25.0  # deg
+const DA_MAX = 20.0  # deg  #XXX: In Stevens' book says 21.5 deg (Appendix A Section A.4)
+const DR_MAX = 30.0  # deg
 
 F16FCS() = F16FCS(# Cabin Inputs
                     RangeControl(0.0, [0, 1]),  # stick_longitudinal
@@ -65,7 +72,7 @@ function set_thtl(fcs::F16FCS, value, allow_out_of_range=false, throw_error=fals
     set_value(fcs.thtl, value)
     min, max = get_value_range(fcs.thtl)
     range = max - min
-    set_value(fcs.cpl, tgear(value), allow_out_of_range, throw_error)
+    set_value(fcs.cpl, Aircrafts.tgear(value), allow_out_of_range, throw_error)
 end
 
 function set_controls_trimmer(fcs::F16FCS, slong, slat, ped, thtl,
