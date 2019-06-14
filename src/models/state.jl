@@ -35,7 +35,7 @@ get_quaternions(state::State) = get_quaternions(state.attitude)
 get_body_velocity(state::State) = state.velocity
 get_horizon_velocity(state::State) = body2hor(get_body_velocity(state)...,
                                               get_quaternions(state)...)
-function get_flight_paht_angle(state::State)
+function get_flight_path_angle(state::State)
     vn, ve, vz = get_horizon_velocity(state)
     atan(-vz, norm([vn, ve]))
 end
@@ -43,11 +43,11 @@ end
 # Angular velocity getters
 get_body_ang_velocity(state::State) = state.angular_velocity
 get_turn_rate(state::State) = body2hor(get_body_ang_velocity(state)...,
-                                       get_quaternion(state)...)[3]
+                                       get_quaternions(state)...)[3]
 # Acceleration getters
 get_body_accel(state::State) = state.acceleration
 get_horizon_accel(state::State) = body2hor(get_body_accel(state)...,
-                                           get_quaternion(state)...)
+                                           get_quaternions(state)...)
 # Angular acceleration getters
 get_body_ang_accel(state::State) = state.angular_acceleration
 
