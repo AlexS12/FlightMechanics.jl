@@ -1,6 +1,6 @@
 using Test
 using FlightMechanics.Models
-
+using LinearAlgebra
 
 # Constructor
 rs = RigidSolid(15.0, [1.0, 1.0, 1.0], Matrix(1.0I, 3, 3))
