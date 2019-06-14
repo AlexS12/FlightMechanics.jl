@@ -149,7 +149,7 @@ end
 
 
 """
-    cas2tas(cas, ρ, p)
+    tas2cas(cas, ρ, p)
 
 Calculate true airspeed from calibrated airspeed, density (ρ) and pressure (p)
 at the current altitude.
@@ -219,14 +219,15 @@ Two different models are used depending on the Mach number:
 
 - [1] Ward, D. T. (1993). Introduction to flight test engineering. Elsevier
     Science Ltd. (page 12)
+- [2] Fundamentals of Aerdynamics, 5th edition, J.D.Anderson Jr (page 550)
 """
 function compressible_qinf(M, p)
 
     if M < 1
         pt = p * (1 + (γ - 1) / 2 * M*M) ^ (γ / (γ - 1))
-    else
-        # TODO: implementation for M > 1
-        error("Not Implemented yet")
+    else    # (M > 1)
+        pt = p * ((1 - γ + (2 * γ * M^2))/(γ + 1)) * (((γ + 1)^2 * M^2)/((4 * γ * M^2) - 2*(γ - 1)))^(γ / (γ - 1))
     end
     return pt
 end
+
