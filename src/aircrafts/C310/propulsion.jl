@@ -1,3 +1,4 @@
+using FlightMechanics
 using FlightMechanics.Models
 
 import FlightMechanics.Models:
@@ -7,7 +8,7 @@ import FlightMechanics.Models:
 
 export C310Engine, C310EngineLeft, C310EngineRight,
     get_pfm, get_cj, get_power, get_efficiency, get_tanks,
-    get_engine_position, get_engine_orientation, get_default_fuel_tanks,
+    get_engine_position, get_engine_orientation, #get_default_fuel_tanks,   # not defined (get_default_fuel_tanks)
     calculate_engine
 
 abstract type C310Engine<:Engine end
