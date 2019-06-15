@@ -113,6 +113,15 @@ exp_qinf_comp = 38295.5172  # Pa (Total Head)
 qinf_comp = compressible_qinf(M, p)
 @test isapprox(qinf_comp, exp_qinf_comp, atol=0.01)
 
+M = [0.6, 1.3, 3.0]         # Ref=> Aerodynamics, Anderson, page 550
+p = 1
+exp_qinf_comp = [1.276, 2.714, 12.06]
+qinf_comp = []
+for i = 1:length(exp_qinf_comp)
+    push!(qinf_comp, compressible_qinf(M[i], p))
+end
+@test isapprox(qinf_comp, exp_qinf_comp, atol=0.01)
+
 
 # --- tas, alpha, beta from body ---
 u, v, w = 100, 0, 0  # m/s
