@@ -202,7 +202,7 @@ Reimplemented from:
 function calculate_engine(eng::F16Engine, fcs::FCS, aerostate::AeroState,
                           state::State; consume_fuel=false)
 
-    get_thrust(fcs) = get_value(fcs.cpl)        # temporary solution    # TODO
+    get_thrust(fcs) = get_value(fcs.cpl)        # temporarily here # TODo: move to model/fcs.jl
     pow = get_thrust(fcs)  # Commanded power: between 0 and 100
     Mach = get_mach(aerostate)
     # TODO: Should be altitude
