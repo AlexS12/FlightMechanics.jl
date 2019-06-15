@@ -225,7 +225,7 @@ function compressible_qinf(M, p)
 
     if M < 1
         pt = p * (1 + (γ - 1) / 2 * M*M) ^ (γ / (γ - 1))
-    else    # (M > 1)
+    else    # (M >= 1)
         pt = p * ((1 - γ + (2 * γ * M^2))/(γ + 1)) * (((γ + 1)^2 * M^2)/((4 * γ * M^2) - 2*(γ - 1)))^(γ / (γ - 1))
     end
     return pt
