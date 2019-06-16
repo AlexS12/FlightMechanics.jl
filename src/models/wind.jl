@@ -41,7 +41,7 @@ get_vertical(wind::Wind) = wind.vertical
     get_wind_NED(wind::Wind)
 
 Express wind in local horizon axis [N, E, D]. Must be interpreted as wind coming
-from north, east and west [m/s].
+from north, east and down [m/s].
 """
 function get_wind_NED(wind::Wind)
     # coming from
@@ -59,7 +59,7 @@ from forward, right and down directions [m/s]
 """
 function get_wind_body(wind::Wind, att::Attitude)
     wind_ned = get_wind_NED(wind)
-    hor2body(wind_ned..., get_quaternion(att)...)
+    hor2body(wind_ned..., get_quaternions(att)...)
 end
 
 

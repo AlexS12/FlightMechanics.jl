@@ -1,5 +1,6 @@
 using Test
 using FlightMechanics.Models
+using FlightMechanics
 
 
 llh = [deg2rad(49.996908), 0.000000, 9907.31]

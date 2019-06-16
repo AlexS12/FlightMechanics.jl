@@ -51,6 +51,6 @@ function set_value(c::DiscreteControl, val)
     if val in get_value_choices(c)
         c.value = val
     else
-        throw(DomainError(val, "val not in dicrete control options"))
+        throw(DomainError(val, "val not in discrete control options"))
     end
 end

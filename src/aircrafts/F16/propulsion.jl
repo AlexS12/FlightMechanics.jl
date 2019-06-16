@@ -6,7 +6,7 @@ import FlightMechanics.Models:
     get_engine_position, get_engine_orientation, get_engine_gyro_effects,
     calculate_engine
 
-export F16Engine
+export F16Engine,
     get_pfm, get_cj, get_power, get_efficiency, get_tanks,
     get_engine_position, get_engine_orientation,
     calculate_engine
@@ -202,6 +202,7 @@ Reimplemented from:
 function calculate_engine(eng::F16Engine, fcs::FCS, aerostate::AeroState,
                           state::State; consume_fuel=false)
 
+    get_thrust(fcs) = get_value(fcs.cpl)        # temporarily here # TODo: move to model/fcs.jl
     pow = get_thrust(fcs)  # Commanded power: between 0 and 100
     Mach = get_mach(aerostate)
     # TODO: Should be altitude
