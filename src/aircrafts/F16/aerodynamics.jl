@@ -1,5 +1,5 @@
-using FlightMechanics
-using FlightMechanics.Models
+# using FlightMechanics
+# using FlightMechanics.Models
 import FlightMechanics.Models: calculate_aerodynamics
 
 export F16Aerodynamics, calculate_aerodynamics

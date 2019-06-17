@@ -1,6 +1,6 @@
-using FlightMechanics
-using FlightMechanics.Models
-using FlightMechanics.Aircrafts
+# using FlightMechanics
+# using FlightMechanics.Models
+# using FlightMechanics.Aircrafts
 
 import FlightMechanics.Models:
     get_name, get_wing_area, get_wing_span, get_chord, get_arp,
