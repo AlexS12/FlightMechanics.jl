@@ -1,4 +1,6 @@
 module Aircrafts
+    include("includes.jl")
+
     include("C310/aerodynamics.jl")
     include("C310/propulsion.jl")
     include("C310/fcs.jl")

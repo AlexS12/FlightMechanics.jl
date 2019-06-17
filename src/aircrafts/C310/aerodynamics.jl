@@ -1,7 +1,7 @@
-using Dierckx
+# using Dierckx
 
-using FlightMechanics
-using FlightMechanics.Models
+# using FlightMechanics
+# using FlightMechanics.Models
 import FlightMechanics.Models: calculate_aerodynamics
 
 export C310Aerodynamics, calculate_aerodynamics
