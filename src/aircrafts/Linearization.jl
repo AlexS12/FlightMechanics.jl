@@ -60,7 +60,7 @@ function get_lon_A(linear_sys::Linearize)
         A[1,12] A[3,12] A[5,12] A[8,12] A[10,12] A[12,12]
         ]
 
-    return transpose(A)
+    return Array(transpose(A))
 end
 
 function get_lon_B(linear_sys::Linearize)
@@ -88,7 +88,7 @@ function get_lat_A(linear_sys::Linearize)
         A[2,11] A[4,11] A[6,11] A[7,11] A[9,11] A[11,11];
         ]
 
-    return transpose(A)
+    return Array(transpose(A))
 end
 
 function get_lat_B(linear_sys::Linearize)
@@ -233,7 +233,7 @@ function recalculate_aircraft(xt::Array, ac, fcs, grav)
 end
 
 """
-construct an control_array
+construct a control_array
 """
 function get_controls(fcs::FCS)
     u = [fcs.stick_longitudinal.value, fcs.stick_lateral.value, fcs.pedals.value, fcs.thtl.value]
