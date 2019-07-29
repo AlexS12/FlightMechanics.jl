@@ -25,7 +25,13 @@ body2ecef, rot_matrix_body2ecef, ecef2body, rot_matrix_ecef2body,
 quaternion2euler, euler2quaternion,
 llh2ecef, ecef2llh,
 # atmosphere
-atmosphere_isa, atmosphere_f16
+atmosphere_isa, atmosphere_f16,
+# anemometry
+qc2cas, qc2tas, qc2eas,
+tas2eas, eas2tas, cas2eas, eas2cas, cas2tas, tas2cas,
+tas_alpha_beta_from_uvw,
+incompressible_qinf, compressible_qinf
+
 
 include("constants.jl")
 include("atmosphere.jl")

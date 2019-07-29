@@ -1,14 +1,3 @@
-using FlightMechanics
-
-export qc2cas, qc2tas, qc2eas,
-       tas2eas, eas2tas,
-       cas2eas, eas2cas,
-       cas2tas, tas2cas,
-       tas_alpha_beta_from_uvw,
-       incompressible_qinf,
-       compressible_qinf
-
-
 const γ = GAMMA_AIR
 const p0 = P0
 const ρ0 = RHO0
@@ -230,4 +219,3 @@ function compressible_qinf(M, p)
     end
     return pt
 end
-
