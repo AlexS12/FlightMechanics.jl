@@ -39,7 +39,11 @@ rigid_body_velocity, rigid_body_acceleration, steiner_inertia,
 # Flight Mechanics
 coordinated_turn_bank, climb_theta, turn_rate_angular_velocity,
 body_angular_velocity_to_euler_angles_rates,
-euler_angles_rates_to_body_angular_velocity
+euler_angles_rates_to_body_angular_velocity,
+# Models
+six_dof_euler_fixed_mass,
+six_dof_quaternion_fixed_mass,
+six_dof_ecef_quaternion_fixed_mass
 
 
 include("constants.jl")
