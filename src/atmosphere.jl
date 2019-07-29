@@ -1,8 +1,3 @@
-using FlightMechanics
-
-export atmosphere_isa
-
-
 const G0 = GRAVITY_ACCEL
 
 """
