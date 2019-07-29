@@ -1,7 +1,3 @@
-export coordinated_turn_bank, climb_theta, turn_rate_angular_velocity,
-    body_angular_velocity_to_euler_angles_rates,
-    euler_angles_rates_to_body_angular_velocity
-
 
 function coordinated_turn_bank(turn_rate, alpha, beta, tas, gamma)
 

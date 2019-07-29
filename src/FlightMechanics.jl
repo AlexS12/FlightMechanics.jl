@@ -35,7 +35,11 @@ tas2eas, eas2tas, cas2eas, eas2cas, cas2tas, tas2cas,
 tas_alpha_beta_from_uvw,
 incompressible_qinf, compressible_qinf,
 # Mechanics
-rigid_body_velocity, rigid_body_acceleration, steiner_inertia
+rigid_body_velocity, rigid_body_acceleration, steiner_inertia,
+# Flight Mechanics
+coordinated_turn_bank, climb_theta, turn_rate_angular_velocity,
+body_angular_velocity_to_euler_angles_rates,
+euler_angles_rates_to_body_angular_velocity
 
 
 include("constants.jl")
