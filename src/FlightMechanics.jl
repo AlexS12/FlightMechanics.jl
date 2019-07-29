@@ -1,5 +1,8 @@
 module FlightMechanics
 
+using Markdown
+using LinearAlgebra
+
 export
 # Air Constants
 GAMMA_AIR, R_AIR, RHO0, P0, T0, A0,
@@ -30,7 +33,9 @@ atmosphere_isa, atmosphere_f16,
 qc2cas, qc2tas, qc2eas,
 tas2eas, eas2tas, cas2eas, eas2cas, cas2tas, tas2cas,
 tas_alpha_beta_from_uvw,
-incompressible_qinf, compressible_qinf
+incompressible_qinf, compressible_qinf,
+# Mechanics
+rigid_body_velocity, rigid_body_acceleration, steiner_inertia
 
 
 include("constants.jl")
