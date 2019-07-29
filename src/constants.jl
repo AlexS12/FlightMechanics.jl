@@ -1,33 +1,4 @@
-# AIR CONSTANTS
-export GAMMA_AIR, R_AIR, RHO0, P0, T0, A0
-
-export GRAVITY_ACCEL, STD_GRAV_PARAMETER, GRAV_CONSTANT, ROT_VELOCITY,
-      EARTH_MASS, EARTH_MEAN_RADIUS,
-      Clarke1866, Clarke1880,
-      International,
-      Bessel,
-      Everest,
-      ModifiedEverest,
-      AustralianNational,
-      SouthAmerican1969,
-      Airy,
-      ModifiedAiry,
-      Hough,
-      Fischer1960SouthAsia, Fischer1960Mercury, Fischer1968,
-      WGS60, WGS66, WGS72, WGS84
-
-export LB2KG,
-      FT2M, M2FT,
-      IN2M, M2IN,
-      SLUG2KG,
-      SLUGFT2_2_KGM2, SLUGFT3_2_KGM3,
-      KT2MS, MS2KT,
-      DEG2RAD, RAD2DEG,
-      HP2WAT, WAT2HP,
-      LBF2N,
-      PA2PSF, PSF2PA,
-      RANK2KEL, KEL2RANK
-
+# Air Constants
 const GAMMA_AIR = 1.4  # Adiabatic index or ratio of specific heats (dry air at 20º C)
 const R_AIR = 287.05287  # Specific gas constant for dry air (J/(Kg·K))
 
@@ -37,9 +8,7 @@ const P0 = 101325.0  # Pressure at sea level (Pa)
 const T0 = 288.15  # Temperature at sea level (K)
 const A0 = 340.293990543  # Sound speed at sea level (m/s)
 
-
 # EARTH CONSTANTS
-
 const GRAVITY_ACCEL = 9.80665  # Gravity of Ethe Earth (m/s^2)
 # Standard Gravitational Parameter
 # product of the gravitational constant G and the mass M of the body
@@ -95,6 +64,7 @@ WGS84                = Ellipsoid(6378137.0  , 298.257223563)
 
 # CONVERSIONS
 const LB2KG = 0.453592  # Pounds (lb) to kilograms (kg)
+const KG2LB = 2.20462  # Kilograms (kg) to pounds (lb)
 const FT2M = 0.3048  # Feet (ft) to meters (m)
 const M2FT = 3.28084  # Meters (m) to feet (ft)
 const IN2M = 0.0254  # Inches (in) to meters (m)

@@ -1,5 +1,23 @@
 module FlightMechanics
 
+export
+# Air Constants
+GAMMA_AIR, R_AIR, RHO0, P0, T0, A0,
+# Earth constants
+GRAVITY_ACCEL, STD_GRAV_PARAMETER, GRAV_CONSTANT, ROT_VELOCITY, EARTH_MASS,
+EARTH_MEAN_RADIUS,
+# Ellipsoids
+Ellipsoid,
+Clarke1866, Clarke1880,
+International, Bessel, Everest, ModifiedEverest,
+AustralianNational, SouthAmerican1969, Airy, ModifiedAiry, Hough,
+Fischer1960SouthAsia, Fischer1960Mercury, Fischer1968,
+WGS60, WGS66, WGS72, WGS84,
+# Conversion constants
+LB2KG, KG2LB, FT2M, M2FT, IN2M, M2IN, SLUG2KG, SLUGFT2_2_KGM2, SLUGFT3_2_KGM3,
+KT2MS, MS2KT, DEG2RAD, RAD2DEG, HP2WAT, WAT2HP, LBF2N, PA2PSF, PSF2PA,
+RANK2KEL, KEL2RANK
+
 include("constants.jl")
 include("atmosphere.jl")
 include("coordinates.jl")
