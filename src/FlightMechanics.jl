@@ -16,7 +16,14 @@ WGS60, WGS66, WGS72, WGS84,
 # Conversion constants
 LB2KG, KG2LB, FT2M, M2FT, IN2M, M2IN, SLUG2KG, SLUGFT2_2_KGM2, SLUGFT3_2_KGM3,
 KT2MS, MS2KT, DEG2RAD, RAD2DEG, HP2WAT, WAT2HP, LBF2N, PA2PSF, PSF2PA,
-RANK2KEL, KEL2RANK
+RANK2KEL, KEL2RANK,
+# Coordinates
+body2hor, rot_matrix_body2hor, hor2body, rot_matrix_hor2body,
+wind2hor, hor2wind, body2wind, wind2body,
+ecef2hor, rot_matrix_ecef2hor, hor2ecef, rot_matrix_hor2ecef,
+body2ecef, rot_matrix_body2ecef, ecef2body, rot_matrix_ecef2body,
+quaternion2euler, euler2quaternion,
+llh2ecef, ecef2llh
 
 include("constants.jl")
 include("atmosphere.jl")
