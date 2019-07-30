@@ -1,7 +1,8 @@
 module Models
 
+import Base: +, -, *, isapprox
+using LinearAlgebra
 using FlightMechanics
-import Base: +
 
 export
 # Attitude
@@ -18,14 +19,16 @@ get_body_accel, get_horizon_accel,
 get_body_ang_accel,
 get_sixdof_euler_fixed_mass_state,
 # Mass
-RigidSolid, PointMass, get_mass, get_cg, get_inertia
+RigidSolid, PointMass, get_mass, get_cg, get_inertia,
+# Pont Forces and moments
+PointForcesMoments, translate_forces_moments, rotate
 
 
 include("attitude.jl")
 include("position.jl")
 include("state.jl")
 include("mass.jl")
-    include("point_forces_moments.jl")
+include("point_forces_moments.jl")
     include("atmosphere.jl")
     include("wind.jl")
     include("gravity.jl")
