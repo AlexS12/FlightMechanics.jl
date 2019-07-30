@@ -1,10 +1,3 @@
-using FlightMechanics
-
-export Attitude,
-       get_euler_angles,
-       get_quaternions
-
-
 """
 Attitude objects that contains Euler angles and quaternions.
 

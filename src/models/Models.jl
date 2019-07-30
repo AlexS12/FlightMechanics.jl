@@ -1,5 +1,13 @@
 module Models
-    include("attitude.jl")
+
+using FlightMechanics
+
+export
+# Attitude
+Attitude, get_euler_angles, get_quaternions
+
+
+include("attitude.jl")
     include("position.jl")
     include("state.jl")
     include("mass.jl")
