@@ -1,6 +1,7 @@
 using FlightMechanics
 
-export get_position, get_llh, get_xyz_earth, get_xyz_ecef, get_height,
+export State,
+       get_position, get_llh, get_xyz_earth, get_xyz_ecef, get_height,
        get_attitude, get_euler_angles, get_quaternions,
        get_body_velocity, get_horizon_velocity,
        get_flight_path_angle,
