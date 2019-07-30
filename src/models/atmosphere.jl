@@ -1,11 +1,3 @@
-using FlightMechanics
-using FlightMechanics.Models
-
-export AtmosphereISA,
-       get_temperature, get_pressure, get_density, get_sound_velocity,
-       calculate_atmosphere
-
-
 """
     Atmosphere
 
@@ -60,7 +52,7 @@ function calculate_atmosphere(atmos::AtmosphereISA, pos::Position)
 end
 
 # Not exported because it is used only for validation
-import FlightMechanics: atmosphere_f16
+# import FlightMechanics: atmosphere_f16
 
 """
 Standard Atmosphere implemented in Stevens F16 model.

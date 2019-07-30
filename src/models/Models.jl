@@ -21,7 +21,11 @@ get_sixdof_euler_fixed_mass_state,
 # Mass
 RigidSolid, PointMass, get_mass, get_cg, get_inertia,
 # Pont Forces and moments
-PointForcesMoments, translate_forces_moments, rotate
+PointForcesMoments, translate_forces_moments, rotate,
+# Atmosphere
+AtmosphereISA,AtmosphereF16,
+get_temperature, get_pressure, get_density, get_sound_velocity,
+calculate_atmosphere
 
 
 include("attitude.jl")
@@ -29,7 +33,7 @@ include("position.jl")
 include("state.jl")
 include("mass.jl")
 include("point_forces_moments.jl")
-    include("atmosphere.jl")
+include("atmosphere.jl")
     include("wind.jl")
     include("gravity.jl")
     include("environment.jl")
