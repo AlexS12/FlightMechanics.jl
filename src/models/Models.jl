@@ -48,7 +48,12 @@ FCS,
 Engine, get_engine_position, get_engine_orientation, get_engine_gyro_effects,
 # Propulsion
 Propulsion, get_propulsion_position, get_fuel_mass_props, calculate_propulsion,
-get_engines, get_gyro_effects
+get_engines, get_gyro_effects,
+# Aerodynamics
+Aerodynamics, aerodynamics_from_wind_total, aerodynamics_from_wind_coeff,
+aerodynamics_from_body_total, aerodynamics_from_body_coeff, get_pfm,
+get_wind_pfm, get_wind_adim_pfm, get_body_pfm, get_body_adim_pfm,
+calculate_aerodynamics
 
 
 include("attitude.jl")
@@ -64,6 +69,6 @@ include("aero_state.jl")
 include("controls.jl")
 include("fcs.jl")
 include("propulsion.jl")
-    include("aerodynamics.jl")
+include("aerodynamics.jl")
     include("aircraft.jl")
 end
