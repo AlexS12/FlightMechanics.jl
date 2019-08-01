@@ -28,11 +28,13 @@ get_temperature, get_pressure, get_density, get_sound_velocity,
 calculate_atmosphere,
 # Wind
 Wind, ConstantWind,
-get_wind_NED, get_wind_body, get_direction, get_intensity,
+get_wind_NED, get_wind_body, get_wind_direction, get_wind_intensity,
 get_vertical, calculate_wind,
 # Gravity
 EarthConstantGravity, get_gravity_horizon, get_gravity_accel, get_gravity_body,
-calculate_gravity
+calculate_gravity,
+# Environment
+Environment, calculate_environment, get_atmos, get_wind, get_gravity
 
 
 include("attitude.jl")
@@ -43,7 +45,7 @@ include("point_forces_moments.jl")
 include("atmosphere.jl")
 include("wind.jl")
 include("gravity.jl")
-    include("environment.jl")
+include("environment.jl")
     include("aero_state.jl")
     include("controls.jl")
     include("fcs.jl")

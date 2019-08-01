@@ -1,9 +1,3 @@
-using FlightMechanics
-
-export Environment, calculate_environment,
-    get_atmos, get_wind, get_gravity
-
-
 """
     Environment(atmos::Atmosphere, wind::Wind, grav::Gravity)
 
@@ -73,9 +67,9 @@ get_wind(env::Environment) = env.wind
 get_wind_dir_int_ver(env::Environment) = get_wind_dir_int_ver(env.wind)
 get_wind_NED(env::Environment) = get_wind_NED(env.wind)
 get_wind_body(env::Environment, att::Attitude) = get_wind_body(env.wind, att)
-get_wind_direction(env::Environment) = get_direction(env.wind)
-get_wind_intensity(env::Environment) = get_intensity(env.wind)
-get_wind_vertical(env::Environment) = get_vertical(env.wind)
+get_wind_direction(env::Environment) = get_wind_direction(env.wind)
+get_wind_intensity(env::Environment) = get_wind_intensity(env.wind)
+get_wind_vertical(env::Environment) = get_wind_vertical(env.wind)
 
 get_gravity(env::Environment) = env.grav
 get_gravity_horizon(env::Environment) = get_gravity_horizon(env.grav)

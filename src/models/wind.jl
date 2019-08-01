@@ -19,17 +19,17 @@ get_wind_dir_int_ver(wind::Wind) = [get_direction(wind), get_intensity(wind), ge
 """
 Wind blowing from this direction [rad]
 """
-get_direction(wind::Wind) = wind.direction
+get_wind_direction(wind::Wind) = wind.direction
 
 """
 Wind magnitude ≥ 0  [m/s]
 """
-get_intensity(wind::Wind) = wind.intensity
+get_wind_intensity(wind::Wind) = wind.intensity
 
 """
 Wind vertical magnitude [m/s]. Possitive blowing up.
 """
-get_vertical(wind::Wind) = wind.vertical
+get_wind_vertical(wind::Wind) = wind.vertical
 
 """
     get_wind_NED(wind::Wind)
@@ -38,12 +38,12 @@ Express wind in local horizon axis [N, E, D]. Must be interpreted as wind coming
 from north, east and down [m/s].
 """
 function get_wind_NED(wind::Wind)
-    intensity = get_intensity(wind)
-    direction = get_direction(wind)
+    intensity = get_wind_intensity(wind)
+    direction = get_wind_direction(wind)
     # coming from
     wind_N = intensity * cos(direction)
     wind_E = intensity * sin(direction)
-    wind_D = get_vertical(wind)
+    wind_D = get_wind_vertical(wind)
     return [wind_N, wind_E, wind_D]
 end
 
