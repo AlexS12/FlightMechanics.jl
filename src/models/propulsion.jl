@@ -1,20 +1,3 @@
-using FlightMechanics
-
-
-export Engine,
-    get_engine_position,
-    get_engine_orientation,
-    get_engine_gyro_effects
-
-
-export Propulsion,
-       get_propulsion_position,
-       get_fuel_mass_props,
-       calculate_propulsion,
-       get_engines,
-       get_gyro_effects
-
-
 abstract type Engine end
 
 get_engine_position(eng::Engine) = [0, 0, 0]

@@ -43,7 +43,12 @@ generate_state_aerostate, check_state_aerostate_env_coherence,
 Control, RangeControl, DiscreteControl,
 get_value, get_value_range, get_value_choices, set_value,
 # FCS
-FCS
+FCS,
+# Engine
+Engine, get_engine_position, get_engine_orientation, get_engine_gyro_effects,
+# Propulsion
+Propulsion, get_propulsion_position, get_fuel_mass_props, calculate_propulsion,
+get_engines, get_gyro_effects
 
 
 include("attitude.jl")
@@ -58,7 +63,7 @@ include("environment.jl")
 include("aero_state.jl")
 include("controls.jl")
 include("fcs.jl")
-    include("propulsion.jl")
+include("propulsion.jl")
     include("aerodynamics.jl")
     include("aircraft.jl")
 end
