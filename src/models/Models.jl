@@ -29,7 +29,10 @@ calculate_atmosphere,
 # Wind
 Wind, ConstantWind,
 get_wind_NED, get_wind_body, get_direction, get_intensity,
-get_vertical, calculate_wind
+get_vertical, calculate_wind,
+# Gravity
+EarthConstantGravity, get_gravity_horizon, get_gravity_accel, get_gravity_body,
+calculate_gravity
 
 
 include("attitude.jl")
@@ -39,7 +42,7 @@ include("mass.jl")
 include("point_forces_moments.jl")
 include("atmosphere.jl")
 include("wind.jl")
-    include("gravity.jl")
+include("gravity.jl")
     include("environment.jl")
     include("aero_state.jl")
     include("controls.jl")

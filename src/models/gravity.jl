@@ -1,11 +1,5 @@
-using LinearAlgebra
-using FlightMechanics
-
-export EarthConstantGravity, calculate_gravity,
-    get_gravity_horizon, get_gravity_accel, get_gravity_body
-
-
 abstract type Gravity end
+
 
 get_gravity_horizon(grav::Gravity) = grav.hor
 get_gravity_accel(grav::Gravity) = norm(get_gravity_horizon(grav))
