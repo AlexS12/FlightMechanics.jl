@@ -1,10 +1,3 @@
-using FlightMechanics
-
-export ConstantWind,
-    get_wind, get_wind_NED, get_wind_direction, get_wind_intensity, get_wind_vertical,
-    calculate_wind
-
-
 # -------- WIND --------
 """
     Wind

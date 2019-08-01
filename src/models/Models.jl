@@ -25,7 +25,11 @@ PointForcesMoments, translate_forces_moments, rotate,
 # Atmosphere
 AtmosphereISA,AtmosphereF16,
 get_temperature, get_pressure, get_density, get_sound_velocity,
-calculate_atmosphere
+calculate_atmosphere,
+# Wind
+Wind, ConstantWind,
+get_wind, get_wind_NED, get_wind_direction, get_wind_intensity,
+get_wind_vertical, calculate_wind
 
 
 include("attitude.jl")
@@ -34,7 +38,7 @@ include("state.jl")
 include("mass.jl")
 include("point_forces_moments.jl")
 include("atmosphere.jl")
-    include("wind.jl")
+include("wind.jl")
     include("gravity.jl")
     include("environment.jl")
     include("aero_state.jl")
