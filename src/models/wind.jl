@@ -37,12 +37,12 @@ Express wind in local horizon axis [N, E, D]. Must be interpreted as wind coming
 from north, east and down [m/s].
 """
 function get_wind_NED(wind::Wind)
-    intensity = get_wind_intensity(wind)
-    direction = get_wind_direction(wind)
+    intensity = get_intensity(wind)
+    direction = get_direction(wind)
     # coming from
     wind_N = intensity * cos(direction)
     wind_E = intensity * sin(direction)
-    wind_D = get_wind_vertical(wind)
+    wind_D = get_vertical(wind)
     return [wind_N, wind_E, wind_D]
 end
 
