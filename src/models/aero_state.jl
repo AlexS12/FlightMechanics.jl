@@ -68,7 +68,7 @@ function AeroState(tas::Number, alpha::Number, beta::Number, height::Number)
 end
 
 """
-    state_aerostate(pos::Position, att::Attitude, tas::Number, alpha::Number,
+    generate_state_aerostate(pos::Position, att::Attitude, tas::Number, alpha::Number,
                                 beta::Number, env::Environment,
                                 ang_vel=[0.0, 0.0, 0.0], accel=[0.0, 0.0, 0.0],
                                 ang_accel=[0.0, 0.0, 0.0])
@@ -76,7 +76,7 @@ end
 returns both state and aerostate provided the values of aircrft states, environment and
 aerodynamic angles.
 """
-function state_aerostate(pos::Position, att::Attitude, tas::Number, alpha::Number,
+function generate_state_aerostate(pos::Position, att::Attitude, tas::Number, alpha::Number,
                          beta::Number, env::Environment,
                          ang_vel=[0.0, 0.0, 0.0], accel=[0.0, 0.0, 0.0],
                          ang_accel=[0.0, 0.0, 0.0])
