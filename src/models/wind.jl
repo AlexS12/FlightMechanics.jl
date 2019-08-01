@@ -6,6 +6,7 @@ Wind information at a given placement.
 """
 abstract type Wind end
 
+
 """
     get_wind_dir_int_ver(wind::Wind)
 
@@ -13,7 +14,7 @@ abstract type Wind end
 - intensity: wind speed [m/s]
 - vertical: vertical wind speed [m/s] positive blowing upwards.
 """
-get_wind_dir_int_ver(wind::Wind) = [wind.direction, wind.intensity, wind.vertical]
+get_wind_dir_int_ver(wind::Wind) = [get_direction(wind), get_intensity(wind), get_vertical(wind)]
 
 """
 Wind blowing from this direction [rad]
