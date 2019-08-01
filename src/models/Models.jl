@@ -38,7 +38,10 @@ Environment, calculate_environment, get_atmos, get_wind, get_gravity,
 # Aerostate
 AeroState, get_alpha, get_beta, get_aero_angles, get_alpha_dot, get_tas,
 get_eas, get_cas, get_ias, get_aero_speeds, get_qinf, get_mach,
-generate_state_aerostate, check_state_aerostate_env_coherence
+generate_state_aerostate, check_state_aerostate_env_coherence,
+# Controls
+Control, RangeControl, DiscreteControl,
+get_value, get_value_range, get_value_choices, set_value
 
 
 include("attitude.jl")
@@ -51,7 +54,7 @@ include("wind.jl")
 include("gravity.jl")
 include("environment.jl")
 include("aero_state.jl")
-    include("controls.jl")
+include("controls.jl")
     include("fcs.jl")
     include("propulsion.jl")
     include("aerodynamics.jl")

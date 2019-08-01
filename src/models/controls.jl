@@ -1,13 +1,7 @@
-export Control, RangeControl, DiscreteControl,
-    get_value, get_value_range, get_value_choices,
-    set_value
-
-
 # --------- Control ---------
 abstract type Control end
 
 get_value(c::Control) = c.value
-
 
 # --------- RangeControl ---------
 mutable struct RangeControl<:Control
