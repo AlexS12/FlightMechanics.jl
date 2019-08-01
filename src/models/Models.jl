@@ -34,7 +34,11 @@ get_vertical, calculate_wind,
 EarthConstantGravity, get_gravity_horizon, get_gravity_accel, get_gravity_body,
 calculate_gravity,
 # Environment
-Environment, calculate_environment, get_atmos, get_wind, get_gravity
+Environment, calculate_environment, get_atmos, get_wind, get_gravity,
+# Aerostate
+AeroState, get_alpha, get_beta, get_aero_angles, get_alpha_dot, get_tas,
+get_eas, get_cas, get_ias, get_aero_speeds, get_qinf, get_mach,
+state_aerostate, check_state_aerostate_env_coherence
 
 
 include("attitude.jl")
@@ -46,7 +50,7 @@ include("atmosphere.jl")
 include("wind.jl")
 include("gravity.jl")
 include("environment.jl")
-    include("aero_state.jl")
+include("aero_state.jl")
     include("controls.jl")
     include("fcs.jl")
     include("propulsion.jl")
