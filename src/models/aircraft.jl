@@ -1,10 +1,3 @@
-export Aircraft,
-    get_mass_props, get_pfm, get_aerodynamics, get_propulsion,
-    get_name, get_wing_area, get_wing_span, get_chord, get_arp,
-    get_empty_mass_props, get_payload_mass_props,
-    calculate_aircraft
-
-
 abstract type Aircraft end
 
 
