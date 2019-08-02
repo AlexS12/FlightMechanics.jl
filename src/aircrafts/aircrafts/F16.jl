@@ -1,28 +1,115 @@
 using FlightMechanics
 using FlightMechanics.Models
-import FlightMechanics.Models: calculate_aerodynamics
 
+##----------------------------------------------------------------------------------------------------
+## imports
+
+# Aerodynamics
+import FlightMechanics.Models:
+    calculate_aerodynamics
+
+# Propulsion
+import FlightMechanics.Models:
+    get_pfm, get_cj, get_power, get_efficiency, get_tanks,
+    get_engine_position, get_engine_orientation, get_engine_gyro_effects,
+    calculate_engine
+
+# Aircraft Model
+import FlightMechanics.Models:
+    get_name, get_wing_area, get_wing_span, get_chord, get_arp,
+    get_empty_mass_props
+
+
+##----------------------------------------------------------------------------------------------------
+## exports
+
+# Aerodynamics
 export F16Aerodynamics, calculate_aerodynamics
 
+# Propulsion
+export F16Engine,
+    get_pfm, get_cj, get_power, get_efficiency, get_tanks,
+    get_engine_position, get_engine_orientation,
+    calculate_engine
 
-# TODO: CDα, CLα, CYβ... could be included here
-struct F16Aerodynamics<:Aerodynamics
+# FCS
+export F16FCS,
+    set_stick_lon, set_stick_lat, set_pedals,
+    set_thtl,
+    set_controls_trimmer, get_controls_trimmer,
+    get_controls_ranges_trimmer
+
+# Aircraft Model
+export F16,
+    get_name,
+    get_empty_mass_props,
+    get_wing_area,
+    get_wing_span,
+    get_chord,
+    get_arp
+
+
+##----------------------------------------------------------------------------------------------------
+## structs
+
+# Aerodynamics
+struct F16Aerodynamics<:Aerodynamics    # TODO: CDα, CLα, CYβ... could be included here
     wind_pfm::PointForcesMoments
     wind_coeff_pfm::PointForcesMoments
     body_pfm::PointForcesMoments
     body_coeff_pfm::PointForcesMoments
 end
 
+# Propulsion
+struct F16Engine<:Engine
+    pfm::PointForcesMoments
+    cj::Number
+    power::Number
+    efficiency::Number
+    tanks::Array{RigidSolid, 1}
+    h::Array{T, 1} where T<:Number  # angular momentum [kg·m²/s]
+end
+
+# FCS
+struct F16FCS<:FCS      # TODO: implement also rate limits and time constants
+    # Cabin controls
+    stick_longitudinal::RangeControl
+    stick_lateral::RangeControl
+    pedals::RangeControl
+    thtl::RangeControl
+
+    # Aerodynamic surfaces
+    de::RangeControl
+    da::RangeControl
+    dr::RangeControl
+    # Engine
+    cpl::RangeControl
+end
+
+# Aircraft Model
+struct F16<:Aircraft
+    mass_props::RigidSolid
+    pfm::PointForcesMoments
+    aerodynamics::F16Aerodynamics
+    propulsion::Propulsion
+end
+
+
+##----------------------------------------------------------------------------------------------------
+## constants
+
+const DE_MAX = 25.0  # deg
+const DA_MAX = 20.0  # deg  #XXX: In Stevens' book says 21.5 deg (Appendix A Section A.4)
+const DR_MAX = 30.0  # deg
+
+
+##----------------------------------------------------------------------------------------------------
+## Aerodynamics
 
 α_data = [-10. -5. 0. 5. 10. 15. 20. 25. 30. 35. 40. 45.]  # deg
 β_data = [0. 5. 10. 15. 20. 25. 30.]  # deg
 
 de_data = [-24. -12.   0.  12.  24.]  # deg
-
-# TODO: move this constants to aircraft parameters
-const DE_MAX = 25.0  # deg
-const DA_MAX = 20.0  # deg  #XXX: In Stevens' book says 21.5 deg (Appendix A Section A.4)
-const DR_MAX = 30.0  # deg
 
 # UTILS for interpolations
 function get_interp_idx(val, coeff, min_, max_, off_=3)
@@ -79,7 +166,6 @@ function interp2d2(val1, val2, coeff1, coeff2, min1, min2, max1, max2, data)
 
    return res
 end
-
 
 # DAMPING COEFFICIENTS
 CXq_data = [-0.267  -0.110   0.308   1.340   2.080   2.910   2.760   2.050   1.500   1.490   1.830   1.210]
@@ -315,3 +401,345 @@ function calculate_aerodynamics(ac::Aircraft, aero::F16Aerodynamics, fcs::FCS,
    # Generate aerodynamics  object
    aerodynamics_from_body_coeff(adim_pfm_body, α, β, qinf, Sw, b, c, aero)
 end
+
+
+##----------------------------------------------------------------------------------------------------
+## Propulsion
+
+function F16Engine()
+    F16Engine(
+        PointForcesMoments(zeros(3), zeros(3), zeros(3)),
+        0,
+        0,
+        0,
+        # Fuel tanks can be obtained from JSBSim model
+        [PointMass(0 * LB2KG, [0., 0., 0.] .* IN2M)],
+        [160.0*SLUGFT2_2_KGM2, 0.0, 0.0]
+        )
+
+end
+
+# TODO: Engine position and orientation
+get_engine_position(prop::F16Engine) = [0.35 * 11.32 * FT2M, 0.0, 0.0]
+get_engine_orientation(prop::F16Engine) = [0., 0., 0.] .* DEG2RAD
+get_engine_gyro_effects(prop::F16Engine) = [160.0*SLUGFT2_2_KGM2, 0.0, 0.0]  # [kg·m²/s]
+
+
+# ENGINE DATA
+"""
+    tgear(thtl)
+
+Given the thottle setting (0 ≤ thtl ≤ 1) calculate the commanded power level
+(0 ≤ cpow ≤ 100)
+"""
+function tgear(thtl)
+    if thtl <= .77
+     cpow = 64.94 * thtl
+    else
+     cpow = 217.38 * thtl - 117.38
+    end
+    return cpow
+end
+
+"""
+    pdot(p3, p1)
+
+Rate of change of power with time using a first order lag (%/s)
+
+# Arguments
+p3::Number  Actual power (%)
+p1::Number  Power command (%)
+"""
+function pdot(p3, p1)
+    if p1 >= 50.
+        if p3 >= 50.
+            t = 5.
+            p2 = p1
+        else
+            p2 = 60.
+            t = rtau(p2-p3)
+        end
+    else
+        if p3 >= 50.
+            t = 5.
+            p2 = 40.
+        else
+            p2 = p1
+            t = rtau(p2-p3)
+        end
+    end
+    pd = t * (p2 - p3)
+    return pd
+end
+
+"""
+    rtau(dp)
+
+Calculate the reciprocal time constant (1/s) for a first-order thrust lag given
+the difference between the commanded power level (%) and the actual power
+level (%).
+"""
+function rtau(dp)
+    if dp <= 25.
+        rt = 1.0  # Reciprocal time constant
+    elseif dp >= 50.
+        rt = 0.1
+    else
+        rt = 1.9 - 0.036 * dp
+    end
+    return rt
+end
+
+
+idle_data =
+    [ 1060.  670.   880.   1140.  1500.  1860.
+      635.   425.   690.   1010.  1330.  1700.
+      60.    25.    345.   755.   1130.  1525.
+     -1020. -710.  -300.   350.   910.   1360.
+     -2700. -1900. -1300. -247.   600.   1100.
+     -3600. -1400. -595.  -342.  -200.   700.]'
+
+# Mil data
+mil_data =
+    [12680. 9150.  6200.  3950.  2450. 1400.
+     12680. 9150.  6313.  4040.  2470. 1400.
+     12610. 9312.  6610.  4290.  2600. 1560.
+     12640. 9839.  7090.  4660.  2840. 1660.
+     12390. 10176. 7750.  5320.  3250. 1930.
+     11680. 9848.  8050.  6100.  3800. 2310.]'
+
+# Max data
+max_data =
+    [20000. 15000. 10800. 7000.  4000. 2500.
+     21420. 15700. 11225. 7323.  4435. 2600.
+     22700. 16860. 12250. 8154.  5000. 2835.
+     24240. 18910. 13760. 9285.  5700. 3215.
+     26070. 21075. 15975. 11115. 6860. 3950.
+     28886. 23319. 18300. 13484. 8642. 5057.]'
+
+
+"""
+    thrust(pow, alt, rmach)
+
+Given the commanded power level (%), the altitude (ft) and the Mach number,
+calculate the engine thrust (lbf)
+"""
+function calculate_thrust(pow, alt, rmach)
+
+    h = 0.0001 * alt
+    i = floor(Int, h)
+    if i >= 5
+        i=4
+    end
+
+    dh = h - float(i)
+
+    rm = 5.0 * rmach
+    m = floor(Int, rm);
+    if m >= 5
+        m = 4
+    end
+
+    dm = rm - float(m)
+    cdh = 1.0 - float(dh)
+
+    i=i+1;
+    m=m+1;
+
+    s = mil_data[i, m] * cdh + mil_data[i+1, m] * dh
+    t = mil_data[i, m+1] *cdh + mil_data[i+1, m+1] * dh
+    tmil = s + (t - s) * dm
+
+    if pow < 50.
+        s = idle_data[i, m] * cdh + idle_data[i+1, m] * dh
+        t = idle_data[i,m+1] * cdh + idle_data[i+1, m+1] * dh
+        tidl = s + (t - s) * dm
+        thrst = tidl + (tmil - tidl) * pow * 0.02
+    else
+        s = max_data[i, m] * cdh + max_data[i+1, m] * dh
+        t = max_data[i, m+1] * cdh + max_data[i+1, m+1] * dh
+        tmax = s + (t-s) * dm
+        thrst = tmil + (tmax - tmil) * (pow-50.) * 0.02
+    end
+
+    return thrst
+    end
+
+
+"""
+The F-16 engine power response is modelled by a first-order lag (pdot function).
+The rest of the model consists of thottle gearing (tgear) and lookup tables for
+thrust as a function of operating power level, altitude and Mach.
+
+Lookup tables have rows corresponding to Mach from 0 to 1 in increments of 0.2
+and columns correspond to altitudes from 0 to 50000ft in increments of 10000ft.
+There is a table for each power level: idle, military and maximum. Results can
+be extrapolated beyond the boundaries but results may be unrealistic.
+
+# References
+
+Reimplemented from:
+
+- [1] Stevens, B. L., Lewis, F. L., & Johnson, E. N. (2015). Aircraft control
+ and simulation: dynamics, controls design, and autonomous systems. John Wiley
+ & Sons. (page 715)
+"""
+function calculate_engine(eng::F16Engine, fcs::FCS, aerostate::AeroState,
+                          state::State; consume_fuel=false)
+
+    pow = get_thrust(fcs)  # Commanded power: between 0 and 100
+    Mach = get_mach(aerostate)
+    # TODO: Should be altitude
+    height = get_height(state) * M2FT
+
+    thrust = calculate_thrust(pow, height, Mach)
+    thrust *= LBF2N
+    cj = 0.0
+    Pm = thrust * get_tas(aerostate)
+    ηp = NaN
+
+    if consume_fuel==true
+        error("fuel consumption not implemented")
+    else
+        tanks = get_tanks(eng)
+    end
+
+    # TODO: Torque calcualtion is missing
+    pfm = PointForcesMoments(get_engine_position(eng),
+                             [thrust, 0, 0],
+                             [0, 0, 0]
+                             )
+
+    return typeof(eng)(pfm, cj, Pm, ηp, tanks, get_engine_gyro_effects(eng))
+end
+
+
+##----------------------------------------------------------------------------------------------------
+## FCS
+
+# TODO: Move to FCS in models
+get_thrust(fcs::F16FCS) = get_value(fcs.cpl)
+
+F16FCS() = F16FCS(# Cabin Inputs
+                    RangeControl(0.0, [0, 1]),  # stick_longitudinal
+                    RangeControl(0.0, [0, 1]),  # stick_lateral
+                    RangeControl(0.0, [0, 1]),  # pedals
+                    RangeControl(0.0, [0, 1]),  # thtl
+                    # Controls
+                    RangeControl(0.0, [-DE_MAX, DE_MAX] .* DEG2RAD),  # elevator
+                    RangeControl(0.0, [-DA_MAX, DA_MAX] .* DEG2RAD),  # ailerons
+                    RangeControl(0.0, [-DR_MAX, DR_MAX] .* DEG2RAD),  # rudder
+                    # Commanded power level
+                    RangeControl(0.0, [0.0, 100.]),                # CPL
+                    )
+
+function set_stick_lon(fcs::F16FCS, value, allow_out_of_range=false, throw_error=false)
+    set_value(fcs.stick_longitudinal, value)
+    min, max = get_value_range(fcs.de)
+    range = max - min
+    set_value(fcs.de, min + range * value, allow_out_of_range, throw_error)
+end
+
+function set_stick_lat(fcs::F16FCS, value, allow_out_of_range=false, throw_error=false)
+    set_value(fcs.stick_lateral, value)
+    min, max = get_value_range(fcs.da)
+    range = max - min
+    set_value(fcs.da, min + range * value, allow_out_of_range, throw_error)
+end
+
+function set_pedals(fcs::F16FCS, value, allow_out_of_range=false, throw_error=false)
+    set_value(fcs.pedals, value)
+    min, max = get_value_range(fcs.dr)
+    range = max - min
+    set_value(fcs.dr, min + range * value, allow_out_of_range, throw_error)
+end
+
+function set_thtl(fcs::F16FCS, value, allow_out_of_range=false, throw_error=false)
+    set_value(fcs.thtl, value)
+    min, max = get_value_range(fcs.thtl)
+    range = max - min
+    set_value(fcs.cpl, tgear(value), allow_out_of_range, throw_error)
+end
+
+function set_controls_trimmer(fcs::F16FCS, slong, slat, ped, thtl,
+    allow_out_of_range=true, throw_error=false)
+    set_stick_lat(fcs, slong, allow_out_of_range, throw_error)
+    set_stick_lon(fcs, slat, allow_out_of_range, throw_error)
+    set_pedals(fcs, ped, allow_out_of_range, throw_error)
+    set_thtl(fcs, thtl, allow_out_of_range, throw_error)
+end
+
+function get_controls_trimmer(fcs::F16FCS)
+    [get_value(fcs.stick_longitudinal),
+     get_value(fcs.stick_lateral),
+     get_value(fcs.pedals),
+     get_value(fcs.thtl)]
+ end
+
+function get_controls_ranges_trimmer(fcs::F16FCS)
+    [get_value_range(fcs.stick_longitudinal),
+     get_value_range(fcs.stick_lateral),
+     get_value_range(fcs.pedals),
+     get_value_range(fcs.thtl)]
+end
+
+
+##----------------------------------------------------------------------------------------------------
+## Aircraft Model
+
+function F16()
+    pfm0 = PointForcesMoments(zeros(3), zeros(3), zeros(3))
+    aero0 = F16Aerodynamics(pfm0, pfm0, pfm0, pfm0)
+    engine = F16Engine()
+    propulsion0 = Propulsion(
+            PointForcesMoments(zeros(3), zeros(3), zeros(3)),
+            0, 0, 0,
+            [engine],
+            get_gyro_effects(engine)
+            )
+
+    # mass properties cannot be retrieved until ac is created... so:
+    ac = F16(RigidSolid(0, zeros(3), zeros(3, 3)),
+              pfm0,
+              aero0,
+              propulsion0)
+    mass = get_fuel_mass_props(get_propulsion(ac)) + get_empty_mass_props(ac)
+            # + get_payload_mass_props(ac)
+    F16(mass, pfm0, aero0, propulsion0)
+end
+
+
+# Name
+function get_name(ac::F16)
+    return "F16"
+end
+
+# GEOMETRIC PROPERTIES
+get_wing_area(ac::F16) = 300.0 * FT2M^2
+get_wing_span(ac::F16) = 30. * FT2M
+get_chord(ac::F16) = 11.32 * FT2M
+
+# Aerodynamic Reference Point
+# Origin assumed leading edge of CMA
+get_arp(ac::F16) = [-0.35 * get_chord(ac), 0.0, 0.0]
+get_empty_cg(ac::F16) = [-0.35 * get_chord(ac), 0, 0]
+
+# MASS PROPERTIES
+function get_empty_mass_props(ac::F16)
+    RigidSolid(
+        20500 * LB2KG,                                # Empty mass
+        get_empty_cg(ac),                             # Empty CG
+        [9456.        0.    -982.;                     # Empty inertia
+            0.    55814.       0.;
+          -982.       0.   63100.]  .* SLUGFT2_2_KGM2
+    )
+end
+
+# Crew and cargo
+# get_pilot_mass_props(ac::F16) = PointMass(0 * LB2KG, [0., 0., 0.] .* IN2M)
+# get_cargo_mass_props(ac::F16) = PointMass(0 * LB2KG, [0., 0., 0.] .* IN2M)
+
+# get_payload_mass_props(ac::F16) = get_pilot_mass_props(ac)
+
+
+##----------------------------------------------------------------------------------------------------

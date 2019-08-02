@@ -1,9 +1,3 @@
-using FlightMechanics
-
-export Environment, calculate_environment,
-    get_atmos, get_wind, get_gravity
-
-
 """
     Environment(atmos::Atmosphere, wind::Wind, grav::Gravity)
 
@@ -64,28 +58,28 @@ end
 
 
 get_atmos(env::Environment) = env.atmos
-get_temperature(env::Environment) = get_temperature(env.atmos)
-get_pressure(env::Environment) = get_pressure(env.atmos)
-get_density(env::Environment) = get_density(env.atmos)
-get_sound_velocity(env::Environment) = get_sound_velocity(env.atmos)
+get_temperature(env::Environment) = get_temperature(get_atmos(env))
+get_pressure(env::Environment) = get_pressure(get_atmos(env))
+get_density(env::Environment) = get_density(get_atmos(env))
+get_sound_velocity(env::Environment) = get_sound_velocity(get_atmos(env))
 
 get_wind(env::Environment) = env.wind
-get_wind_dir_int_ver(env::Environment) = get_wind_dir_int_ver(env.wind)
-get_wind_NED(env::Environment) = get_wind_NED(env.wind)
-get_wind_body(env::Environment, att::Attitude) = get_wind_body(env.wind, att)
-get_wind_direction(env::Environment) = get_wind_direction(env.wind)
-get_wind_intensity(env::Environment) = get_wind_intensity(env.wind)
-get_wind_vertical(env::Environment) = get_wind_vertical(env.wind)
+get_wind_dir_int_ver(env::Environment) = get_wind_dir_int_ver(get_wind(env))
+get_wind_NED(env::Environment) = get_wind_NED(get_wind(env))
+get_wind_body(env::Environment, att::Attitude) = get_wind_body(get_wind(env))
+get_wind_direction(env::Environment) = get_wind_direction(get_wind(env))
+get_wind_intensity(env::Environment) = get_wind_intensity(get_wind(env))
+get_wind_vertical(env::Environment) = get_wind_vertical(get_wind(env))
 
 get_gravity(env::Environment) = env.grav
-get_gravity_horizon(env::Environment) = get_gravity_horizon(env.grav)
-get_gravity_accel(env::Environment) = get_gravity_accel(env.grav)
-get_gravity_body(env::Environment, att::Attitude) = get_gravity_body(env.grav, att)
+get_gravity_horizon(env::Environment) = get_gravity_horizon(get_gravity(env))
+get_gravity_accel(env::Environment) = get_gravity_accel(get_gravity(env))
+get_gravity_body(env::Environment, att::Attitude) = get_gravity_body(get_gravity(env), att)
 
 
 function calculate_environment(env::Environment, pos::Position)
-    atmos = calculate_atmosphere(env.atmos, pos)
-    wind = calculate_wind(env.wind, pos)
-    grav = calculate_gravity(env.grav, pos)
+    atmos = calculate_atmosphere(get_atmos(env), pos)
+    wind = calculate_wind(get_wind(env), pos)
+    grav = calculate_gravity(get_gravity(env), pos)
     Environment(atmos, wind, grav)
 end

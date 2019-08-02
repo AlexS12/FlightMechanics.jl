@@ -1,13 +1,3 @@
-using FlightMechanics
-
-export Aerodynamics,
-    aerodynamics_from_wind_total, aerodynamics_from_wind_coeff,
-    aerodynamics_from_body_total, aerodynamics_from_body_coeff,
-    get_pfm, calculate_aerodynamics,
-    get_wind_pfm, get_wind_adim_pfm,
-    get_body_pfm, get_body_adim_pfm
-
-
 """
     Aerodynamics
 

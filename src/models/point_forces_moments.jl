@@ -1,15 +1,3 @@
-import Base: +, -, *, isapprox
-
-using LinearAlgebra
-
-
-export PointForcesMoments,
-    translate_forces_moments,
-     +, -, *, isapprox,
-     rotate
-
-
-
 # TODO: provide outer constructor checking dimensions?
 # TODO: think about associating it to a coordinate system
 """

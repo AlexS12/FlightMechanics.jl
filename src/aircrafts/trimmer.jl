@@ -1,6 +1,6 @@
 using Optim
-using FlightMechanics
-using FlightMechanics.Models
+# using FlightMechanics
+# using FlightMechanics.Models
 
 
 export steady_state_trim
@@ -76,7 +76,7 @@ function steady_state_trim(ac::Aircraft, fcs::FCS, env::Environment,
     accel = [0., 0., 0.]
     ang_accel = [0., 0., 0.]
 
-    state, aerostate = state_aerostate(pos, att, tas, alpha0, beta0, env, ang_vel,
+    state, aerostate = generate_state_aerostate(pos, att, tas, alpha0, beta0, env, ang_vel,
                                        accel, ang_accel)
 
     # Ensure that environment is calculated at the position given to the trimmer
@@ -144,7 +144,7 @@ function trim_cost_function(trimming_variables, trimmer::Trimmer)
 
     env = trimmer.env
 
-    state, aerostate = state_aerostate(pos, att, tas, alpha, beta, env, ang_vel,
+    state, aerostate = generate_state_aerostate(pos, att, tas, alpha, beta, env, ang_vel,
                                        accel, ang_accel)
 
     env = calculate_environment(trimmer.env, get_position(trimmer.state))

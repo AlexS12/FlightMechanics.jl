@@ -1,11 +1,3 @@
-using FlightMechanics
-import Base: +
-
-
-export RigidSolid, PointMass,
-    get_mass, get_cg, get_inertia, +
-
-
 # TODO: provide outer constructor checking dimensions?
 """
     RigidSolid(mass::Number, cg::Array{T, 1}, inertia::Array{T, 2})
