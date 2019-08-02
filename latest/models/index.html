@@ -8,7 +8,7 @@
   
   <meta name="author" content="Alex Saez">
   <link rel="shortcut icon" href="../img/favicon.ico">
-  <title>Anemometry - FlightMechanics.jl</title>
+  <title>Models - FlightMechanics.jl</title>
   <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
 
   <link rel="stylesheet" href="../css/theme.css" type="text/css" />
@@ -18,8 +18,8 @@
   
   <script>
     // Current page data
-    var mkdocs_page_name = "Anemometry";
-    var mkdocs_page_input_path = "anemometry.md";
+    var mkdocs_page_name = "Models";
+    var mkdocs_page_input_path = "models.md";
     var mkdocs_page_url = null;
   </script>
   
@@ -75,29 +75,9 @@
                     
     <a class="" href="../dynamic_models/">Dynamic models</a>
                 </li>
-                <li class=" current">
+                <li class="">
                     
-    <a class="current" href="./">Anemometry</a>
-    <ul class="subnav">
-            
-    <li class="toctree-l3"><a href="#anemometry">Anemometry</a></li>
-    
-        <ul>
-        
-            <li><a class="toctree-l4" href="#tas">TAS</a></li>
-        
-            <li><a class="toctree-l4" href="#cas">CAS</a></li>
-        
-            <li><a class="toctree-l4" href="#eas">EAS</a></li>
-        
-            <li><a class="toctree-l4" href="#ias">IAS</a></li>
-        
-            <li><a class="toctree-l4" href="#asi">ASI</a></li>
-        
-        </ul>
-    
-
-    </ul>
+    <a class="" href="../anemometry/">Anemometry</a>
                 </li>
                 <li class="">
                     
@@ -127,15 +107,11 @@
     <li><a href="..">Docs</a> &raquo;</li>
     
       
-        
-          <li>Basics &raquo;</li>
-        
-      
     
-    <li>Anemometry</li>
+    <li>Models</li>
     <li class="wy-breadcrumbs-aside">
       
-        <a href="https://github.com/AlexS12/FlightMechanics.jl/edit/master/docs/anemometry.md"
+        <a href="https://github.com/AlexS12/FlightMechanics.jl/edit/master/docs/models.md"
           class="icon icon-github"> Edit on GitHub</a>
       
     </li>
@@ -145,32 +121,101 @@
           <div role="main">
             <div class="section">
               
-                <p><a id='Anemometry-1'></a></p>
-<h1 id="anemometry">Anemometry</h1>
-<p>TBD...</p>
-<p><a id='TAS-1'></a></p>
-<h2 id="tas">TAS</h2>
-<p><a id='CAS-1'></a></p>
-<h2 id="cas">CAS</h2>
-<p><a id='EAS-1'></a></p>
-<h2 id="eas">EAS</h2>
-<p><a id='IAS-1'></a></p>
-<h2 id="ias">IAS</h2>
-<p><a id='ASI-1'></a></p>
-<h2 id="asi">ASI</h2>
+                <p><a id='Models-1'></a></p>
+<h1 id="models">Models</h1>
+<p><a id='AeroState-1'></a></p>
+<h2 id="aerostate">AeroState</h2>
+<p>```@autodocs
+Modules = [FlightMechanics.Simulator.Models]
+Pages   = ["aero_state.jl"]</p>
+<pre><code>
+
+&lt;a id='State-1'&gt;&lt;/a&gt;
+
+## State
+
+
+```@autodocs
+Modules = [FlightMechanics.Simulator.Models]
+Pages   = [&quot;state.jl&quot;]
+</code></pre>
+
+<p><a id='Position-1'></a></p>
+<h3 id="position">Position</h3>
+<p>```@autodocs
+Modules = [FlightMechanics.Simulator.Models]
+Pages   = ["position.jl"]</p>
+<pre><code>
+
+&lt;a id='Attitude-1'&gt;&lt;/a&gt;
+
+### Attitude
+
+
+```@autodocs
+Modules = [FlightMechanics.Simulator.Models]
+Pages   = [&quot;attitude.jl&quot;]
+</code></pre>
+
+<p><a id='Environment-1'></a></p>
+<h1 id="environment">Environment</h1>
+<p>```@autodocs
+Modules = [FlightMechanics.Simulator.Models]
+Pages   = ["environment.jl"]</p>
+<pre><code>
+
+&lt;a id='Aircraft-1'&gt;&lt;/a&gt;
+
+# Aircraft
+
+
+&lt;a id='PointForcesMoments-1'&gt;&lt;/a&gt;
+
+## PointForcesMoments
+
+
+```@autodocs
+Modules = [FlightMechanics.Simulator.Models]
+Pages   = [&quot;point_forces_moments.jl&quot;]
+</code></pre>
+
+<p><a id='Propulsion-1'></a></p>
+<h2 id="propulsion">Propulsion</h2>
+<p>```@autodocs
+Modules = [FlightMechanics.Simulator.Models]
+Pages   = ["propulsion.jl"]</p>
+<pre><code>
+
+&lt;a id='Aerodynamics-1'&gt;&lt;/a&gt;
+
+## Aerodynamics
+
+
+```@autodocs
+Modules = [FlightMechanics.Simulator.Models]
+Pages   = [&quot;aerodynamics.jl&quot;]
+</code></pre>
+
+<p><a id='FCS-1'></a></p>
+<h2 id="fcs">FCS</h2>
+<p>```@autodocs
+Modules = [FlightMechanics.Simulator.Models]
+Pages   = ["fcs.jl"]</p>
+<pre><code>
+
+&lt;a id='RigidSolid-and-PointMass-1'&gt;&lt;/a&gt;
+
+## RigidSolid &amp; PointMass
+
+
+```@autodocs
+Modules = [FlightMechanics.Simulator.Models]
+Pages   = [&quot;mass.jl&quot;]
+</code></pre>
               
             </div>
           </div>
           <footer>
-  
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="../kinematics/" class="btn btn-neutral float-right" title="Kinematics">Next <span class="icon icon-circle-arrow-right"></span></a>
-      
-      
-        <a href="../dynamic_models/" class="btn btn-neutral" title="Dynamic models"><span class="icon icon-circle-arrow-left"></span> Previous</a>
-      
-    </div>
   
 
   <hr/>
@@ -196,10 +241,6 @@
           <a href="https://github.com/AlexS12/FlightMechanics.jl/" class="fa fa-github" style="float: left; color: #fcfcfc"> GitHub</a>
       
       
-        <span><a href="../dynamic_models/" style="color: #fcfcfc;">&laquo; Previous</a></span>
-      
-      
-        <span style="margin-left: 15px"><a href="../kinematics/" style="color: #fcfcfc">Next &raquo;</a></span>
       
     </span>
 </div>
