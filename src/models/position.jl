@@ -1,10 +1,3 @@
-using FlightMechanics
-
-export State,
-       Position, PositionLLH, PositionEarth, PositionECEF,
-       get_position, get_llh, get_xyz_earth, get_xyz_ecef, get_height
-
-
 """
     Position(llh, xzy_earth, xyz_ecef)
 

@@ -1,12 +1,5 @@
-using FlightMechanics
-
-export Attitude,
-       get_euler_angles,
-       get_quaternions
-
-
 """
-Attitude objects that contains Euler angles and quaternions.
+Attitude objects contains Euler angles (rad) and quaternions.
 
 # Constructors
     Attitude(psi, theta, phi)
@@ -33,5 +26,16 @@ Attitude(q0, q1, q2, q3) = Attitude(quaternion2euler(q0, q1, q2, q3)...,
                                     q0, q1, q2, q3)
 
 # Getters
+"""
+    get_euler_angles(att::Attitude)
+
+Return Euler angles ψ, θ, ϕ (yaw, pith, roll).
+"""
 get_euler_angles(att::Attitude) = [att.psi, att.theta, att.phi]
+
+"""
+    get_quaternions(att::Attitude)
+
+Return quaternions. 
+"""
 get_quaternions(att::Attitude) = [att.q0, att.q1, att.q2, att.q3]

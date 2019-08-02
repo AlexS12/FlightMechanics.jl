@@ -26,9 +26,9 @@ aerost = AeroState(tas, alpha, beta, 0.0)
 
 @test isequal(check_state_aerostate_env_coherence(state, aerost, env), true)
 
-# TEST state_aerostate for the same case
-state, aerost = state_aerostate(pos, att, tas, alpha, beta, env, ang_vel, accel,
-                                ang_accel)
+# TEST generate_state_aerostate for the same case
+state, aerost = generate_state_aerostate(pos, att, tas, alpha, beta, env,
+                                         ang_vel, accel, ang_accel)
 @test isequal(check_state_aerostate_env_coherence(state, aerost, env), true)
 @test isapprox(get_horizon_velocity(state), [100, 0.0, 0.0])
 
@@ -39,8 +39,8 @@ alpha, beta = 0.0, 0.0
 aerost_exp = AeroState(tas, alpha, beta, 0.0)
 
 att = Attitude(pi, 0.0, 0.0)
-# TEST state_aerostate
-state, aerost = state_aerostate(pos, att, tas, alpha, beta, env, ang_vel, accel,
+# TEST generate_state_aerostate
+state, aerost = generate_state_aerostate(pos, att, tas, alpha, beta, env, ang_vel, accel,
                                 ang_accel)
 @test isequal(check_state_aerostate_env_coherence(state, aerost, env), true)
 @test isapprox(get_horizon_velocity(state), [-100, 0.0, 0.0])
@@ -53,8 +53,8 @@ alpha, beta = 0.0, 0.0
 aerost_exp = AeroState(tas, alpha, beta, 0.0)
 
 att = Attitude(pi, 0.0, 0.0)
-# TEST state_aerostate
-state, aerost = state_aerostate(pos, att, tas, alpha, beta, env, ang_vel, accel,
+# TEST generate_state_aerostate
+state, aerost = generate_state_aerostate(pos, att, tas, alpha, beta, env, ang_vel, accel,
                                 ang_accel)
 state_wrong = State(get_position(state),
                     get_attitude(state),

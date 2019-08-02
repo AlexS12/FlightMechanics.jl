@@ -1,7 +1,3 @@
-using FlightMechanics
-
-export six_dof_ecef_quaternion_fixed_mass
-
 const ωe = ROT_VELOCITY
 
 """

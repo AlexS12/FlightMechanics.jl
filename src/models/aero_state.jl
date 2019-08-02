@@ -1,11 +1,3 @@
-using FlightMechanics
-
-export AeroState, state_aerostate, check_state_aerostate_env_coherence,
-    get_alpha, get_beta, get_aero_angles, get_alpha_dot,
-    get_tas, get_eas, get_cas, get_ias, get_aero_speeds,
-    get_qinf, get_mach
-
-
 """
     AeroState(alpha, beta, alpha_dot, tas, eas, cas, ias, qinf, mach)
 
@@ -76,15 +68,15 @@ function AeroState(tas::Number, alpha::Number, beta::Number, height::Number)
 end
 
 """
-    state_aerostate(pos::Position, att::Attitude, tas::Number, alpha::Number,
+    generate_state_aerostate(pos::Position, att::Attitude, tas::Number, alpha::Number,
                                 beta::Number, env::Environment,
                                 ang_vel=[0.0, 0.0, 0.0], accel=[0.0, 0.0, 0.0],
                                 ang_accel=[0.0, 0.0, 0.0])
 
-returns both state and aerostate provided the values of aircrft states, environment and 
+returns both state and aerostate provided the values of aircrft states, environment and
 aerodynamic angles.
 """
-function state_aerostate(pos::Position, att::Attitude, tas::Number, alpha::Number,
+function generate_state_aerostate(pos::Position, att::Attitude, tas::Number, alpha::Number,
                          beta::Number, env::Environment,
                          ang_vel=[0.0, 0.0, 0.0], accel=[0.0, 0.0, 0.0],
                          ang_accel=[0.0, 0.0, 0.0])
