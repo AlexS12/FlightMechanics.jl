@@ -107,6 +107,12 @@ from velocity expressed in body axis.
 This function assumes that u, v, w are the body components of the aerodynamic
 speed. This is not true in genreal (wind speed different from zero), as u, v, w
 represent velocity with respect to an inertial reference frame.
+
+# References
+
+- [1] Stevens, B. L., Lewis, F. L., & Johnson, E. N. (2015). Aircraft control
+ and simulation: dynamics, controls design, and autonomous systems. John Wiley
+ & Sons. Equation (2.3-6b) (page 78)
 """
 function uvw_to_tasαβ(u, v, w)
 
