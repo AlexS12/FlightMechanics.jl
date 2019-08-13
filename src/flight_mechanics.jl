@@ -96,3 +96,22 @@ function euler_angles_rates_to_body_angular_velocity(ψ_dot, θ_dot, ϕ_dot, θ,
 
     return [p, q, r]
 end
+
+"""
+    uvw_to_tasαβ(u, v, w)
+
+Calculate true air speed (TAS), angle of attack (α) and angle of side slip (β)
+from velocity expressed in body axis.
+
+# Notes
+This function assumes that u, v, w are the body components of the aerodynamic
+speed. This is not true in genreal (wind speed different from zero), as u, v, w
+represent velocity with respect to an inertial reference frame.
+"""
+function uvw_to_tasαβ(u, v, w)
+
+    tas = sqrt(u*u + v*v + w*w)
+    α = atan(w, u)
+    β = atan(v, sqrt(u*u + v*v))
+    return [tas, α, β]
+end
