@@ -17,6 +17,10 @@ struct PointForcesMoments
     moments::Array{Number, 1}
 end
 
+get_point(pfm::PointForcesMoments) = pfm.point
+get_forces(pfm::PointForcesMoments) = pfm.forces
+get_moments(pfm::PointForcesMoments) = pfm.moments
+
 """
     translate_forces_moments(pfm::PointForcesMoments, point::Array{T, 1}) where T<:Number
 
