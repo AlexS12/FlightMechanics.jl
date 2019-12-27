@@ -1,5 +1,5 @@
 """
-    six_dof_quaternion_fixed_mass(state, mass, inertia, forces, moments,
+    six_dof_quaternion_fixed_mass(x, mass, inertia, forces, moments,
                                   h=[0.0, 0.0, 0.0], k=0.0)
 
 Six degrees of freedom dynamic system using quaternions for attitude
@@ -16,7 +16,7 @@ The effects of the angular momentum produced by spinning rotors is taken into
 account with the optional argument `h`.
 
 # Arguments
-- `state::12-element Array{Number,1}`: state vector.
+- `x::12-element Array{Number,1}`: state vector.
     u, v, w: inertial linear velocity expressed in body axis. (m/s)
     p, q, r: inertial rotatinal velocity expressed in body axis. (rad/s)
     q0, q1, q2, q3: attitude given by quaternions.
@@ -30,7 +30,7 @@ account with the optional argument `h`.
 - `k::Number`: orthonormality error factor.
 
 # Returns
-- `state_dot`: state vector derivative according to the equation of motion,
+- `x_dot`: state vector derivative according to the equation of motion,
     inertial properties and applied forces and moments.
 
 # Notes
@@ -52,12 +52,12 @@ account with the optional argument `h`.
  dynamics. American Institute of Aeronautics and Astronautics.
  (page 368, figure 10.2)
 """
-function six_dof_quaternion_fixed_mass(state, mass, inertia, forces, moments,
+function six_dof_quaternion_fixed_mass(x, mass, inertia, forces, moments,
                                        h=[0.0, 0.0, 0.0], k=0.0)
 
     m = mass
 
-    u, v, w, p, q, r, q0, q1, q2, q3, xe, ye, ze = state
+    u, v, w, p, q, r, q0, q1, q2, q3, xe, ye, ze = x
 
     Fx, Fy, Fz = forces
     L, M, N = moments
