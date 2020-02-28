@@ -1,10 +1,10 @@
 struct State
     position::Position
     attitude::Attitude
-    velocity::Array{T, 1} where T<:Number
-    angular_velocity::Array{T, 1} where T<:Number
-    acceleration::Array{T, 1} where T<:Number
-    angular_acceleration::Array{T, 1} where T<:Number
+    velocity::Array{T, 1} where T<:Number  # body (u, v, w) in m/s
+    angular_velocity::Array{T, 1} where T<:Number  # body (p, q, r) in rad/s
+    acceleration::Array{T, 1} where T<:Number  # body (ax, ay, az) in m/s^2
+    angular_acceleration::Array{T, 1} where T<:Number  # body (p_dot, q_dot, r_dot) in rad/s^2
 end
 
 # Position getters
