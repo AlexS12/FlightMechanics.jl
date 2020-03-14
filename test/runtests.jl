@@ -14,6 +14,7 @@ using FlightMechanics
 @testset "position" begin include("simulator/models/position.jl") end
 @testset "aerodynamics" begin include("simulator/models/aerodynamics.jl") end
 @testset "aerostate" begin include("simulator/models/aero_state.jl") end
+@testset "trimmer" begin include("simulator/models/trimmer.jl") end
 
 @testset "ac: c310" begin include("simulator/aircrafts/c310.jl") end
 @testset "ac: f16" begin include("simulator/aircrafts/f16.jl") end
