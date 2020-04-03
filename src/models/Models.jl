@@ -22,6 +22,7 @@ get_sixdof_euler_fixed_mass_state,
 RigidSolid, PointMass, get_mass, get_cg, get_inertia,
 # Pont Forces and moments
 PointForcesMoments, translate_forces_moments, rotate,
+get_point, get_forces, get_moments,
 # Atmosphere
 AtmosphereISA,AtmosphereF16,
 get_temperature, get_pressure, get_density, get_sound_velocity,
