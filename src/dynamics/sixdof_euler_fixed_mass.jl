@@ -1,5 +1,5 @@
 """
-    six_dof_euler_fixed_mass(state, mass, inertia, forces, moments,
+    six_dof_euler_fixed_mass(x, mass, inertia, forces, moments,
                              h=[0.0, 0.0, 0.0])
 
 Six degrees of freedom dynamic system using Euler angles for attitude
@@ -16,7 +16,7 @@ The effects of the angular momentum produced by spinning rotors is taken into
 account with the optional argument `h`.
 
 # Arguments
-- `state::12-element Array{Number,1}`: state vector.
+- `x::12-element Array{Number,1}`: state vector.
     u, v, w: inertial linear velocity expressed in body axis. (m/s)
     p, q, r: inertial rotatinal velocity expressed in body axis. (rad/s)
     ψ, θ, ϕ: attitude given by Euler angles (zyx). Yaw, pitch, roll. (rad)
@@ -29,7 +29,7 @@ account with the optional argument `h`.
   as those coming from spinning rotors (kg·m²/s).
 
 # Returns
-- `state_dot`: state vector derivative according to the equation of motion,
+- `x_dot`: state vector derivative according to the equation of motion,
     inertial properties and applied forces and moments.
 
 # References
@@ -45,11 +45,11 @@ account with the optional argument `h`.
  (page 368, figure 10.2, not taking into account quaternions in angular
  kinematic equations)
 """
-function six_dof_euler_fixed_mass(state, mass, inertia, forces, moments,
+function six_dof_euler_fixed_mass(x, mass, inertia, forces, moments,
                                   h=[0.0, 0.0, 0.0])
 
     m = mass
-    u, v, w, p, q, r, ψ, θ, ϕ, xe, ye, ze = state
+    u, v, w, p, q, r, ψ, θ, ϕ, xe, ye, ze = x
 
     Fx, Fy, Fz = forces
     L, M, N = moments

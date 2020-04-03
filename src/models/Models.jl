@@ -1,6 +1,6 @@
 module Models
 
-import Base: +, -, *, isapprox
+import Base: +, -, *, isapprox, convert
 using LinearAlgebra
 using FlightMechanics
 
@@ -58,8 +58,10 @@ calculate_aerodynamics,
 # Aircraft
 Aircraft, get_mass_props, get_pfm, get_aerodynamics, get_propulsion, get_name,
 get_wing_area, get_wing_span, get_chord, get_arp, get_empty_mass_props,
-get_payload_mass_props, calculate_aircraft
-
+get_payload_mass_props, calculate_aircraft,
+# DynamicSystem
+SixDOFEulerFixedMass, SixDOFQuaternionFixedMass,
+get_state_equation, get_state_equation_ode_wrapper, get_x, get_x_count, get_state
 
 include("attitude.jl")
 include("position.jl")
@@ -76,4 +78,5 @@ include("fcs.jl")
 include("propulsion.jl")
 include("aerodynamics.jl")
 include("aircraft.jl")
+include("dynamic_systems.jl")
 end

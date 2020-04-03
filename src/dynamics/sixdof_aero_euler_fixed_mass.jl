@@ -1,11 +1,11 @@
 """
 
 """
-function six_dof_aero_euler_fixed_mass(state, mass, inertia, forces, moments,
+function six_dof_aero_euler_fixed_mass(x, mass, inertia, forces, moments,
                                        h=[0.0, 0.0, 0.0])
 
     m = mass
-    tas, α, β, p, q, r, ψ, θ, ϕ, xe, ye, ze = state
+    tas, α, β, p, q, r, ψ, θ, ϕ, xe, ye, ze = x
 
     Fx, Fy, Fz = forces
     L, M, N = moments
