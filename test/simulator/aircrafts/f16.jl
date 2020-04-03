@@ -313,7 +313,7 @@ end
     end
 
     # Cases with small deviations in α
-    @testset "trim tas=$(trim_test_data[ii, 1]) ft/s" for ii=5:6
+    @testset "trim tas=$(trim_test_data[ii, 1]) ft/s" for ii=5:5
         tas =  trim_test_data[ii, 1] * FT2M
 
         exp_thtl = trim_test_data[ii, 2]
@@ -344,7 +344,7 @@ end
     end
 
     # Cases matching the test values
-    @testset "trim tas=$(trim_test_data[ii, 1]) ft/s" for ii=7:size(trim_test_data, 1)
+    @testset "trim tas=$(trim_test_data[ii, 1]) ft/s" for ii=6:size(trim_test_data, 1)
         tas =  trim_test_data[ii, 1] * FT2M
 
         exp_thtl = trim_test_data[ii, 2]
