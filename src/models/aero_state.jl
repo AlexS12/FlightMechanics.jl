@@ -53,9 +53,7 @@ function AeroState(state::State, env::Environment)
 end
 
 
-function AeroState(tas::Number, alpha::Number, beta::Number, height::Number)
-
-    T, p, ρ, a = atmosphere_isa(height)
+function AeroState(tas::Number, alpha::Number, beta::Number, p::Number, ρ::Number, a::Number)
 
     cas = tas2cas(tas, ρ, p)
     ias = tas
@@ -81,7 +79,14 @@ function generate_state_aerostate(pos::Position, att::Attitude, tas::Number, alp
                          ang_vel=[0.0, 0.0, 0.0], accel=[0.0, 0.0, 0.0],
                          ang_accel=[0.0, 0.0, 0.0])
 
-    aerostate = AeroState(tas, alpha, beta, get_height(pos))
+    env = calculate_environment(env, pos)
+
+    p = get_pressure(env)
+    ρ = get_density(env)
+    T = get_temperature(env)
+    a = get_sound_velocity(env)
+
+    aerostate = AeroState(tas, alpha, beta, p, ρ, a)
 
     aero_vel_body = wind2body([tas, 0, 0]..., alpha, beta)
     wind_vel_body = hor2body(get_wind_NED(env)..., get_euler_angles(att)...)
