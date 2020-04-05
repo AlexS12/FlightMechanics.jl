@@ -49,9 +49,9 @@ ac_trim, aerostate_trim, state_trim, fcs_trim = steady_state_trim(
 @test isapprox(get_tas(aerostate_trim), tas)
 @test isapprox(get_beta(aerostate_trim), 0.0, atol = 1e-13)
 
-@test isapprox(fcs_trim.thtl.value, exp_thtl, atol = 1e-3)
-@test isapprox(aerostate_trim.alpha * RAD2DEG, exp_α, atol = 10.0^(-length(split(string(exp_α), ".")[2])))
-@test isapprox(fcs_trim.de.value * RAD2DEG, exp_de, atol = 10.0^(-length(split(string(exp_de), ".")[2])))
+@test isapprox(fcs_trim.thtl.value, exp_thtl, atol = 0.001)
+@test isapprox(aerostate_trim.alpha * RAD2DEG, exp_α, atol = 0.01)
+@test isapprox(fcs_trim.de.value * RAD2DEG, exp_de, atol = 0.001)
 
 # TEST: Trim a trimmed aircraft and check if returns the same trim
 ac_trim2, aerostate_trim2, state_trim2, fcs_trim2 = steady_state_trim(
@@ -63,6 +63,6 @@ ac_trim2, aerostate_trim2, state_trim2, fcs_trim2 = steady_state_trim(
 @test isapprox(get_tas(aerostate_trim2), tas)
 @test isapprox(get_beta(aerostate_trim2),  0.0, atol = 1e-13)
 
-@test isapprox(fcs_trim2.thtl.value, exp_thtl, atol = 1e-3)
-@test isapprox(aerostate_trim2.alpha * RAD2DEG, exp_α, atol = 10.0^(-length(split(string(exp_α), ".")[2])))
-@test isapprox(fcs_trim2.de.value * RAD2DEG, exp_de, atol = 10.0^(-length(split(string(exp_de), ".")[2])))
+@test isapprox(fcs_trim2.thtl.value, exp_thtl, atol = 0.001)
+@test isapprox(aerostate_trim2.alpha * RAD2DEG, exp_α, atol = 0.01)
+@test isapprox(fcs_trim2.de.value * RAD2DEG, exp_de, atol = 0.001)
