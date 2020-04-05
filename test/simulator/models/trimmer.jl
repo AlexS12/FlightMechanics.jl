@@ -66,3 +66,15 @@ ac_trim2, aerostate_trim2, state_trim2, fcs_trim2 = steady_state_trim(
 @test isapprox(fcs_trim2.thtl.value, exp_thtl, atol = 0.001)
 @test isapprox(aerostate_trim2.alpha * RAD2DEG, exp_α, atol = 0.01)
 @test isapprox(fcs_trim2.de.value * RAD2DEG, exp_de, atol = 0.001)
+
+# TEST: calculate aircraft on trimmed aricraft and check that forces and moments
+# are the same
+ac_calc = calculate_aircraft(
+    ac_trim,
+    fcs_trim,
+    aerostate_trim,
+    state_trim,
+    get_gravity(env),
+    )
+@test isapprox(ac_trim.pfm.forces, ac_calc.pfm.forces)
+@test isapprox(ac_trim.pfm.moments, ac_calc.pfm.moments)
