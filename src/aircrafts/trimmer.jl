@@ -1,6 +1,4 @@
 using Optim
-# using FlightMechanics
-# using FlightMechanics.Models
 
 
 export steady_state_trim
@@ -61,7 +59,7 @@ See section 3.4 in [1] for the algorithm description.
 """
 function steady_state_trim(ac::Aircraft, fcs::FCS, env::Environment,
     tas::Number, pos::Position, psi::Number, gamma::Number, turn_rate::Number,
-    α0::Number, β0::Number; show_trace=false)
+    α0::Number, β0::Number; show_trace = false)
 
     alpha0 = α0
     beta0 = β0
@@ -76,8 +74,17 @@ function steady_state_trim(ac::Aircraft, fcs::FCS, env::Environment,
     accel = [0., 0., 0.]
     ang_accel = [0., 0., 0.]
 
-    state, aerostate = generate_state_aerostate(pos, att, tas, alpha0, beta0, env, ang_vel,
-                                       accel, ang_accel)
+    state, aerostate = generate_state_aerostate(
+        pos,
+        att,
+        tas,
+        alpha0,
+        beta0,
+        env,
+        ang_vel,
+        accel,
+        ang_accel,
+    )
 
     # Ensure that environment is calculated at the position given to the trimmer
     env = calculate_environment(env, get_position(state))
@@ -90,7 +97,7 @@ function steady_state_trim(ac::Aircraft, fcs::FCS, env::Environment,
     # lower_bounds = [-15 * DEG2RAD, -15 * DEG2RAD]
     # upper_bounds = [ 15 * DEG2RAD,  15 * DEG2RAD]
     #
-    for (value, range)=zip(get_controls_trimmer(fcs), get_controls_ranges_trimmer(fcs))
+    for (value, range) = zip(get_controls_trimmer(fcs), get_controls_ranges_trimmer(fcs))
     #     min, max = range
         val = value
         append!(trim_vars0, val)
@@ -102,13 +109,17 @@ function steady_state_trim(ac::Aircraft, fcs::FCS, env::Environment,
     trimming_function(x) = trim_cost_function(x, trimmer)
 
     # Trim
-    result = optimize(trimming_function, trim_vars0,
-                      Optim.Options(
-                        g_tol=1e-25,
-                        iterations=5000,
-                        show_trace=show_trace, show_every=100
-                        );
-                      )
+    result = optimize(
+        trimming_function,
+        trim_vars0,
+        Optim.Options(
+            g_tol = 1e-25,
+            iterations = 5000,
+            show_trace = show_trace,
+            show_every = 100,
+            );
+        )
+
     if show_trace
         println(result)
         println(Optim.minimizer(result))
@@ -144,8 +155,17 @@ function trim_cost_function(trimming_variables, trimmer::Trimmer)
 
     env = trimmer.env
 
-    state, aerostate = generate_state_aerostate(pos, att, tas, alpha, beta, env, ang_vel,
-                                       accel, ang_accel)
+    state, aerostate = generate_state_aerostate(
+        pos,
+        att,
+        tas,
+        alpha,
+        beta,
+        env,
+        ang_vel,
+        accel,
+        ang_accel
+    )
 
     env = calculate_environment(trimmer.env, get_position(trimmer.state))
 
@@ -160,7 +180,7 @@ function trim_cost_function(trimming_variables, trimmer::Trimmer)
     # Some controls may be fixed and the rest of them are given in trimming_variables
     set_controls_trimmer(fcs, trimming_variables[3:end]...)
 
-    trimmer.ac = calculate_aircraft(ac, fcs, aerostate, state, grav; consume_fuel=false)
+    trimmer.ac = calculate_aircraft(ac, fcs, aerostate, state, grav; consume_fuel = false)
     pfm = trimmer.ac.pfm
     mass_props = get_mass_props(trimmer.ac)
     mass = mass_props.mass
