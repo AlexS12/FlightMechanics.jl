@@ -59,7 +59,7 @@ See section 3.4 in [1] for the algorithm description.
 """
 function steady_state_trim(ac::Aircraft, fcs::FCS, env::Environment,
     tas::Number, pos::Position, psi::Number, gamma::Number, turn_rate::Number,
-    α0::Number, β0::Number; show_trace = false)
+    α0::Number, β0::Number; show_trace = false, g_tol = 1e-25, max_iters = 5000)
 
     alpha0 = α0
     beta0 = β0
@@ -113,8 +113,8 @@ function steady_state_trim(ac::Aircraft, fcs::FCS, env::Environment,
         trimming_function,
         trim_vars0,
         Optim.Options(
-            g_tol = 1e-25,
-            iterations = 5000,
+            g_tol = g_tol,
+            iterations = max_iters,
             show_trace = show_trace,
             show_every = 100,
             );
