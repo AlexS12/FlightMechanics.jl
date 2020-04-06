@@ -129,13 +129,22 @@ function steady_state_trim(ac::Aircraft, fcs::FCS, env::Environment,
     trimmer.ac, trimmer.aerostate, trimmer.state, trimmer.fcs
 end
 
+"""
+    trim_cost_function(x, trimmer::Trimmer)
 
-function trim_cost_function(trimming_variables, trimmer::Trimmer)
+Function minimized to trim the aircraft. Independent variables are passed in x:
+- x[1] angle of attack (rad).
+- x[2] angle of sideslip (rad).
+- x[3:end]: controls expected by set_controls_trimmer (ie. stick_long, stick_lat, pedals,
+throttle)
+
+"""
+function trim_cost_function(x, trimmer::Trimmer)
 
     # alpha, beta, tas, height are known so aero can be created
-    # alpha and beta are given by trimming_variables
+    # alpha and beta are given by x
     # tas is fixed for the trim
-    alpha, beta = trimming_variables[1:2]
+    alpha, beta = x[1:2]
 
     tr = trimmer.turn_rate
     tas = get_tas(trimmer.aerostate)
@@ -177,8 +186,8 @@ function trim_cost_function(trimming_variables, trimmer::Trimmer)
     fcs = trimmer.fcs
     ac = trimmer.ac
     grav = env.grav
-    # Some controls may be fixed and the rest of them are given in trimming_variables
-    set_controls_trimmer(fcs, trimming_variables[3:end]...)
+    # Some controls may be fixed and the rest of them are given in x
+    set_controls_trimmer(fcs, x[3:end]...)
 
     trimmer.ac = calculate_aircraft(ac, fcs, aerostate, state, grav; consume_fuel = false)
     pfm = trimmer.ac.pfm
