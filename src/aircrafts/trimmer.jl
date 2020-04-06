@@ -126,7 +126,7 @@ function steady_state_trim(ac::Aircraft, fcs::FCS, env::Environment,
     end
 
     # Return trimmed variables
-    trimmer.ac, trimmer.aerostate, trimmer.state, trimmer.fcs
+    return trimmer.ac, trimmer.aerostate, trimmer.state, trimmer.fcs
 end
 
 """
@@ -178,26 +178,38 @@ function trim_cost_function(x, trimmer::Trimmer)
 
     env = calculate_environment(trimmer.env, get_position(trimmer.state))
 
-    # Set trimmer attributes
-    trimmer.state = state
-    trimmer.aerostate = aerostate
-    trimmer.env = env
-
     fcs = trimmer.fcs
     ac = trimmer.ac
     grav = env.grav
     # Some controls may be fixed and the rest of them are given in x
     set_controls_trimmer(fcs, x[3:end]...)
+    # Calcualte aircraft
+    ac = calculate_aircraft(ac, fcs, aerostate, state, grav; consume_fuel = false)
 
-    trimmer.ac = calculate_aircraft(ac, fcs, aerostate, state, grav; consume_fuel = false)
+    # Update trimmer
+    trimmer.ac = ac
+    trimmer.aerostate = aerostate
+    trimmer.state = state
+    trimmer.env = env
+    trimmer.fcs = fcs
+    
+    # Calculate objective function cost
+    cost = evaluate_cost_function(trimmer)
+    return cost
+end
+
+
+function evaluate_cost_function(trimmer::Trimmer)
+    # Calculate derivatives u_dot, v_dot, w_dot, p_dot, q_dot, r_dot
     pfm = trimmer.ac.pfm
     mass_props = get_mass_props(trimmer.ac)
     mass = mass_props.mass
     inertia = mass_props.inertia
 
-    state = get_sixdof_euler_fixed_mass_state(trimmer.state)
+    # Get dynamic system state x
+    x_ = get_sixdof_euler_fixed_mass_state(trimmer.state)
+    # Evaluate x_dot given x, u, parameters
+    x_dot = six_dof_euler_fixed_mass(x_, mass, inertia, pfm.forces, pfm.moments)[1:6]
 
-    r = six_dof_euler_fixed_mass(state, mass, inertia, pfm.forces, pfm.moments)[1:6]
-
-    return sum(r.^2)
+    return sum(x_dot.^2)
 end
