@@ -14,6 +14,8 @@ RangeControl(value, value_range) = RangeControl(value, value_range[1], value_ran
 
 get_value_range(c::RangeControl) = (c.value_min, c.value_max)
 
+copy(rc::RangeControl) = RangeControl(rc.value, rc.value_min, rc.value_max)
+
 # TODO: for trimmer to work, values out of the domain are allowed.
 # an optimization method with boundaries must be sought
 function set_value!(c::RangeControl, val, allow_out_of_range=false, throw_error=false)
@@ -51,3 +53,5 @@ function set_value!(c::DiscreteControl, val)
         throw(DomainError(val, "val not in discrete control options"))
     end
 end
+
+copy(dc::DiscreteControl) = DiscreteControl(dc.value, copy(dc.value_choices))

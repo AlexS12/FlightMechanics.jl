@@ -88,6 +88,7 @@ function steady_state_trim(ac::Aircraft, fcs::FCS, env::Environment,
 
     # Ensure that environment is calculated at the position given to the trimmer
     env = calculate_environment(env, get_position(state))
+    fcs = copy(fcs)
 
     # Store every necessary variable in the trimmer
     trimmer = Trimmer(ac, aerostate, state, env, fcs, turn_rate, gamma)

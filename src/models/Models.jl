@@ -1,6 +1,6 @@
 module Models
 
-import Base: +, -, *, isapprox, convert
+import Base: +, -, *, isapprox, convert, copy
 using LinearAlgebra
 using FlightMechanics
 

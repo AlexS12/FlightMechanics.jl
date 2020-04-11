@@ -39,9 +39,14 @@ thtl0 = exp_thtl + 0.3
 set_stick_lon!(fcs, stick_lon0)
 set_thtl!(fcs, thtl0)
 
+fcs_before_trimming = copy(fcs)
+
 ac_trim, aerostate_trim, state_trim, fcs_trim = steady_state_trim(
     ac, fcs, env, tas, pos, psi, gamma, turn_rate, α0, 0.0, show_trace = false
     )
+
+# TEST: FCS has not been modified by trimmer
+@test isapprox(get_controls_trimmer(fcs), get_controls_trimmer(fcs_before_trimming))
 
 # TEST: Check results against Stevens (also checked in f16.jl tests)
 @test isapprox(ac_trim.pfm.forces, zeros(3), atol = 1e-7)
