@@ -6,10 +6,13 @@ get_value(c::Control) = c.value
 # --------- RangeControl ---------
 mutable struct RangeControl<:Control
     value::Number
-    value_range::Array{Number, 1}
+    value_min::Number
+    value_max::Number
 end
 
-get_value_range(c::RangeControl) = c.value_range
+RangeControl(value, value_range) = RangeControl(value, value_range[1], value_range[2])
+
+get_value_range(c::RangeControl) = (c.value_min, c.value_max)
 
 # TODO: for trimmer to work, values out of the domain are allowed.
 # an optimization method with boundaries must be sought
