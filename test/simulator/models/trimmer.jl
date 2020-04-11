@@ -9,10 +9,10 @@ using FlightMechanics.Models
 ac = F16()
 fcs = F16FCS()
 
-set_stick_lon(fcs, 0.0)
-set_stick_lat(fcs, 0.5)
-set_pedals(fcs, 0.5)
-set_thtl(fcs, 0.8)
+set_stick_lon!(fcs, 0.0)
+set_stick_lat!(fcs, 0.5)
+set_pedals!(fcs, 0.5)
+set_thtl!(fcs, 0.8)
 
 h = 0.0 * M2FT
 psi = 0.0  # rad
@@ -36,8 +36,8 @@ exp_de   = -0.756
 stick_lon0 = exp_de / 25.0 + 0.5
 thtl0 = exp_thtl + 0.3
 
-set_stick_lon(fcs, stick_lon0)
-set_thtl(fcs, thtl0)
+set_stick_lon!(fcs, stick_lon0)
+set_thtl!(fcs, thtl0)
 
 ac_trim, aerostate_trim, state_trim, fcs_trim = steady_state_trim(
     ac, fcs, env, tas, pos, psi, gamma, turn_rate, α0, 0.0, show_trace = false

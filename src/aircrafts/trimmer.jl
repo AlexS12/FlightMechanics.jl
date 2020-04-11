@@ -135,7 +135,7 @@ end
 Function minimized to trim the aircraft. Independent variables are passed in x:
 - x[1] angle of attack (rad).
 - x[2] angle of sideslip (rad).
-- x[3:end]: controls expected by set_controls_trimmer (ie. stick_long, stick_lat, pedals,
+- x[3:end]: controls expected by set_controls_trimmer! (ie. stick_long, stick_lat, pedals,
 throttle)
 
 """
@@ -182,7 +182,7 @@ function trim_cost_function(x, trimmer::Trimmer)
     ac = trimmer.ac
     grav = env.grav
     # Some controls may be fixed and the rest of them are given in x
-    set_controls_trimmer(fcs, x[3:end]...)
+    set_controls_trimmer!(fcs, x[3:end]...)
     # Calcualte aircraft
     ac = calculate_aircraft(ac, fcs, aerostate, state, grav; consume_fuel = false)
 
