@@ -634,31 +634,31 @@ F16FCS() = F16FCS(# Cabin Inputs
                     )
 
 function set_stick_lon!(fcs::F16FCS, value, allow_out_of_range=false, throw_error=false)
-    set_value(fcs.stick_longitudinal, value)
+    set_value!(fcs.stick_longitudinal, value)
     min, max = get_value_range(fcs.de)
     range = max - min
-    set_value(fcs.de, min + range * value, allow_out_of_range, throw_error)
+    set_value!(fcs.de, min + range * value, allow_out_of_range, throw_error)
 end
 
 function set_stick_lat!(fcs::F16FCS, value, allow_out_of_range=false, throw_error=false)
-    set_value(fcs.stick_lateral, value)
+    set_value!(fcs.stick_lateral, value)
     min, max = get_value_range(fcs.da)
     range = max - min
-    set_value(fcs.da, min + range * value, allow_out_of_range, throw_error)
+    set_value!(fcs.da, min + range * value, allow_out_of_range, throw_error)
 end
 
 function set_pedals!(fcs::F16FCS, value, allow_out_of_range=false, throw_error=false)
-    set_value(fcs.pedals, value)
+    set_value!(fcs.pedals, value)
     min, max = get_value_range(fcs.dr)
     range = max - min
-    set_value(fcs.dr, min + range * value, allow_out_of_range, throw_error)
+    set_value!(fcs.dr, min + range * value, allow_out_of_range, throw_error)
 end
 
 function set_thtl!(fcs::F16FCS, value, allow_out_of_range=false, throw_error=false)
-    set_value(fcs.thtl, value)
+    set_value!(fcs.thtl, value)
     min, max = get_value_range(fcs.thtl)
     range = max - min
-    set_value(fcs.cpl, tgear(value), allow_out_of_range, throw_error)
+    set_value!(fcs.cpl, tgear(value), allow_out_of_range, throw_error)
 end
 
 function set_controls_trimmer!(fcs::F16FCS, slong, slat, ped, thtl,

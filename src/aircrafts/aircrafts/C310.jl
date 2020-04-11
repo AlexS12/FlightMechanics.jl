@@ -400,38 +400,38 @@ C310FCS() = C310FCS(# Cabin Inputs
                     )
 
 function set_stick_lon!(fcs::C310FCS, value, allow_out_of_range=false, throw_error=false)
-    set_value(fcs.stick_longitudinal, value)
+    set_value!(fcs.stick_longitudinal, value)
     min, max = get_value_range(fcs.de)
     range = max - min
-    set_value(fcs.de, min + range * value, allow_out_of_range, throw_error)
+    set_value!(fcs.de, min + range * value, allow_out_of_range, throw_error)
 end
 
 function set_stick_lat!(fcs::C310FCS, value, allow_out_of_range=false, throw_error=false)
-    set_value(fcs.stick_lateral, value)
+    set_value!(fcs.stick_lateral, value)
     min, max = get_value_range(fcs.da)
     range = max - min
-    set_value(fcs.da, min + range * value, allow_out_of_range, throw_error)
+    set_value!(fcs.da, min + range * value, allow_out_of_range, throw_error)
 end
 
 function set_pedals!(fcs::C310FCS, value, allow_out_of_range=false, throw_error=false)
-    set_value(fcs.pedals, value)
+    set_value!(fcs.pedals, value)
     min, max = get_value_range(fcs.dr)
     range = max - min
-    set_value(fcs.dr, min + range * value, allow_out_of_range, throw_error)
+    set_value!(fcs.dr, min + range * value, allow_out_of_range, throw_error)
 end
 
 function set_thtl1!(fcs::C310FCS, value, allow_out_of_range=false, throw_error=false)
-    set_value(fcs.thtl, value)
+    set_value!(fcs.thtl, value)
     min, max = get_value_range(fcs.t1)
     range = max - min
-    set_value(fcs.t1, min + range * value, allow_out_of_range, throw_error)
+    set_value!(fcs.t1, min + range * value, allow_out_of_range, throw_error)
 end
 
 function set_thtl2!(fcs::C310FCS, value, allow_out_of_range=false, throw_error=false)
-    set_value(fcs.thtl, value)
+    set_value!(fcs.thtl, value)
     min, max = get_value_range(fcs.t2)
     range = max - min
-    set_value(fcs.t2, min + range * value, allow_out_of_range, throw_error)
+    set_value!(fcs.t2, min + range * value, allow_out_of_range, throw_error)
 end
 
 function set_thtl!(fcs::C310FCS, value, allow_out_of_range=false, throw_error=false)

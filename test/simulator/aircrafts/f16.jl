@@ -118,9 +118,9 @@ end
                       [0., 0., 0.],
                       [0., 0., 0.]
                      )
-        set_value(fcs.de, de*DEG2RAD)
-        set_value(fcs.da, da*DEG2RAD)
-        set_value(fcs.dr, dr*DEG2RAD)
+        set_value!(fcs.de, de*DEG2RAD)
+        set_value!(fcs.da, da*DEG2RAD)
+        set_value!(fcs.dr, dr*DEG2RAD)
 
         aerostate = AeroState(state, env)
 
@@ -175,9 +175,9 @@ end
                       [0., 0., 0.],
                       [0., 0., 0.]
                      )
-        set_value(fcs.de, de*DEG2RAD)
-        set_value(fcs.da, da*DEG2RAD)
-        set_value(fcs.dr, dr*DEG2RAD)
+        set_value!(fcs.de, de*DEG2RAD)
+        set_value!(fcs.da, da*DEG2RAD)
+        set_value!(fcs.dr, dr*DEG2RAD)
 
         aerostate = AeroState(state, env)
 
@@ -499,10 +499,10 @@ end
                  )
 
     fcs = F16FCS()
-    set_value(fcs.de, 20.0*DEG2RAD)
-    set_value(fcs.da, -15.0*DEG2RAD)
-    set_value(fcs.dr, -20*DEG2RAD)
-    set_value(fcs.cpl, 90.0)
+    set_value!(fcs.de, 20.0*DEG2RAD)
+    set_value!(fcs.da, -15.0*DEG2RAD)
+    set_value!(fcs.dr, -20*DEG2RAD)
+    set_value!(fcs.cpl, 90.0)
 
     env = Environment(pos, atmos="ISAF16", wind="NoWind", grav="const")
     aerostate = AeroState(state, env)

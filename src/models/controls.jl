@@ -13,7 +13,7 @@ get_value_range(c::RangeControl) = c.value_range
 
 # TODO: for trimmer to work, values out of the domain are allowed.
 # an optimization method with boundaries must be sought
-function set_value(c::RangeControl, val, allow_out_of_range=false, throw_error=false)
+function set_value!(c::RangeControl, val, allow_out_of_range=false, throw_error=false)
     if allow_out_of_range
         c.value = val
     else
@@ -41,7 +41,7 @@ end
 
 get_value_choices(c::DiscreteControl) = c.value_choices
 
-function set_value(c::DiscreteControl, val)
+function set_value!(c::DiscreteControl, val)
     if val in get_value_choices(c)
         c.value = val
     else

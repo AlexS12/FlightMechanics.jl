@@ -42,7 +42,7 @@ get_eas, get_cas, get_ias, get_aero_speeds, get_qinf, get_mach,
 generate_state_aerostate, check_state_aerostate_env_coherence,
 # Controls
 Control, RangeControl, DiscreteControl,
-get_value, get_value_range, get_value_choices, set_value,
+get_value, get_value_range, get_value_choices, set_value!,
 # FCS
 FCS,
 # Engine
