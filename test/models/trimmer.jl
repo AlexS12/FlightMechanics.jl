@@ -93,4 +93,3 @@ ac_trim2, aerostate_trim2, state_trim2, fcs_trim2 = steady_state_trim(
 
 @test isapprox(ac_trim2.pfm.forces, ac_trim.pfm.forces)
 @test isapprox(ac_trim2.pfm.moments, ac_trim.pfm.moments)
-# TODO: when fixed forces and moments, check all trimmer results exhaustively
