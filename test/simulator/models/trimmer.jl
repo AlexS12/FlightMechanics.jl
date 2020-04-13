@@ -42,7 +42,7 @@ set_thtl!(fcs, thtl0)
 fcs_before_trimming = copy(fcs)
 
 ac_trim, aerostate_trim, state_trim, fcs_trim = steady_state_trim(
-    ac, fcs, env, tas, pos, psi, gamma, turn_rate, α0, 0.0, show_trace = false
+    ac, fcs, env, tas, pos, psi, gamma, turn_rate, α0, 0.0,
     )
 
 # TEST: FCS has not been modified by trimmer
@@ -72,7 +72,16 @@ ac_calc = calculate_aircraft(
 
 # TEST: Trim a trimmed aircraft and check if returns the same trim
 ac_trim2, aerostate_trim2, state_trim2, fcs_trim2 = steady_state_trim(
-    ac_trim, fcs_trim, env, tas, pos, psi, gamma, turn_rate, α0, 0.0, show_trace = false
+    ac_trim,
+    fcs_trim,
+    env,
+    tas,
+    pos,
+    psi,
+    gamma,
+    turn_rate,
+    get_alpha(aerostate_trim),
+    get_beta(aerostate_trim),
     )
 
 @test isapprox(get_tas(aerostate_trim2), tas)

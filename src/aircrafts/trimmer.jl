@@ -109,21 +109,34 @@ function steady_state_trim(ac::Aircraft, fcs::FCS, env::Environment,
     # Wrapper for trim_cost_function with trimmer
     trimming_function(x) = trim_cost_function(x, trimmer)
 
-    # Trim
-    result = optimize(
-        trimming_function,
-        trim_vars0,
-        Optim.Options(
-            g_tol = g_tol,
-            iterations = max_iters,
-            show_trace = show_trace,
-            show_every = 100,
-            );
-        )
+    # Calcualte cost function to check if a/c is already trimmed
+    # Calcualte aircraft
+    grav = env.grav
+    ac = calculate_aircraft(ac, fcs, aerostate, state, grav; consume_fuel = false)
+    trimmer.ac = ac
+    cost = evaluate_cost_function(trimmer)
 
-    if show_trace
-        println(result)
-        println(Optim.minimizer(result))
+    # Trim if not already trimmed
+    # XXX: It is observed that sometimes optimization method returns a minimum slightly
+    # above g_tol, so the optmization loop would be entered again in a retrimming.
+    # See tests -> trimmer.jl
+    if cost > g_tol*10
+        # Trim
+        result = optimize(
+            trimming_function,
+            trim_vars0,
+            Optim.Options(
+                g_tol = g_tol,
+                iterations = max_iters,
+                show_trace = show_trace,
+                show_every = 100,
+                );
+            )
+
+        if show_trace
+            println(result)
+            println(Optim.minimizer(result))
+        end
     end
 
     # Return trimmed variables
