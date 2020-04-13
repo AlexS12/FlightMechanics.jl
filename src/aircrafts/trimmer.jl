@@ -1,6 +1,4 @@
 using Optim
-# using FlightMechanics
-# using FlightMechanics.Models
 
 
 export steady_state_trim
@@ -61,7 +59,7 @@ See section 3.4 in [1] for the algorithm description.
 """
 function steady_state_trim(ac::Aircraft, fcs::FCS, env::Environment,
     tas::Number, pos::Position, psi::Number, gamma::Number, turn_rate::Number,
-    α0::Number, β0::Number; show_trace=false)
+    α0::Number, β0::Number; show_trace = false, g_tol = 1e-25, max_iters = 5000)
 
     alpha0 = α0
     beta0 = β0
@@ -76,11 +74,21 @@ function steady_state_trim(ac::Aircraft, fcs::FCS, env::Environment,
     accel = [0., 0., 0.]
     ang_accel = [0., 0., 0.]
 
-    state, aerostate = generate_state_aerostate(pos, att, tas, alpha0, beta0, env, ang_vel,
-                                       accel, ang_accel)
+    state, aerostate = generate_state_aerostate(
+        pos,
+        att,
+        tas,
+        alpha0,
+        beta0,
+        env,
+        ang_vel,
+        accel,
+        ang_accel,
+    )
 
     # Ensure that environment is calculated at the position given to the trimmer
     env = calculate_environment(env, get_position(state))
+    fcs = copy(fcs)
 
     # Store every necessary variable in the trimmer
     trimmer = Trimmer(ac, aerostate, state, env, fcs, turn_rate, gamma)
@@ -90,7 +98,7 @@ function steady_state_trim(ac::Aircraft, fcs::FCS, env::Environment,
     # lower_bounds = [-15 * DEG2RAD, -15 * DEG2RAD]
     # upper_bounds = [ 15 * DEG2RAD,  15 * DEG2RAD]
     #
-    for (value, range)=zip(get_controls_trimmer(fcs), get_controls_ranges_trimmer(fcs))
+    for (value, range) = zip(get_controls_trimmer(fcs), get_controls_ranges_trimmer(fcs))
     #     min, max = range
         val = value
         append!(trim_vars0, val)
@@ -101,30 +109,56 @@ function steady_state_trim(ac::Aircraft, fcs::FCS, env::Environment,
     # Wrapper for trim_cost_function with trimmer
     trimming_function(x) = trim_cost_function(x, trimmer)
 
-    # Trim
-    result = optimize(trimming_function, trim_vars0,
-                      Optim.Options(
-                        g_tol=1e-25,
-                        iterations=5000,
-                        show_trace=show_trace, show_every=100
-                        );
-                      )
-    if show_trace
-        println(result)
-        println(Optim.minimizer(result))
+    # Calcualte cost function to check if a/c is already trimmed
+    # Calcualte aircraft
+    grav = env.grav
+    ac = calculate_aircraft(ac, fcs, aerostate, state, grav; consume_fuel = false)
+    trimmer.ac = ac
+    cost = evaluate_cost_function(trimmer)
+
+    # Trim if not already trimmed
+    # XXX: It is observed that sometimes optimization method returns a minimum slightly
+    # above g_tol, so the optmization loop would be entered again in a retrimming.
+    # See tests -> trimmer.jl
+    if cost > g_tol*10
+        # Trim
+        result = optimize(
+            trimming_function,
+            trim_vars0,
+            Optim.Options(
+                g_tol = g_tol,
+                iterations = max_iters,
+                show_trace = show_trace,
+                show_every = 100,
+                );
+            )
+
+        if show_trace
+            println(result)
+            println(Optim.minimizer(result))
+        end
     end
 
     # Return trimmed variables
-    trimmer.ac, trimmer.aerostate, trimmer.state, trimmer.fcs
+    return trimmer.ac, trimmer.aerostate, trimmer.state, trimmer.fcs
 end
 
+"""
+    trim_cost_function(x, trimmer::Trimmer)
 
-function trim_cost_function(trimming_variables, trimmer::Trimmer)
+Function minimized to trim the aircraft. Independent variables are passed in x:
+- x[1] angle of attack (rad).
+- x[2] angle of sideslip (rad).
+- x[3:end]: controls expected by set_controls_trimmer! (ie. stick_long, stick_lat, pedals,
+throttle)
+
+"""
+function trim_cost_function(x, trimmer::Trimmer)
 
     # alpha, beta, tas, height are known so aero can be created
-    # alpha and beta are given by trimming_variables
+    # alpha and beta are given by x
     # tas is fixed for the trim
-    alpha, beta = trimming_variables[1:2]
+    alpha, beta = x[1:2]
 
     tr = trimmer.turn_rate
     tas = get_tas(trimmer.aerostate)
@@ -144,31 +178,52 @@ function trim_cost_function(trimming_variables, trimmer::Trimmer)
 
     env = trimmer.env
 
-    state, aerostate = generate_state_aerostate(pos, att, tas, alpha, beta, env, ang_vel,
-                                       accel, ang_accel)
+    state, aerostate = generate_state_aerostate(
+        pos,
+        att,
+        tas,
+        alpha,
+        beta,
+        env,
+        ang_vel,
+        accel,
+        ang_accel
+    )
 
     env = calculate_environment(trimmer.env, get_position(trimmer.state))
-
-    # Set trimmer attributes
-    trimmer.state = state
-    trimmer.aerostate = aerostate
-    trimmer.env = env
 
     fcs = trimmer.fcs
     ac = trimmer.ac
     grav = env.grav
-    # Some controls may be fixed and the rest of them are given in trimming_variables
-    set_controls_trimmer(fcs, trimming_variables[3:end]...)
+    # Some controls may be fixed and the rest of them are given in x
+    set_controls_trimmer!(fcs, x[3:end]...)
+    # Calcualte aircraft
+    ac = calculate_aircraft(ac, fcs, aerostate, state, grav; consume_fuel = false)
 
-    trimmer.ac = calculate_aircraft(ac, fcs, aerostate, state, grav; consume_fuel=false)
+    # Update trimmer
+    trimmer.ac = ac
+    trimmer.aerostate = aerostate
+    trimmer.state = state
+    trimmer.env = env
+    trimmer.fcs = fcs
+    
+    # Calculate objective function cost
+    cost = evaluate_cost_function(trimmer)
+    return cost
+end
+
+
+function evaluate_cost_function(trimmer::Trimmer)
+    # Calculate derivatives u_dot, v_dot, w_dot, p_dot, q_dot, r_dot
     pfm = trimmer.ac.pfm
     mass_props = get_mass_props(trimmer.ac)
     mass = mass_props.mass
     inertia = mass_props.inertia
 
-    state = get_sixdof_euler_fixed_mass_state(trimmer.state)
+    # Get dynamic system state x
+    x_ = get_sixdof_euler_fixed_mass_state(trimmer.state)
+    # Evaluate x_dot given x, u, parameters
+    x_dot = six_dof_euler_fixed_mass(x_, mass, inertia, pfm.forces, pfm.moments)[1:6]
 
-    r = six_dof_euler_fixed_mass(state, mass, inertia, pfm.forces, pfm.moments)[1:6]
-
-    return sum(r.^2)
+    return sum(x_dot.^2)
 end
