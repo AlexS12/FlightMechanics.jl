@@ -514,10 +514,11 @@ end
     mass = mass_props.mass
     inertia = mass_props.inertia
 
-    stv = get_sixdof_euler_fixed_mass_state(state)
-
-    r = six_dof_euler_fixed_mass(stv, mass, inertia, pfm.forces, pfm.moments,
-                                 [160.0*SLUGFT2_2_KGM2, 0.0, 0.0])
+    six_dof_euler_fixed_mass_ds = convert(SixDOFEulerFixedMass, state)
+    x = get_x(six_dof_euler_fixed_mass_ds)
+    f = get_state_equation(six_dof_euler_fixed_mass_ds)
+    # Evaluate x_dot given x, u, parameters
+    r = f(x, mass, inertia, pfm.forces, pfm.moments, [160.0*SLUGFT2_2_KGM2, 0.0, 0.0])
 
     # u, v, w are used in this test, so they need to be transformed to VT, α, β
     VT = 500 * FT2M

@@ -17,7 +17,6 @@ get_body_velocity, get_horizon_velocity, get_flight_path_angle,
 get_body_ang_velocity, get_turn_rate,
 get_body_accel, get_horizon_accel,
 get_body_ang_accel,
-get_sixdof_euler_fixed_mass_state,
 # Mass
 RigidSolid, PointMass, get_mass, get_cg, get_inertia,
 # Pont Forces and moments

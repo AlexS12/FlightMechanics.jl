@@ -36,11 +36,3 @@ get_horizon_accel(state::State) = body2hor(get_body_accel(state)...,
                                            get_quaternions(state)...)
 # Angular acceleration getters
 get_body_ang_accel(state::State) = state.angular_acceleration
-
-
-function get_sixdof_euler_fixed_mass_state(state::State)
-    [get_body_velocity(state)...,
-     get_body_ang_velocity(state)...,
-     get_euler_angles(state)...,
-     get_xyz_earth(state)...]
-end
