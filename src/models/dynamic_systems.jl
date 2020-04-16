@@ -7,6 +7,8 @@ get_state_equation(ds::DynamicSystem) = ds.state_equation
 get_state_equation_ode_wrapper(ds::DynamicSystem) = ds.state_equation_ode_wrapper!
 get_x(ds::DynamicSystem) = ds.x
 get_x(ds::DynamicSystem, state::State) = get_x(convert(typeof(ds), state))
+get_x_dot(ds::DynamicSystem) = ds.x_dot
+get_x_dot(ds::DynamicSystem, state::State) = get_x(convert(typeof(ds), state))
 get_x_count(ds::DynamicSystem) = length(get_x(ds))
 get_state(ds::DynamicSystem) = convert(State, ds)
 
@@ -14,6 +16,7 @@ get_state(ds::DynamicSystem) = convert(State, ds)
 # ---------------------- SixDOFEulerFixedMass ----------------------
 struct SixDOFEulerFixedMass <: DynamicSystem
     x :: Array{T, 1} where T<:Number
+    x_dot :: Array{T, 1} where T<:Number
     state_equation :: Function
     state_equation_ode_wrapper! :: Function
 end
@@ -27,8 +30,15 @@ function six_dof_euler_fixed_mass_ode_wrapper!(dx, x, p, t)
     dx[:] = six_dof_euler_fixed_mass(x, mass, inertia, forces, moments, h)
 end
 
-SixDOFEulerFixedMass() = SixDOFEulerFixedMass(fill(NaN, 12), six_dof_euler_fixed_mass, six_dof_euler_fixed_mass_ode_wrapper!)
-SixDOFEulerFixedMass(x) = SixDOFEulerFixedMass(x, six_dof_euler_fixed_mass, six_dof_euler_fixed_mass_ode_wrapper!)
+SixDOFEulerFixedMass(x, x_dot) = SixDOFEulerFixedMass(
+    x,
+    x_dot,
+    six_dof_euler_fixed_mass,
+    six_dof_euler_fixed_mass_ode_wrapper!
+    )
+SixDOFEulerFixedMass(x) = SixDOFEulerFixedMass(x, fill(NaN, 12))
+SixDOFEulerFixedMass() = SixDOFEulerFixedMass(fill(NaN, 12))
+
 
 function convert(::Type{SixDOFEulerFixedMass}, state::State)
     x = [
@@ -51,7 +61,8 @@ end
 # TODO: implementations for the rest of the systems
 # ---------------------- SixDOFQuaternionFixedMass ----------------------
 struct SixDOFQuaternionFixedMass <: DynamicSystem
-    x :: Array{T, 1} where T<: Number
+    x :: Array{T, 1} where T<:Number
+    x_dot::Array{T, 1} where T<:Number
     state_equation :: Function
     state_equation_ode_wrapper! :: Function
     # TODO: must include k
@@ -67,8 +78,14 @@ function six_dof_quaternion_fixed_mass_ode_wrapper!(dx, x, p, t, k=0.0)
     dx[:] = six_dof_quaternion_fixed_mass(x, mass, inertia, forces, moments, h, k)
 end
 
-SixDOFQuaternionFixedMass() = SixDOFQuaternionFixedMass(fill(NaN, 13), six_dof_quaternion_fixed_mass, six_dof_quaternion_fixed_mass_ode_wrapper!)
-SixDOFQuaternionFixedMass(x) = SixDOFQuaternionFixedMass(x, six_dof_quaternion_fixed_mass, six_dof_quaternion_fixed_mass_ode_wrapper!)
+SixDOFQuaternionFixedMass(x, x_dot) = SixDOFQuaternionFixedMass(
+    x,
+    x_dot,
+    six_dof_quaternion_fixed_mass,
+    six_dof_quaternion_fixed_mass_ode_wrapper!
+    )
+SixDOFQuaternionFixedMass(x) = SixDOFQuaternionFixedMass(x, fill(NaN, 13))
+SixDOFQuaternionFixedMass() = SixDOFQuaternionFixedMass(fill(NaN, 13))
 
 function convert(::Type{State}, ds::SixDOFQuaternionFixedMass)
     # TODO: add x_dot to Dynamic system to fill accel and ang_accel
