@@ -13,6 +13,9 @@ get_state_equation_ode_wrapper(ds::DynamicSystem) = ds.state_equation_ode_wrappe
 get_x_count(ds::DynamicSystem) = length(get_x(ds))
 get_state(ds::DynamicSystem) = convert(State, ds)
 
+set_x!(ds::DynamicSystem, x) = ds.x[:] = x
+set_x_dot!(ds::DynamicSystem, x_dot) = ds.x_dot[:] = x_dot
+
 
 # ---------------------- SixDOFEulerFixedMass ----------------------
 struct SixDOFEulerFixedMass <: DynamicSystem
