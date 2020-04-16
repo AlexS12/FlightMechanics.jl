@@ -3,12 +3,13 @@ import Base.convert
 abstract type DynamicSystem end
 
 
-get_state_equation(ds::DynamicSystem) = ds.state_equation
-get_state_equation_ode_wrapper(ds::DynamicSystem) = ds.state_equation_ode_wrapper!
 get_x(ds::DynamicSystem) = ds.x
 get_x(ds::DynamicSystem, state::State) = get_x(convert(typeof(ds), state))
 get_x_dot(ds::DynamicSystem) = ds.x_dot
 get_x_dot(ds::DynamicSystem, state::State) = get_x(convert(typeof(ds), state))
+get_state_equation(ds::DynamicSystem) = ds.state_equation
+get_state_equation_ode_wrapper(ds::DynamicSystem) = ds.state_equation_ode_wrapper!
+
 get_x_count(ds::DynamicSystem) = length(get_x(ds))
 get_state(ds::DynamicSystem) = convert(State, ds)
 
