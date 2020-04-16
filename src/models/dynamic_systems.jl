@@ -46,20 +46,34 @@ SixDOFEulerFixedMass() = SixDOFEulerFixedMass(fill(NaN, 12))
 
 function convert(::Type{SixDOFEulerFixedMass}, state::State)
     x = [
-            get_body_velocity(state)...,
-            get_body_ang_velocity(state)...,
-            get_euler_angles(state)...,
-            get_xyz_earth(state)...,
-        ]
+        get_body_velocity(state)...,
+        get_body_ang_velocity(state)...,
+        get_euler_angles(state)...,
+        get_xyz_earth(state)...,
+    ]
 
-    SixDOFEulerFixedMass(x)
+    x_dot = [
+        get_body_accel(state)...,
+        get_body_ang_velocity(state)...,
+        get_euler_angles_rates(state)...,
+        get_horizon_velocity(state)...,
+    ]
+
+    SixDOFEulerFixedMass(x, x_dot)
 end
 
 function convert(::Type{State}, ds::SixDOFEulerFixedMass)
-    # TODO: add x_dot to Dynamic system to fill accel and ang_accel
     x = get_x(ds)
+    x_dot = get_x_dot(ds)
     # TODO: only PositionEarth is being updated. What about LLH or ECEF...
-    State(PositionEarth(x[10:12]...), Attitude(x[7:9]...), x[1:3], x[4:6], [0.0, 0.0, 0.0], [0.0, 0.0, 0.0])
+    State(
+        PositionEarth(x[10:12]...),
+        Attitude(x[7:9]...),
+        x[1:3],
+        x[4:6],
+        x_dot[1:3],
+        x_dot[4:6]
+        )
 end
 
 # TODO: implementations for the rest of the systems
@@ -92,21 +106,35 @@ SixDOFQuaternionFixedMass(x) = SixDOFQuaternionFixedMass(x, fill(NaN, 13))
 SixDOFQuaternionFixedMass() = SixDOFQuaternionFixedMass(fill(NaN, 13))
 
 function convert(::Type{State}, ds::SixDOFQuaternionFixedMass)
-    # TODO: add x_dot to Dynamic system to fill accel and ang_accel
     x = get_x(ds)
+    x_dot = get_dot(ds)
     # TODO: only PositionEarth is being updated. What about LLH or ECEF...
-    State(PositionEarth(x[11:13]...), Attitude(x[7:10]...), x[1:3], x[4:6], [0.0, 0.0, 0.0], [0.0, 0.0, 0.0])
+    State(
+        PositionEarth(x[11:13]...), 
+        Attitude(x[7:10]...), 
+        x[1:3], 
+        x[4:6], 
+        x_dot[1:3], 
+        x_dot[4:6]
+        )
 end
 
 function convert(::Type{SixDOFQuaternionFixedMass}, state::State)
     x = [
-            get_body_velocity(state)...,
-            get_body_ang_velocity(state)...,
-            get_quaternions(state)...,
-            get_xyz_earth(state)...,
-        ]
+        get_body_velocity(state)...,
+        get_body_ang_velocity(state)...,
+        get_quaternions(state)...,
+        get_xyz_earth(state)...,
+    ]
+    
+    x_dot = [
+        get_body_accel(state)...,
+        get_body_ang_accel(state)...,
+        get_quaternions_rate(state)...,
+        get_horizon_velocity(state)...,
+    ]
 
-    SixDOFQuaternionFixedMass(x)
+    SixDOFQuaternionFixedMass(x, x_dot)
 end
 # ---------------------- SixDOFECEFQuaternionFixedMass ----------------------
 
