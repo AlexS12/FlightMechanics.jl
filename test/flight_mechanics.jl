@@ -16,6 +16,18 @@ pqr1 = euler_angles_rates_to_body_angular_velocity(ψ_dot, 0.0, 0.0, θ, ϕ)
 pqr2 = turn_rate_angular_velocity(ψ_dot, θ, ϕ)
 @test isapprox(pqr1, pqr2)
 
+# Test body_angular_velocity_to_quaternion_rates
+quat = euler2quaternion(ψ, θ, ϕ)
+qdot = body_angular_velocity_to_quaternion_rates(p, q, r, quat...)
+
+Ω_inv = inv(
+    [0 -p -q -r;
+     p  0  r -q;
+     q -r  0  p;
+     r  q -p  0]
+)
+@test isapprox(Ω_inv * qdot * 2, quat)
+
 # Test uvw_to_tasαβ
 exp_tas = 100  # m/s
 exp_α = 0.01  # rad
