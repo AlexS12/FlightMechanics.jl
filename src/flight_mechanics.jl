@@ -97,6 +97,32 @@ function euler_angles_rates_to_body_angular_velocity(ψ_dot, θ_dot, ϕ_dot, θ,
     return [p, q, r]
 end
 
+
+"""
+    body_angular_velocity_to_quaternion_rates(p, q, r, q0, q1, q2, q3)
+
+Transform body angular velocity (p, q, r) [rad/s] to quaternion rates [1/s].
+
+- [1] Stevens, B. L., Lewis, F. L., & Johnson, E. N. (2015). Aircraft control
+ and simulation: dynamics, controls design, and autonomous systems. John Wiley
+ & Sons. Equation (1.8-15) (page 51)
+
+"""
+function body_angular_velocity_to_quaternion_rates(p, q, r, q0, q1, q2, q3)
+
+    Ω = [
+        0 -p -q -r;
+        p  0  r -q;
+        q -r  0  p;
+        r  q -p  0;
+    ]
+    q = [q0; q1; q2; q3]
+    q_dot = 0.5 * Ω * q
+
+    return q_dot
+end
+
+
 """
     uvw_to_tasαβ(u, v, w)
 
