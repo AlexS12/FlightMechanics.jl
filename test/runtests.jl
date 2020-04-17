@@ -14,6 +14,7 @@ using FlightMechanics
 @testset "position" begin include("models/position.jl") end
 @testset "aerodynamics" begin include("models/aerodynamics.jl") end
 @testset "aerostate" begin include("models/aero_state.jl") end
+@testset "dynamic system" begin include("models/dynamic_system.jl") end
 @testset "trimmer" begin include("models/trimmer.jl") end
 
 @testset "ac: c310" begin include("aircrafts/c310.jl") end
