@@ -33,7 +33,10 @@ get_turn_rate(state::State) = body2hor(get_body_ang_velocity(state)...,
 get_euler_angles_rates(state::State) = body_angular_velocity_to_euler_angles_rates(
     get_body_ang_velocity(state)..., get_euler_angles(state)[2:3]...
 )
-get_quaternions_rate(state::State) = zeros(4)  # TODO implement
+get_quaternions_rate(state::State) = body_angular_velocity_to_quaternion_rates(
+    get_body_ang_velocity(state)...,
+     get_quaternions(state)...
+     )
 # Acceleration getters
 get_body_accel(state::State) = state.acceleration
 get_horizon_accel(state::State) = body2hor(get_body_accel(state)...,
