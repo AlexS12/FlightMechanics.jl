@@ -30,3 +30,15 @@ get_llh(pos::Position) = pos.llh
 get_xyz_earth(pos::Position) = pos.xyz_earth
 get_xyz_ecef(pos::Position) = pos.xyz_ecef
 get_height(pos::Position) = pos.llh[3]
+
+
+function isapprox(x::Position, y::Position; rtol=1e-8, atol=0.0, nans=false)
+
+    result = all([
+        isapprox(x.llh, y.llh, rtol=rtol, atol=atol, nans=nans),
+        isapprox(x.xyz_earth, y.xyz_earth, rtol=rtol, atol=atol, nans=nans),
+        isapprox(x.xyz_ecef, y.xyz_ecef, rtol=rtol, atol=atol, nans=nans),
+    ])
+
+    return result
+end

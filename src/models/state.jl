@@ -43,3 +43,18 @@ get_horizon_accel(state::State) = body2hor(get_body_accel(state)...,
                                            get_quaternions(state)...)
 # Angular acceleration getters
 get_body_ang_accel(state::State) = state.angular_acceleration
+
+
+function isapprox(x::State, y::State; rtol=1e-8, atol=0.0, nans=false)
+
+    result = all([
+        isapprox(x.position, y.position; rtol=rtol, atol=atol, nans=nans),
+        isapprox(x.attitude, y.attitude; rtol=rtol, atol=atol, nans=nans),
+        isapprox(x.velocity, y.velocity; rtol=rtol, atol=atol, nans=nans),
+        isapprox(x.angular_velocity, y.angular_velocity, rtol=rtol, atol=atol, nans=nans),
+        isapprox(x.acceleration, y.angular_acceleration, rtol=rtol, atol=atol, nans=nans),
+        isapprox(x.angular_acceleration, y.angular_acceleration, rtol=rtol, atol=atol, nans=nans),
+    ])
+
+    return result
+end
