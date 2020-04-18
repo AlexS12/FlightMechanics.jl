@@ -107,7 +107,7 @@ SixDOFQuaternionFixedMass() = SixDOFQuaternionFixedMass(fill(NaN, 13))
 
 function convert(::Type{State}, ds::SixDOFQuaternionFixedMass)
     x = get_x(ds)
-    x_dot = get_dot(ds)
+    x_dot = get_x_dot(ds)
     # TODO: only PositionEarth is being updated. What about LLH or ECEF...
     State(
         PositionEarth(x[11:13]...), 
