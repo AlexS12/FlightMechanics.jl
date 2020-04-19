@@ -36,3 +36,38 @@ pzero = Position()
 @test isapprox(get_xyz_earth(pzero), [0, 0, 0])
 @test isapprox(get_xyz_ecef(pzero), llh2ecef(0, 0, 0))
 @test isapprox(get_height(pzero), 0)
+
+
+# Start Earth come back from ECEF and LLH
+ref_llh = LLHPosition(π/4, π/3, 0.0)
+earth = EarthPosition(1000.0, 300.0, 5000.0, ref_llh)
+
+llh = convert(LLHPosition, earth)
+earth_from_llh = convert(earth, llh)
+@test isapprox(earth, earth_from_llh)
+
+ecef = convert(ECEFPosition, earth)
+earth_from_ecef = convert(earth, ecef)
+@test isapprox(earth, earth_from_ecef)
+
+# Start LLH come back from Earth and ECEF
+llh = LLHPosition(π/4, π/3, 1000.0)
+
+earth = convert(EarthPosition(ref_llh), llh)
+llh_from_earth = convert(LLHPosition, earth)
+@test isapprox(llh, llh_from_earth)
+
+ecef = convert(ECEFPosition, llh)
+llh_from_ecef = convert(llh, ecef)
+@test isapprox(llh, llh_from_ecef)
+
+# Start ECEF come back from Earth and LLH
+ecef = ECEFPosition(2.25e6, 3.91e6, 4.48e6)
+
+llh = convert(LLHPosition(WGS84), ecef)
+ecef_from_llh = convert(ECEFPosition, llh)
+@test isapprox(ecef, ecef_from_llh)
+
+earth = convert(EarthPosition(ref_llh), ecef)
+ecef_from_earth = convert(ECEFPosition, earth)
+@test isapprox(ecef, ecef_from_earth)
