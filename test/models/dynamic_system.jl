@@ -1,7 +1,7 @@
 using FlightMechanics.Models
 
 
-pos = PositionEarth(1000.0, 500.0, 1000.0)
+pos = EarthPosition(1000.0, 500.0, -1000.0)
 att = Attitude(π/4, π/32, π/8)
 vel = [100.0, 0.0, 0.0]
 ang_vel = [π/90, π/18, π/9]

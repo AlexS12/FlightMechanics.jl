@@ -67,7 +67,7 @@ function convert(::Type{State}, ds::SixDOFEulerFixedMass)
     x_dot = get_x_dot(ds)
     # TODO: only PositionEarth is being updated. What about LLH or ECEF...
     State(
-        PositionEarth(x[10:12]...),
+        EarthPosition(x[10:12]...),
         Attitude(x[7:9]...),
         x[1:3],
         x[4:6],
@@ -110,7 +110,7 @@ function convert(::Type{State}, ds::SixDOFQuaternionFixedMass)
     x_dot = get_x_dot(ds)
     # TODO: only PositionEarth is being updated. What about LLH or ECEF...
     State(
-        PositionEarth(x[11:13]...), 
+        EarthPosition(x[11:13]...), 
         Attitude(x[7:10]...), 
         x[1:3], 
         x[4:6], 

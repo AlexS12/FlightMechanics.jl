@@ -15,7 +15,7 @@ ac = C310()
 @test isapprox(get_wing_area(ac), 16.258032)
 
 att = Attitude(1/180*pi, 0, 0)
-pos = PositionEarth(0, 0, -1000)
+pos = EarthPosition(0, 0, -1000)
 state = State(pos, att, [65., 0., 3.], [0., 0., 0.], [0., 0., 0.], [0., 0., 0.])
 
 env = Environment(pos, atmos="ISA1978", wind="NoWind", grav="const")

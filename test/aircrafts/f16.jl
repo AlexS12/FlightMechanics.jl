@@ -101,7 +101,7 @@ end
     ]
 
     att = Attitude(-1, 1, -1)
-    pos = PositionEarth(1000*FT2M, 900*FT2M, -10000*FT2M)
+    pos = EarthPosition(1000*FT2M, 900*FT2M, -10000*FT2M)
     env = Environment(pos, atmos="ISA1978", wind="NoWind", grav="const")
     fcs = F16FCS()
 
@@ -158,7 +158,7 @@ end
     ]
 
     att = Attitude(-1, 1, -1)
-    pos = PositionEarth(1000*FT2M, 900*FT2M, -10000*FT2M)
+    pos = EarthPosition(1000*FT2M, 900*FT2M, -10000*FT2M)
     env = Environment(pos, atmos="ISA1978", wind="NoWind", grav="const")
     fcs = F16FCS()
 
@@ -217,12 +217,12 @@ end
     eng = F16Engine()
     fcs = F16FCS()
     att = Attitude(0., 0., 0.)
-    pos = PositionEarth(0, 0, 0)
+    pos = EarthPosition(0, 0, 0)
     env = Environment(pos, atmos="ISAF16", wind="NoWind", grav="const")
 
 
     @testset "Case $ii" for ii=1:size(test_data, 1)
-        pos = PositionEarth(0, 0, -test_data[ii, 2]*FT2M)
+        pos = EarthPosition(0, 0, -test_data[ii, 2]*FT2M)
         env = calculate_environment(env, pos)
         u, v, w = wind2body(test_data[ii, 3]*FT2M, 0., 0., 0., 0.)
         set_thtl!(fcs, test_data[ii, 1])
@@ -254,7 +254,7 @@ end
     gamma = 0.0
     turn_rate = 0.0
 
-    pos = PositionEarth(0, 0, -h)
+    pos = EarthPosition(0, 0, -h)
     env = Environment(pos, atmos="ISAF16", wind="NoWind", grav="const")
 
     #  Stevens, B. L., Lewis, F. L., & Johnson, E. N. (2015). Aircraft control
@@ -380,7 +380,7 @@ end
     #  Stevens, B. L., Lewis, F. L., & Johnson, E. N. (2015). Aircraft control
     #  and simulation: dynamics, controls design, and autonomous systems. John Wiley
     #  & Sons. (page 192)
-    pos = PositionEarth(0, 0, 0)
+    pos = EarthPosition(0, 0, 0)
     env = Environment(pos, atmos="ISAF16", wind="NoWind", grav="const")
 
     ac = F16()
@@ -488,7 +488,7 @@ end
     ac = F16()
 
     att = Attitude(-1, 1, -1)
-    pos = PositionEarth(1000*FT2M, 900*FT2M, -10000*FT2M)
+    pos = EarthPosition(1000*FT2M, 900*FT2M, -10000*FT2M)
     u, v, w = wind2body(500*FT2M, 0, 0, 0.5, -0.2)
     state = State(pos,
                   att,

@@ -19,7 +19,7 @@ psi = 0.0  # rad
 gamma = 0.0
 turn_rate = 0.0
 
-pos = PositionEarth(0, 0, -h)
+pos = EarthPosition(0, 0, -h)
 env = Environment(pos, atmos = "ISAF16", wind = "NoWind", grav = "const")
 
 #  Stevens, B. L., Lewis, F. L., & Johnson, E. N. (2015). Aircraft control
