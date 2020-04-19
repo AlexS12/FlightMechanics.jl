@@ -52,7 +52,7 @@ function isapprox(x::State, y::State; rtol=1e-8, atol=0.0, nans=false)
         isapprox(x.attitude, y.attitude; rtol=rtol, atol=atol, nans=nans),
         isapprox(x.velocity, y.velocity; rtol=rtol, atol=atol, nans=nans),
         isapprox(x.angular_velocity, y.angular_velocity, rtol=rtol, atol=atol, nans=nans),
-        isapprox(x.acceleration, y.angular_acceleration, rtol=rtol, atol=atol, nans=nans),
+        isapprox(x.acceleration, y.acceleration, rtol=rtol, atol=atol, nans=nans),
         isapprox(x.angular_acceleration, y.angular_acceleration, rtol=rtol, atol=atol, nans=nans),
     ])
 
