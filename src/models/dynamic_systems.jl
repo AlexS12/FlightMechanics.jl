@@ -54,7 +54,7 @@ function convert(::Type{SixDOFEulerFixedMass}, state::State)
 
     x_dot = [
         get_body_accel(state)...,
-        get_body_ang_velocity(state)...,
+        get_body_ang_accel(state)...,
         get_euler_angles_rates(state)...,
         get_horizon_velocity(state)...,
     ]
