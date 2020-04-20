@@ -20,3 +20,11 @@ end
     state2 = convert(state, x)
     @test isapprox(state, state2)
 end
+
+pos_ecef = convert(ECEFPosition, pos)
+state = State(pos_ecef, att, vel, ang_vel, accel, ang_accel)
+@testset "SixDOFECEFQuaternionFixedMass" begin
+    x = convert(SixDOFECEFQuaternionFixedMass, state)
+    state3 = convert(state, x)
+    @test isapprox(state, state3)
+end
