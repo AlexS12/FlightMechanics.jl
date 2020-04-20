@@ -11,12 +11,12 @@ state = State(pos, att, vel, ang_vel, accel, ang_accel)
 
 @testset "SixDOFEulerFixedMass conversion" begin
     x = convert(SixDOFEulerFixedMass, state)
-    state1 = convert(State, x)
+    state1 = convert(state, x)
     @test isapprox(state, state1)
 end
 
 @testset "SixDOFQuaternionFixedMass" begin
     x = convert(SixDOFQuaternionFixedMass, state)
-    state2 = convert(State, x)
+    state2 = convert(state, x)
     @test isapprox(state, state2)
 end
