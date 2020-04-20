@@ -45,6 +45,7 @@ uvw_to_tasαβ,
 # Models
 six_dof_euler_fixed_mass,
 six_dof_quaternion_fixed_mass,
+six_dof_aero_euler_fixed_mass,
 six_dof_ecef_quaternion_fixed_mass
 
 
