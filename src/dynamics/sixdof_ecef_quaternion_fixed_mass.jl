@@ -14,7 +14,7 @@ The effects of the angular momentum produced by spinning rotors is taken into
 account with the optional argument `h`.
 
 # Arguments
-- `x::12-element Array{Number,1}`: state vector.
+- `x::13-element Array{Number,1}`: state vector.
     u, v, w: inertial linear velocity expressed in body axis. (m/s)
     p, q, r: inertial rotatinal velocity expressed in body axis. (rad/s)
     q0, q1, q2, q3: attitude given by quaternions.
