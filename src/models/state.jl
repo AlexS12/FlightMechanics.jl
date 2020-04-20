@@ -19,8 +19,16 @@ get_euler_angles(state::State) = get_euler_angles(state.attitude)
 get_quaternions(state::State) = get_quaternions(state.attitude)
 # Velocity getters
 get_body_velocity(state::State) = state.velocity
-get_horizon_velocity(state::State) = body2hor(get_body_velocity(state)...,
-                                              get_quaternions(state)...)
+get_horizon_velocity(state::State) = body2hor(
+    get_body_velocity(state)...,
+    get_quaternions(state)...,
+)
+get_ecef_velocity(state::State) = body2ecef(
+    get_body_velocity(state)...,
+    get_llh(state)[1:2]...,
+    get_euler_angles(state)...,
+)
+
 function get_flight_path_angle(state::State)
     vn, ve, vz = get_horizon_velocity(state)
     atan(-vz, norm([vn, ve]))
