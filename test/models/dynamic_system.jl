@@ -11,20 +11,20 @@ state = State(pos, att, vel, ang_vel, accel, ang_accel)
 
 @testset "SixDOFEulerFixedMass conversion" begin
     x = convert(SixDOFEulerFixedMass, state)
-    state1 = convert(state, x)
-    @test isapprox(state, state1)
+    state_ = convert(state, x)
+    @test isapprox(state, state_)
 end
 
 @testset "SixDOFQuaternionFixedMass" begin
     x = convert(SixDOFQuaternionFixedMass, state)
-    state2 = convert(state, x)
-    @test isapprox(state, state2)
+    state_ = convert(state, x)
+    @test isapprox(state, state_)
 end
 
 pos_ecef = convert(ECEFPosition, pos)
 state = State(pos_ecef, att, vel, ang_vel, accel, ang_accel)
 @testset "SixDOFECEFQuaternionFixedMass" begin
     x = convert(SixDOFECEFQuaternionFixedMass, state)
-    state3 = convert(state, x)
-    @test isapprox(state, state3)
+    state_ = convert(state, x)
+    @test isapprox(state, state_)
 end
