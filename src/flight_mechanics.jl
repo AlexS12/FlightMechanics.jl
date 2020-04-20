@@ -33,7 +33,6 @@ function climb_theta(gamma, alpha, beta, phi)
 end
 
 
-# TODO: generelize d(ψ, θ, ϕ)/dt <=> (p, q, r)
 function turn_rate_angular_velocity(turn_rate, theta, phi)
     # w = turn_rate * k_h
     # k_h = sin(theta) i_b + sin(phi) * cos(theta) j_b + cos(theta) * sin(phi)
