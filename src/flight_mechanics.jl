@@ -158,7 +158,7 @@ Note that tas here is not necessarily true air speed. Could also be inertial spe
 direction of airspeed. It will concide whith TAS for no wind.
 
 # See also
-    tas_α_β_dot_from_uvw_dot2(u, v, w, u_dot, v_dot, w_dot)
+    uvw_dot_from_tas_α_β(tas, α, β, tas_dot, α_dot, β_dot)
 
 # References
 - [1] Morelli, Eugene A., and Vladislav Klein. Aircraft system identification: Theory and
@@ -181,4 +181,24 @@ function tas_α_β_dot_from_uvw_dot(u, v, w, u_dot, v_dot, w_dot)
     α_dot = (w_dot * u - w * u_dot) / (u*u + w*w)
 
     return [tas_dot, α_dot, β_dot]
+end
+
+
+"""
+    uvw_dot_from_tas_α_β(tas, α, β, tas_dot, α_dot, β_dot)
+
+Obatain body velocity derivatives given velocity in wind axis and its derivatives.
+
+# See also
+    tas_α_β_dot_from_uvw_dot(u, v, w, u_dot, v_dot, w_dot)
+
+# References
+- [1] Morelli, Eugene A., and Vladislav Klein. Aircraft system identification: Theory and
+ practice. Williamsburg, VA: Sunflyte Enterprises, 2016. Derived from equation 3.32 (page 44).
+"""
+function uvw_dot_from_tas_α_β(tas, α, β, tas_dot, α_dot, β_dot)
+    u_dot = tas_dot * cos(α) * cos(β) - tas * (α_dot * sin(α) * cos(β) + β_dot * cos(α) * sin(β))
+    v_dot = tas_dot * sin(β) + tas * β_dot * cos(β)
+    w_dot = tas_dot * sin(α) * cos(β) + tas * (α_dot * cos(α) * cos(β) - β_dot * sin(α) * sin(β))
+    return [u_dot, v_dot, w_dot]
 end

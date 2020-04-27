@@ -54,3 +54,8 @@ tas = √(u*u + v*v + w*w)
 @test isapprox(tas_dot, (u * u_dot + v * v_dot + w * w_dot) / tas)
 # Test β_dot against Stevens implementation (function uses Morelli)
 @test isapprox(β_dot, (v_dot * tas - v * tas_dot) / (tas * sqrt(u*u + w*w)))
+
+# tas_α_β_dot_from_uvw_dot <--> uvw_dot_from_tas_α_β
+tas, α, β = uvw_to_tasαβ(u, v, w)
+u_dot_, v_dot_, w_dot_ = uvw_dot_from_tas_α_β(tas, α, β, tas_dot, α_dot, β_dot)
+@test isapprox([u_dot, v_dot, w_dot], [u_dot_, v_dot_, w_dot_], atol=1e-4)
