@@ -13,21 +13,15 @@ function six_dof_aero_euler_fixed_mass(x, mass, inertia, forces, moments,
     sψ, cψ = sin(ψ), cos(ψ)
     sθ, cθ = sin(θ), cos(θ)
     sϕ, cϕ = sin(ϕ), cos(ϕ)
-    sβ, cβ = sin(β), cos(β)
-    sα, cα = sin(α), cos(α)
 
-    u = tas * cα * cβ;
-    v = v * sβ;
-    w = tas * sα * cβ;
+    u, v, w = wind2body(tas, 0.0, 0.0, α, β)
 
     # Linear momentum equations
     u_dot = Fx / m + r * v - q * w
     v_dot = Fy / m - r * u + p * w
     w_dot = Fz / m + q * u - p * v
 
-    tas_dot = (u * u_dot + v * v_dot + w *w_dot) / tas
-    β_dot = (tas * v_dot - v * tas) / (cβ * tas*tas)
-    α_dot = (w_dot * u - w * u_dot) / (u*u + w*w)
+    tas_dot, α_dot, β_dot = tas_α_β_dot_from_uvw_dot(u, v, w, u_dot, v_dot, w_dot)
 
     # Angular momentum equations
     Ix = inertia[1, 1]
