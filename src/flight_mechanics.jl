@@ -146,3 +146,39 @@ function uvw_to_tasαβ(u, v, w)
     β = atan(v, sqrt(u*u + v*v))
     return [tas, α, β]
 end
+
+
+"""
+    tas_α_β_dot_from_uvw_dot(u, v, w, u_dot, v_dot, w_dot)
+
+Calculate time derivatives of velcity expressed as TAS, AOA, AOS.
+
+# Notes
+Note that tas here is not necessarily true air speed. Could also be inertial speed in the
+direction of airspeed. It will concide whith TAS for no wind.
+
+# See also
+    tas_α_β_dot_from_uvw_dot2(u, v, w, u_dot, v_dot, w_dot)
+
+# References
+- [1] Morelli, Eugene A., and Vladislav Klein. Aircraft system identification: Theory and
+ practice. Williamsburg, VA: Sunflyte Enterprises, 2016. Equation 3.33 (page 44).
+- [2] Stevens, B. L., Lewis, F. L., & Johnson, E. N. (2015). Aircraft control
+ and simulation: dynamics, controls design, and autonomous systems. John Wiley
+ & Sons. Equation (2.3-10) (page 81)
+"""
+function tas_α_β_dot_from_uvw_dot(u, v, w, u_dot, v_dot, w_dot)
+
+    # [1] 3.31
+    tas = sqrt(u*u + v*v + w*w)
+    # [1] 3.33a
+    tas_dot = (u * u_dot + v * v_dot + w * w_dot) / tas
+    # [1] 3.33b
+    β_dot = ((u*u + w*w) * v_dot - v * (u * u_dot + w * w_dot)) / (tas^2 * sqrt(u*u + w*w))
+    # [2] 2.3.10b
+    # β_dot = (v_dot * tas - v * tas_dot) / (tas * sqrt(u*u + w*w))
+    # [1] 3.33c
+    α_dot = (w_dot * u - w * u_dot) / (u*u + w*w)
+
+    return [tas_dot, α_dot, β_dot]
+end

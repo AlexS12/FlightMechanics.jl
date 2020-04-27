@@ -42,6 +42,7 @@ body_angular_velocity_to_euler_angles_rates,
 euler_angles_rates_to_body_angular_velocity,
 body_angular_velocity_to_quaternion_rates,
 uvw_to_tasαβ,
+tas_α_β_dot_from_uvw_dot,
 # Models
 six_dof_euler_fixed_mass,
 six_dof_quaternion_fixed_mass,
