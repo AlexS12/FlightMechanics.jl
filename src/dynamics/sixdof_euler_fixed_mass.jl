@@ -1,6 +1,5 @@
 """
-    six_dof_euler_fixed_mass(x, mass, inertia, forces, moments,
-                             h=[0.0, 0.0, 0.0])
+    six_dof_euler_fixed_mass(x, mass, inertia, forces, moments, h=[0.0, 0.0, 0.0])
 
 Six degrees of freedom dynamic system using Euler angles for attitude
 representation and assuming fixed mass.
@@ -45,8 +44,7 @@ account with the optional argument `h`.
  (page 368, figure 10.2, not taking into account quaternions in angular
  kinematic equations)
 """
-function six_dof_euler_fixed_mass(x, mass, inertia, forces, moments,
-                                  h=[0.0, 0.0, 0.0])
+function six_dof_euler_fixed_mass(x, mass, inertia, forces, moments, h=[0.0, 0.0, 0.0])
 
     m = mass
     u, v, w, p, q, r, ψ, θ, ϕ, xe, ye, ze = x

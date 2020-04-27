@@ -1,6 +1,5 @@
 """
-    six_dof_quaternion_fixed_mass(x, mass, inertia, forces, moments,
-                                  h=[0.0, 0.0, 0.0], k=0.0)
+    six_dof_quaternion_fixed_mass(x, mass, inertia, forces, moments, h=[0.0, 0.0, 0.0], k=0.0)
 
 Six degrees of freedom dynamic system using quaternions for attitude
 representation and assuming fixed mass.
@@ -52,8 +51,9 @@ account with the optional argument `h`.
  dynamics. American Institute of Aeronautics and Astronautics.
  (page 368, figure 10.2)
 """
-function six_dof_quaternion_fixed_mass(x, mass, inertia, forces, moments,
-                                       h=[0.0, 0.0, 0.0], k=0.0)
+function six_dof_quaternion_fixed_mass(
+    x, mass, inertia, forces, moments, h=[0.0, 0.0, 0.0], k=0.0
+    )
 
     m = mass
 

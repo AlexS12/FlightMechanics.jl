@@ -1,8 +1,39 @@
 """
+    six_dof_aero_euler_fixed_mass(x, mass, inertia, forces, moments, h=[0.0, 0.0, 0.0])
 
+Six degrees of freedom dynamic system using Euler angles for attitude representation
+and assuming fixed mass.
+
+Flat Earth hypothesis is applied and Earth reference frame is considered
+inertial.
+
+It is considered that the aircraft xb-zb plane is a plane of symmetry so that
+Jxy and Jyz cross-product of inertia are zero and will not be taken into
+account.
+
+The effects of the angular momentum produced by spinning rotors is taken into
+account with the optional argument `h`.
+
+# Arguments
+- `x::12-element Array{Number,1}`: state vector.
+    tas: inertial speed along x_wind axis (m/s)
+    α: angle of attack (rad)
+    β: angle of side-slip (rad)
+    p, q, r: inertial rotatinal velocity expressed in body axis. (rad/s)
+    ψ, θ, ϕ: attitude given by Euler angles (zyx). Yaw, pitch, roll. (rad)
+    xe, ye, ze: position wrt the inertial system origin expressed in Earth Axis. (m)
+- `mass::Number`: total mass of the aircraft (kg)
+- `inertia::3×3 Array{Number,2}`: inertia tensor (kg·m²)
+- `forces::3-element Array{Number,1}`: total forces expressed in body axis. (N)
+- `moments::3-element Array{Number,1}`: total moments expressed in body axis.(N·m)
+- `h::3-element Array{Number,1}`: Additional angular momentum contributions such
+  as those coming from spinning rotors (kg·m²/s).
+
+# Returns
+- `x_dot`: state vector derivative according to the equation of motion,
+    inertial properties and applied forces and moments.
 """
-function six_dof_aero_euler_fixed_mass(x, mass, inertia, forces, moments,
-                                       h=[0.0, 0.0, 0.0])
+function six_dof_aero_euler_fixed_mass(x, mass, inertia, forces, moments, h=[0.0, 0.0, 0.0])
 
     m = mass
     tas, α, β, p, q, r, ψ, θ, ϕ, xe, ye, ze = x

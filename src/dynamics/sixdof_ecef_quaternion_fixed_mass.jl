@@ -1,8 +1,9 @@
 const ωe = ROT_VELOCITY
 
 """
-    six_dof_ecef_quaternion_fixed_mass(x, mass, inertia, forces, moments,
-                                       h=[0.0, 0.0, 0.0], k=0.0, ellipsoid=WGS84)
+    six_dof_ecef_quaternion_fixed_mass(
+        x, mass, inertia, forces, moments, h=[0.0, 0.0, 0.0], k=0.0, ellipsoid=WGS84
+        )
 
 Six degrees of freedom dynamic system using quaternions for attitude
 representation and assuming fixed mass.
@@ -52,8 +53,9 @@ account with the optional argument `h`.
  dynamics. American Institute of Aeronautics and Astronautics.
  (page 396, figure 10.6)
 """
-function six_dof_ecef_quaternion_fixed_mass(x, mass, inertia, forces,
-      moments, h=[0.0, 0.0, 0.0], k=0.0, ellipsoid=WGS84)
+function six_dof_ecef_quaternion_fixed_mass(
+    x, mass, inertia, forces, moments, h=[0.0, 0.0, 0.0], k=0.0, ellipsoid=WGS84
+    )
 
     vb = x[1:3]    # u, v, w
     ωb = x[4:6]    # p, q, r
