@@ -36,7 +36,7 @@ u, v, w = wind2body(tas, 0, 0, exp_α, exp_β)
 tas, α, β = uvw_to_tasαβ(u, v, w)
 @test isapprox(tas, exp_tas)
 @test isapprox(α, exp_α)
-@test isapprox(β, exp_β, rtol=1e-3)
+@test isapprox(β, exp_β, atol=1e-7)
 
 
 # Test tas_α_β_dot_from_uvw_dot
