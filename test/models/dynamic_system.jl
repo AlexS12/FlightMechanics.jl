@@ -28,3 +28,10 @@ state = State(pos_ecef, att, vel, ang_vel, accel, ang_accel)
     state_ = convert(state, x)
     @test isapprox(state, state_)
 end
+
+state = State(pos, att, vel, ang_vel, accel, ang_accel)
+@testset "SixDOFAeroEulerFixedMass" begin
+    x = convert(SixDOFAeroEulerFixedMass, state)
+    state_ = convert(state, x)
+    @test isapprox(state, state_)
+end

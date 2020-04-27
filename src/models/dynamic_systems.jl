@@ -194,3 +194,73 @@ end
 
 
 # ---------------------- SixDOFAeroEulerFixedMass ----------------------
+struct SixDOFAeroEulerFixedMass <: DynamicSystem
+    x :: Array{T, 1} where T<:Number
+    x_dot :: Array{T, 1} where T<:Number
+    state_equation :: Function
+    state_equation_ode_wrapper! :: Function
+end
+
+function six_dof_aero_euler_fixed_mass_ode_wrapper!(dx, x, p, t)
+    mass = p[1]
+    inertia = p[2]
+    forces = p[3]
+    moments = p[4]
+    h = p[5]
+    dx[:] = six_dof_aero_euler_fixed_mass(x, mass, inertia, forces, moments, h)
+end
+
+SixDOFAeroEulerFixedMass(x, x_dot) = SixDOFAeroEulerFixedMass(
+    x,
+    x_dot,
+    six_dof_aero_euler_fixed_mass,
+    six_dof_aero_euler_fixed_mass_ode_wrapper!
+    )
+SixDOFAeroEulerFixedMass(x) = SixDOFAeroEulerFixedMass(x, fill(NaN, 12))
+SixDOFAeroEulerFixedMass() = SixDOFAeroEulerFixedMass(fill(NaN, 12))
+
+
+function convert(::Type{SixDOFAeroEulerFixedMass}, state::State)
+    x = [
+        uvw_to_tasαβ(get_body_velocity(state)...)...,
+        get_body_ang_velocity(state)...,
+        get_euler_angles(state)...,
+        get_xyz_earth(state)...,
+    ]
+
+    x_dot = [
+        tas_α_β_dot_from_uvw_dot(
+            get_body_velocity(state)...,
+            get_body_accel(state)...
+        )...,
+        get_body_ang_accel(state)...,
+        get_euler_angles_rates(state)...,
+        get_horizon_velocity(state)...,
+    ]
+
+    SixDOFAeroEulerFixedMass(x, x_dot)
+end
+
+function convert(state::State, ds::SixDOFAeroEulerFixedMass)
+    x = get_x(ds)
+    x_dot = get_x_dot(ds)
+
+    tas = x[1]
+    α = x[2]
+    β = x[3]
+
+    tas_dot = x_dot[1]
+    α_dot = x_dot[2]
+    β_dot = x_dot[3]
+
+    State(
+        EarthPosition(
+            x[10:12]..., get_position(state).ref_point
+            ),
+        Attitude(x[7:9]...),
+        wind2body(tas, 0.0, 0.0, α, β),
+        x[4:6],
+        uvw_dot_from_tas_α_β(tas, α, β, tas_dot, α_dot, β_dot),
+        x_dot[4:6]
+        )
+end

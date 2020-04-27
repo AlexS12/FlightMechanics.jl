@@ -61,6 +61,7 @@ include("flight_mechanics.jl")
 include("dynamics/sixdof_euler_fixed_mass.jl")
 include("dynamics/sixdof_quaternion_fixed_mass.jl")
 include("dynamics/sixdof_ecef_quaternion_fixed_mass.jl")
+include("dynamics/sixdof_aero_euler_fixed_mass.jl")
 
 # Models
 include("models/Models.jl")
