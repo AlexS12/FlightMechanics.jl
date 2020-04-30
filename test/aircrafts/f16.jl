@@ -519,6 +519,7 @@ end
     f = get_state_equation(six_dof_euler_fixed_mass_ds)
     # Evaluate x_dot given x, u, parameters
     r = f(x, mass, inertia, pfm.forces, pfm.moments, [160.0*SLUGFT2_2_KGM2, 0.0, 0.0])
+    u_dot, v_dot, w_dot, p_dot, q_dot, r_dot, ψ_dot, θ_dot, ϕ_dot, x_dot, y_dot, z_dot = r 
 
     # u, v, w are used in this test, so they need to be transformed to VT, α, β
     VT = 500 * FT2M
@@ -545,17 +546,17 @@ end
         @test isapprox(α_dot_est, α_dot_exp, atol=0.0005)
         @test isapprox(β_dot_est, β_dot_exp, atol=0.06)
 
-        @test isapprox(r[7], ψ_dot_exp, atol=1e-6)  # ψ_dot [rad/s]
-        @test isapprox(r[8], θ_dot_exp, atol=1e-7)  # θ_dot [rad/s]
-        @test isapprox(r[9], ϕ_dot_exp, atol=1e-6)  # ϕ_dot [rad/s]
+        @test isapprox(ψ_dot, ψ_dot_exp, atol=1e-6)  # ψ_dot [rad/s]
+        @test isapprox(θ_dot, θ_dot_exp, atol=1e-7)  # θ_dot [rad/s]
+        @test isapprox(ϕ_dot, ϕ_dot_exp, atol=1e-6)  # ϕ_dot [rad/s]
 
-        @test isapprox(r[4], p_dot_exp, atol=0.06)   # p_dot [rad/s]
-        @test isapprox(r[5], q_dot_exp, atol=0.005)  # q_dot [rad/s]
-        @test isapprox(r[6], r_dot_exp, atol=0.005)  # r_dot [rad/s]
+        @test isapprox(p_dot, p_dot_exp, atol=0.06)   # p_dot [rad/s]
+        @test isapprox(q_dot, q_dot_exp, atol=0.005)  # q_dot [rad/s]
+        @test isapprox(r_dot, r_dot_exp, atol=0.005)  # r_dot [rad/s]
 
-        @test isapprox(r[10]*M2FT, x_dot_exp, atol=1e-4)   # x_dot (ft/s)
-        @test isapprox(r[11]*M2FT, y_dot_exp, atol=1e-4)  # y_dot (ft/s)
-        @test isapprox(-r[12]*M2FT, z_dot_exp, atol=1e-4)   # z_dot (ft/s)
+        @test isapprox(x_dot*M2FT, x_dot_exp, atol=1e-4)   # x_dot (ft/s)
+        @test isapprox(y_dot*M2FT, y_dot_exp, atol=1e-4)  # y_dot (ft/s)
+        @test isapprox(-z_dot*M2FT, z_dot_exp, atol=1e-4)   # z_dot (ft/s)
     end
 
     @testset "Morelli" begin
@@ -593,29 +594,28 @@ end
         qbar = get_qinf(aerostate)
         @test isapprox(qbar, qbar_exp*PSF2PA, atol=0.5)
 
-        @test isapprox(r[1], u_dot_exp*FT2M, atol=0.01)
-        @test isapprox(r[2], v_dot_exp*FT2M, atol=5)
-        @test isapprox(r[3], w_dot_exp*FT2M, atol=0.0005)
+        @test isapprox(u_dot, u_dot_exp*FT2M, atol=0.01)
+        @test isapprox(v_dot, v_dot_exp*FT2M, atol=5)
+        @test isapprox(w_dot, w_dot_exp*FT2M, atol=0.0005)
 
         @test_broken isapprox(VT_dot_est*M2FT, VT_dot_exp, atol=0.05)
         @test isapprox(VT_dot_est*M2FT, VT_dot_exp, atol=5)
         @test isapprox(α_dot_est, α_dot_exp, atol=0.00005)
         @test isapprox(β_dot_est, β_dot_exp, atol=0.05)
 
-        @test isapprox(r[7], ψ_dot_exp, atol=1e-6)  # ψ_dot [rad/s]
+        @test isapprox(ψ_dot, ψ_dot_exp, atol=1e-6)  # ψ_dot [rad/s]
         @test_broken isapprox(r[8], θ_dot_exp, atol=1e-7)  # θ_dot [rad/s]
-        @test isapprox(r[8], θ_dot_exp, atol=1e-5)  # θ_dot [rad/s]
+        @test isapprox(θ_dot, θ_dot_exp, atol=1e-5)  # θ_dot [rad/s]
         @test_broken isapprox(r[9], ϕ_dot_exp, atol=1e-6)  # ϕ_dot [rad/s]
-        @test isapprox(r[9], ϕ_dot_exp, atol=0.5)  # ϕ_dot [rad/s]
+        @test isapprox(ϕ_dot, ϕ_dot_exp, atol=0.5)  # ϕ_dot [rad/s]
 
-        @test_broken isapprox(r[4], p_dot_exp, atol=0.06)   # p_dot [rad/s]
-        @test isapprox(r[4], p_dot_exp, atol=0.5)   # p_dot [rad/s]
-        @test isapprox(r[5], q_dot_exp, atol=0.005)  # q_dot [rad/s]
-        @test_broken isapprox(r[6], r_dot_exp, atol=0.005)  # r_dot [rad/s]
-        @test isapprox(r[6], r_dot_exp, atol=1.5)   # r_dot [rad/s]
+        @test_broken isapprox(p_dot, p_dot_exp, atol=0.06)   # p_dot [rad/s]
+        @test isapprox(p_dot, p_dot_exp, atol=0.5)   # p_dot [rad/s]
+        @test isapprox(q_dot, q_dot_exp, atol=0.005)  # q_dot [rad/s]
+        @test isapprox(r_dot, r_dot_exp, atol=1.5)   # r_dot [rad/s]
 
-        @test isapprox(r[10]*M2FT, x_dot_exp, atol=1e-4)   # x_dot (ft/s)
-        @test isapprox(r[11]*M2FT, y_dot_exp, atol=1e-4)  # y_dot (ft/s)
-        @test isapprox(-r[12]*M2FT, z_dot_exp, atol=1e-4)   # z_dot (ft/s)
+        @test isapprox(x_dot*M2FT, x_dot_exp, atol=1e-4)   # x_dot (ft/s)
+        @test isapprox(y_dot*M2FT, y_dot_exp, atol=1e-4)  # y_dot (ft/s)
+        @test isapprox(-z_dot*M2FT, z_dot_exp, atol=1e-4)   # z_dot (ft/s)
     end
 end
