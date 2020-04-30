@@ -522,9 +522,7 @@ end
 
     # u, v, w are used in this test, so they need to be transformed to VT, α, β
     VT = 500 * FT2M
-    VT_dot_est = (u*r[1] + v*r[2] + w*r[3]) / VT
-    α_dot_est = (u*r[3] - w*r[1]) / (u*u + w*w)
-    β_dot_est = (r[2]*VT - v*VT_dot_est) / (VT * sqrt(u*u + v*v))
+    VT_dot_est, α_dot_est, β_dot_est = tas_α_β_dot_from_uvw_dot(u, v, w, u_dot, v_dot, w_dot)
 
     @testset "Stevens values" begin
         # XDOT Stevens
@@ -602,8 +600,7 @@ end
         @test_broken isapprox(VT_dot_est*M2FT, VT_dot_exp, atol=0.05)
         @test isapprox(VT_dot_est*M2FT, VT_dot_exp, atol=5)
         @test isapprox(α_dot_est, α_dot_exp, atol=0.00005)
-        @test_broken isapprox(β_dot_est, β_dot_exp, atol=0.06)
-        @test isapprox(β_dot_est, β_dot_exp, atol=0.1)
+        @test isapprox(β_dot_est, β_dot_exp, atol=0.05)
 
         @test isapprox(r[7], ψ_dot_exp, atol=1e-6)  # ψ_dot [rad/s]
         @test_broken isapprox(r[8], θ_dot_exp, atol=1e-7)  # θ_dot [rad/s]
