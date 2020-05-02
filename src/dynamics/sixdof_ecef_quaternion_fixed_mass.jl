@@ -59,8 +59,8 @@ function six_dof_ecef_quaternion_fixed_mass(
 
     vb = x[1:3]    # u, v, w
     ωb = x[4:6]    # p, q, r
-    q  = x[7:10]   # q0, q1, q2, q3
-    p  = x[11:13]  # px, py, pz (ecef)
+    quat = x[7:10]   # q0, q1, q2, q3
+    pos  = x[11:13]  # px, py, pz (ecef)
 
     Fb = forces
     J  = inertia
@@ -81,11 +81,11 @@ function six_dof_ecef_quaternion_fixed_mass(
           -q     r   0.0  -p;
           -r    -q    p   0.0]
 
-    lat, lon, h = ecef2llh(p...; ellipsoid=ellipsoid)
-    B = rot_matrix_body2ecef(lat, lon, q...)
+    lat, lon, height = ecef2llh(pos...; ellipsoid=ellipsoid)
+    B = rot_matrix_body2ecef(lat, lon, quat...)
 
     # Linear kinematic equations
-    p_dot = Ωe * p + B' * vb
+    pos_dot = Ωe * pos + B' * vb
     # Linear momentum equations
     # Note that gravity (B g(p) - B Ωe²) p is included in forces (gravity + prop + aero)
     vb_dot = -(ΩB + B*Ωe) * vb + Fb / mass
@@ -97,8 +97,8 @@ function six_dof_ecef_quaternion_fixed_mass(
     # Normalization λ*t < 1 (See Zipfel Chapter 4.3.3.4 p.126)
     # Zipfel, P. H. (2007). Modeling and simulation of aerospace vehicle dynamics.
     # American Institute of Aeronautics and Astronautics.
-    λ = k * (1.0 - q*q)
-    q_dot = (-0.5 * Ωq + λ) * q
+    λ = k * (1.0 - quat' * quat)
+    quat_dot = (-0.5 * Ωq * quat) + λ * quat
 
-    [vb_dot..., ωb_dot..., q_dot..., p_dot...]
+    [vb_dot..., ωb_dot..., quat..., pos_dot...]
 end
