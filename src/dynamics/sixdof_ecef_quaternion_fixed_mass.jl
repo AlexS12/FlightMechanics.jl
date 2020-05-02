@@ -72,7 +72,7 @@ function six_dof_ecef_quaternion_fixed_mass(
 
     p, q, r = ωb
 
-    ΩB = [0.0   -r   -q;
+    ΩB = [0.0   -r    q;
            r    0.0  -p;
           -q     p   0.0]
 
