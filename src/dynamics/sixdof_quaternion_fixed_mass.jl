@@ -116,5 +116,5 @@ function six_dof_quaternion_fixed_mass(
     ye_dot = 2*u*(q1*q2 + q0*q3) + v*(q02 - q12 + q22 - q32) + 2*w*(q2*q3 - q0*q1)
     ze_dot = 2*u*(q1*q3 - q0*q2) + 2*v*(q2*q3 + q0*q1) + w*(q02 - q12 - q22 + q32)
 
-    [u_dot v_dot w_dot p_dot q_dot r_dot q0_dot q1_dot q2_dot q3_dot xe_dot ye_dot ze_dot]
+    [u_dot, v_dot, w_dot, p_dot, q_dot, r_dot, q0_dot, q1_dot, q2_dot, q3_dot, xe_dot, ye_dot, ze_dot]
 end
