@@ -27,7 +27,7 @@ end
 
 show(io::IO, pos::LLHPosition) = print(
     io,
-    "LLH $(typeof(pos.ellipsoid)): lat=$(rad2deg(pos.lat))º, lon=$(rad2deg(pos.lon))º, h=$(pos.height) m",
+    "LLH $(pos.ellipsoid.name): lat=$(rad2deg(pos.lat))º, lon=$(rad2deg(pos.lon))º, h=$(pos.height) m",
     )
 
 
@@ -46,7 +46,7 @@ end
 
 show(io::IO, pos::EarthPosition) = print(
     io,
-    "Earth Position (wrt: $(pos.ref_point)): x=$(pos.x) m, y=$(pos.y) m, z=$(pos.z) m"
+    "Earth Position (wrt $(pos.ref_point)): x=$(pos.x) m, y=$(pos.y) m, z=$(pos.z) m"
     )
 
 
