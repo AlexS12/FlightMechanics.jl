@@ -17,6 +17,13 @@ struct Attitude
     q3::Number
 end
 
+
+show(io::IO, att::Attitude) = print(
+    io,
+    "Attitude: ψ=$(rad2deg(att.psi))º, θ=$(rad2deg(att.theta))º, ϕ=$(rad2deg(att.phi))º",
+    )
+
+
 # Constructor from Euler angles
 Attitude(psi, theta, phi) = Attitude(psi, theta, phi,
                                      euler2quaternion(psi, theta, phi)...)

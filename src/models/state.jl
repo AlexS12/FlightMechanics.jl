@@ -8,6 +8,18 @@ struct State
 end
 
 
+show(io::IO, state::State) = print(
+    io,
+    """State:
+    \t$(state.position),
+    \t$(state.attitude),
+    \tVelocity: u=$(state.velocity[1]) m/s, v=$(state.velocity[2]) m/s, w=$(state.velocity[3]) m/s",
+    \tAngular velocity: p=$(rad2deg(state.angular_acceleration[1])) deg/s, q=$(rad2deg(state.angular_acceleration[2])) deg/s, r=$(rad2deg(state.angular_acceleration[3])) deg/s,
+    \tAcceleration: ax=$(state.acceleration[1]) m/s², ay=$(state.acceleration[2]) m/s², az=$(state.acceleration[3]) m/s²,
+    \tAngular Velocity: p_dot=$(rad2deg(state.angular_acceleration[1])) deg/s², q_dot=$(rad2deg(state.angular_acceleration[2])) deg/s², r_dot=$(rad2deg(state.angular_acceleration[3])) deg/s²
+    """
+    )
+
 # Position getters
 get_position(state::State) = state.position
 get_llh(state::State) = get_llh(state.position)

@@ -12,12 +12,24 @@ struct ECEFPosition <: Position
 end
 
 
+show(io::IO, pos::ECEFPosition) = print(
+    io,
+    "ECEF Position: x=$(pos.x) m, y=$(pos.y) m, z=$(pos.z) m",
+    )
+
+
 struct LLHPosition <: Position
     lat :: Number  # rad
     lon :: Number  # rad
     height :: Number  # m
     ellipsoid :: Ellipsoid
 end
+
+show(io::IO, pos::LLHPosition) = print(
+    io,
+    "LLH $(typeof(pos.ellipsoid)): lat=$(rad2deg(pos.lat))º, lon=$(rad2deg(pos.lon))º, h=$(pos.height) m",
+    )
+
 
 LLHPosition(ellipsoid) = LLHPosition(NaN, NaN, NaN, ellipsoid)
 LLHPosition(lat, lon, h) = LLHPosition(lat, lon, h, WGS84)
@@ -30,6 +42,13 @@ struct EarthPosition <: Position
     z :: Number  # m
     ref_point :: T where T<:Union{LLHPosition}
 end
+
+
+show(io::IO, pos::EarthPosition) = print(
+    io,
+    "Earth Position (wrt: $(pos.ref_point)): x=$(pos.x) m, y=$(pos.y) m, z=$(pos.z) m"
+    )
+
 
 EarthPosition(x, y, z) = EarthPosition(x, y, z, LLHPosition(0, 0, 0))
 EarthPosition(ref_point) = EarthPosition(NaN, NaN, NaN, ref_point)
