@@ -37,8 +37,8 @@ end
 @testset "Dynamic systems evaluation" begin
     ac = F16()
 
-    att = Attitude(-1, 1, -1)
-    pos = EarthPosition(1000*FT2M, 900*FT2M, -10000*FT2M)
+    att = Attitude(250*DEG2RAD, 20*DEG2RAD, -30*DEG2RAD)
+    pos = EarthPosition(0.0, 0.0, 0.0)
     u, v, w = wind2body(500*FT2M, 0, 0, 0.5, -0.2)
     
     state = State(
