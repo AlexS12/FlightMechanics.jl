@@ -65,32 +65,33 @@ end
     mass_props = get_mass_props(ac)
     mass = mass_props.mass
     inertia = mass_props.inertia
+    h = [160.0*SLUGFT2_2_KGM2, 0.0, 0.0]
 
     ds_1 = convert(SixDOFEulerFixedMass, state)
     x_1 = get_x(ds_1)
     f = get_state_equation(ds_1)
-    x_dot_1 = f(x_1, mass, inertia, pfm.forces, pfm.moments, [160.0*SLUGFT2_2_KGM2, 0.0, 0.0])
+    x_dot_1 = f(x_1, mass, inertia, pfm.forces, pfm.moments, h)
     ds = SixDOFEulerFixedMass(x_1, x_dot_1)
     st1 = convert(state, ds)
 
     ds_2 = convert(SixDOFAeroEulerFixedMass, state)
     x_2 = get_x(ds_2)
     f = get_state_equation(ds_2)
-    x_dot_2 = f(x_2, mass, inertia, pfm.forces, pfm.moments, [160.0*SLUGFT2_2_KGM2, 0.0, 0.0])
+    x_dot_2 = f(x_2, mass, inertia, pfm.forces, pfm.moments, h)
     ds = SixDOFAeroEulerFixedMass(x_2, x_dot_2)
     st2 = convert(state, ds)
 
     ds_3 = convert(SixDOFQuaternionFixedMass, state)
     x_3 = get_x(ds_3)
     f = get_state_equation(ds_3)
-    x_dot_3 = f(x_3, mass, inertia, pfm.forces, pfm.moments, [160.0*SLUGFT2_2_KGM2, 0.0, 0.0])
+    x_dot_3 = f(x_3, mass, inertia, pfm.forces, pfm.moments, h)
     ds = SixDOFQuaternionFixedMass(x_3, x_dot_3)
     st3 = convert(state, ds)
 
     ds_4 = convert(SixDOFECEFQuaternionFixedMass, state)
     x_4 = get_x(ds_4)
     f = get_state_equation(ds_4)
-    x_dot_4 = f(x_4, mass, inertia, pfm.forces, pfm.moments, [160.0*SLUGFT2_2_KGM2, 0.0, 0.0])
+    x_dot_4 = f(x_4, mass, inertia, pfm.forces, pfm.moments, h)
     ds = SixDOFECEFQuaternionFixedMass(x_4, x_dot_4)
     st4 = convert(state, ds)
     # Note: Transform position to Earth position to be comparable with other states
