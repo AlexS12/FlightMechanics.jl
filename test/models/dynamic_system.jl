@@ -104,10 +104,20 @@ end
         st4.angular_acceleration
     )
 
-    @test isapprox(st1, st2)
-    @test isapprox(st1, st3)
-    @test isapprox(st1, st4)
-    @test isapprox(st2, st3)
-    @test isapprox(st2, st4)
-    @test isapprox(st3, st4)
+    @testset "$(pair[1])" for pair in (
+            ("SixDOFEulerFixedMass-SixDOFAeroEulerFixedMass", st1, st2),
+            ("SixDOFEulerFixedMass-SixDOFQuaternionFixedMass", st1, st3),
+            ("SixDOFEulerFixedMass-SixDOFECEFQuaternionFixedMass", st1, st4),
+            ("SixDOFAeroEulerFixedMass-SixDOFQuaternionFixedMass", st2, st3),
+            ("SixDOFAeroEulerFixedMass-SixDOFECEFQuaternionFixedMass", st2, st4),
+            ("SixDOFQuaternionFixedMass-SixDOFECEFQuaternionFixedMass", st3, st4),
+        )
+        x, y = pair[2:3]
+        @test isapprox(x.position, y.position)
+        @test isapprox(x.attitude, y.attitude)
+        @test isapprox(x.velocity, y.velocity)
+        @test isapprox(x.angular_velocity, y.angular_velocity)
+        @test isapprox(x.acceleration, y.acceleration)
+        @test isapprox(x.angular_acceleration, y.angular_acceleration)
+    end
 end
