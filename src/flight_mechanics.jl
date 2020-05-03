@@ -143,7 +143,7 @@ function uvw_to_tasαβ(u, v, w)
 
     tas = sqrt(u*u + v*v + w*w)
     α = atan(w, u)
-    β = atan(v, tas)
+    β = asin(v / tas)
     return [tas, α, β]
 end
 
