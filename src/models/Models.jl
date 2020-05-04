@@ -29,7 +29,7 @@ calculate_atmosphere,
 # Wind
 Wind, ConstantWind,
 get_wind_NED, get_wind_body, get_wind_direction, get_wind_intensity,
-get_vertical, calculate_wind,
+get_wind_vertical, calculate_wind,
 # Gravity
 EarthConstantGravity, get_gravity_horizon, get_gravity_accel, get_gravity_body,
 calculate_gravity,
