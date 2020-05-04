@@ -139,3 +139,13 @@ function get_controls(cs::StickPedalsLeverStream, t)
     lev = get_value(cs.thrust_lever_stream, t)
     return StickPedalsLeverControls(slon, slat, ped, lev)
 end
+
+
+function convert(::Type{ControlsStream}, c::StickPedalsLeverControls)
+    StickPedalsLeverStream(
+        ConstantInput(get_stick_lon(c)),
+        ConstantInput(get_stick_lat(c)),
+        ConstantInput(get_pedals(c)),
+        ConstantInput(get_thrust_lever(c)),
+        )
+end

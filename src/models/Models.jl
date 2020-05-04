@@ -2,6 +2,7 @@ module Models
 
 import Base: +, -, *, isapprox, convert, copy, show, push!, getindex, setindex!
 using LinearAlgebra
+using OrdinaryDiffEq
 using FlightMechanics
 
 export
@@ -76,7 +77,9 @@ SixDOFEulerFixedMass, SixDOFQuaternionFixedMass, SixDOFECEFQuaternionFixedMass,
 SixDOFAeroEulerFixedMass,
 get_state_equation, get_state_equation_ode_wrapper, get_x, get_x_count, get_state,
 # Results Store
-ResultsStore
+ResultsStore,
+# Propagator
+propagate_timestep, propagate
 
 include("attitude.jl")
 include("position.jl")
@@ -96,4 +99,5 @@ include("aerodynamics.jl")
 include("aircraft.jl")
 include("dynamic_systems.jl")
 include("results_store.jl")
+include("propagator.jl")
 end
