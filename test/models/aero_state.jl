@@ -5,7 +5,7 @@ using FlightMechanics.Models
 
 # TEST check_state_aerostate_env_coherence
 # STATE
-pos = PositionEarth(0.0, 0.0, 0.0)
+pos = EarthPosition(0.0, 0.0, 0.0)
 att = Attitude(0.0, 0.0, 0.0)
 vel = [100.0, 0.0, 0.0]
 ang_vel = [0.0, 0.0, 0.0]
@@ -73,7 +73,7 @@ state_wrong = State(get_position(state),
               false)
 
 # TODO: look for a name for this test
-pos = PositionEarth(0.0, 0.0, -3000.0)
+pos = EarthPosition(0.0, 0.0, -3000.0)
 atm = AtmosphereISA(pos)
 wind = ConstantWind(0.0, 0.0, 0.0)
 grav = EarthConstantGravity()

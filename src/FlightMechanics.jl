@@ -40,10 +40,13 @@ rigid_body_velocity, rigid_body_acceleration, steiner_inertia,
 coordinated_turn_bank, climb_theta, turn_rate_angular_velocity,
 body_angular_velocity_to_euler_angles_rates,
 euler_angles_rates_to_body_angular_velocity,
+body_angular_velocity_to_quaternion_rates,
 uvw_to_tasαβ,
+tas_α_β_dot_from_uvw_dot, uvw_dot_from_tas_α_β,
 # Models
 six_dof_euler_fixed_mass,
 six_dof_quaternion_fixed_mass,
+six_dof_aero_euler_fixed_mass,
 six_dof_ecef_quaternion_fixed_mass
 
 
@@ -58,6 +61,7 @@ include("flight_mechanics.jl")
 include("dynamics/sixdof_euler_fixed_mass.jl")
 include("dynamics/sixdof_quaternion_fixed_mass.jl")
 include("dynamics/sixdof_ecef_quaternion_fixed_mass.jl")
+include("dynamics/sixdof_aero_euler_fixed_mass.jl")
 
 # Models
 include("models/Models.jl")

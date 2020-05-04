@@ -101,7 +101,7 @@ end
     ]
 
     att = Attitude(-1, 1, -1)
-    pos = PositionEarth(1000*FT2M, 900*FT2M, -10000*FT2M)
+    pos = EarthPosition(1000*FT2M, 900*FT2M, -10000*FT2M)
     env = Environment(pos, atmos="ISA1978", wind="NoWind", grav="const")
     fcs = F16FCS()
 
@@ -158,7 +158,7 @@ end
     ]
 
     att = Attitude(-1, 1, -1)
-    pos = PositionEarth(1000*FT2M, 900*FT2M, -10000*FT2M)
+    pos = EarthPosition(1000*FT2M, 900*FT2M, -10000*FT2M)
     env = Environment(pos, atmos="ISA1978", wind="NoWind", grav="const")
     fcs = F16FCS()
 
@@ -217,12 +217,12 @@ end
     eng = F16Engine()
     fcs = F16FCS()
     att = Attitude(0., 0., 0.)
-    pos = PositionEarth(0, 0, 0)
+    pos = EarthPosition(0, 0, 0)
     env = Environment(pos, atmos="ISAF16", wind="NoWind", grav="const")
 
 
     @testset "Case $ii" for ii=1:size(test_data, 1)
-        pos = PositionEarth(0, 0, -test_data[ii, 2]*FT2M)
+        pos = EarthPosition(0, 0, -test_data[ii, 2]*FT2M)
         env = calculate_environment(env, pos)
         u, v, w = wind2body(test_data[ii, 3]*FT2M, 0., 0., 0., 0.)
         set_thtl!(fcs, test_data[ii, 1])
@@ -254,7 +254,7 @@ end
     gamma = 0.0
     turn_rate = 0.0
 
-    pos = PositionEarth(0, 0, -h)
+    pos = EarthPosition(0, 0, -h)
     env = Environment(pos, atmos="ISAF16", wind="NoWind", grav="const")
 
     #  Stevens, B. L., Lewis, F. L., & Johnson, E. N. (2015). Aircraft control
@@ -380,7 +380,7 @@ end
     #  Stevens, B. L., Lewis, F. L., & Johnson, E. N. (2015). Aircraft control
     #  and simulation: dynamics, controls design, and autonomous systems. John Wiley
     #  & Sons. (page 192)
-    pos = PositionEarth(0, 0, 0)
+    pos = EarthPosition(0, 0, 0)
     env = Environment(pos, atmos="ISAF16", wind="NoWind", grav="const")
 
     ac = F16()
@@ -488,7 +488,7 @@ end
     ac = F16()
 
     att = Attitude(-1, 1, -1)
-    pos = PositionEarth(1000*FT2M, 900*FT2M, -10000*FT2M)
+    pos = EarthPosition(1000*FT2M, 900*FT2M, -10000*FT2M)
     u, v, w = wind2body(500*FT2M, 0, 0, 0.5, -0.2)
     state = State(pos,
                   att,
@@ -514,16 +514,16 @@ end
     mass = mass_props.mass
     inertia = mass_props.inertia
 
-    stv = get_sixdof_euler_fixed_mass_state(state)
-
-    r = six_dof_euler_fixed_mass(stv, mass, inertia, pfm.forces, pfm.moments,
-                                 [160.0*SLUGFT2_2_KGM2, 0.0, 0.0])
+    six_dof_euler_fixed_mass_ds = convert(SixDOFEulerFixedMass, state)
+    x = get_x(six_dof_euler_fixed_mass_ds)
+    f = get_state_equation(six_dof_euler_fixed_mass_ds)
+    # Evaluate x_dot given x, u, parameters
+    r = f(x, mass, inertia, pfm.forces, pfm.moments, [160.0*SLUGFT2_2_KGM2, 0.0, 0.0])
+    u_dot, v_dot, w_dot, p_dot, q_dot, r_dot, ψ_dot, θ_dot, ϕ_dot, x_dot, y_dot, z_dot = r 
 
     # u, v, w are used in this test, so they need to be transformed to VT, α, β
     VT = 500 * FT2M
-    VT_dot_est = (u*r[1] + v*r[2] + w*r[3]) / VT
-    α_dot_est = (u*r[3] - w*r[1]) / (u*u + w*w)
-    β_dot_est = (r[2]*VT - v*VT_dot_est) / (VT * sqrt(u*u + v*v))
+    VT_dot_est, α_dot_est, β_dot_est = tas_α_β_dot_from_uvw_dot(u, v, w, u_dot, v_dot, w_dot)
 
     @testset "Stevens values" begin
         # XDOT Stevens
@@ -546,17 +546,17 @@ end
         @test isapprox(α_dot_est, α_dot_exp, atol=0.0005)
         @test isapprox(β_dot_est, β_dot_exp, atol=0.06)
 
-        @test isapprox(r[7], ψ_dot_exp, atol=1e-6)  # ψ_dot [rad/s]
-        @test isapprox(r[8], θ_dot_exp, atol=1e-7)  # θ_dot [rad/s]
-        @test isapprox(r[9], ϕ_dot_exp, atol=1e-6)  # ϕ_dot [rad/s]
+        @test isapprox(ψ_dot, ψ_dot_exp, atol=1e-6)  # ψ_dot [rad/s]
+        @test isapprox(θ_dot, θ_dot_exp, atol=1e-7)  # θ_dot [rad/s]
+        @test isapprox(ϕ_dot, ϕ_dot_exp, atol=1e-6)  # ϕ_dot [rad/s]
 
-        @test isapprox(r[4], p_dot_exp, atol=0.06)   # p_dot [rad/s]
-        @test isapprox(r[5], q_dot_exp, atol=0.005)  # q_dot [rad/s]
-        @test isapprox(r[6], r_dot_exp, atol=0.005)  # r_dot [rad/s]
+        @test isapprox(p_dot, p_dot_exp, atol=0.06)   # p_dot [rad/s]
+        @test isapprox(q_dot, q_dot_exp, atol=0.005)  # q_dot [rad/s]
+        @test isapprox(r_dot, r_dot_exp, atol=0.005)  # r_dot [rad/s]
 
-        @test isapprox(r[10]*M2FT, x_dot_exp, atol=1e-4)   # x_dot (ft/s)
-        @test isapprox(r[11]*M2FT, y_dot_exp, atol=1e-4)  # y_dot (ft/s)
-        @test isapprox(-r[12]*M2FT, z_dot_exp, atol=1e-4)   # z_dot (ft/s)
+        @test isapprox(x_dot*M2FT, x_dot_exp, atol=1e-4)   # x_dot (ft/s)
+        @test isapprox(y_dot*M2FT, y_dot_exp, atol=1e-4)  # y_dot (ft/s)
+        @test isapprox(-z_dot*M2FT, z_dot_exp, atol=1e-4)   # z_dot (ft/s)
     end
 
     @testset "Morelli" begin
@@ -594,30 +594,28 @@ end
         qbar = get_qinf(aerostate)
         @test isapprox(qbar, qbar_exp*PSF2PA, atol=0.5)
 
-        @test isapprox(r[1], u_dot_exp*FT2M, atol=0.01)
-        @test isapprox(r[2], v_dot_exp*FT2M, atol=5)
-        @test isapprox(r[3], w_dot_exp*FT2M, atol=0.0005)
+        @test isapprox(u_dot, u_dot_exp*FT2M, atol=0.01)
+        @test isapprox(v_dot, v_dot_exp*FT2M, atol=5)
+        @test isapprox(w_dot, w_dot_exp*FT2M, atol=0.0005)
 
         @test_broken isapprox(VT_dot_est*M2FT, VT_dot_exp, atol=0.05)
         @test isapprox(VT_dot_est*M2FT, VT_dot_exp, atol=5)
         @test isapprox(α_dot_est, α_dot_exp, atol=0.00005)
-        @test_broken isapprox(β_dot_est, β_dot_exp, atol=0.06)
-        @test isapprox(β_dot_est, β_dot_exp, atol=0.1)
+        @test isapprox(β_dot_est, β_dot_exp, atol=0.05)
 
-        @test isapprox(r[7], ψ_dot_exp, atol=1e-6)  # ψ_dot [rad/s]
+        @test isapprox(ψ_dot, ψ_dot_exp, atol=1e-6)  # ψ_dot [rad/s]
         @test_broken isapprox(r[8], θ_dot_exp, atol=1e-7)  # θ_dot [rad/s]
-        @test isapprox(r[8], θ_dot_exp, atol=1e-5)  # θ_dot [rad/s]
+        @test isapprox(θ_dot, θ_dot_exp, atol=1e-5)  # θ_dot [rad/s]
         @test_broken isapprox(r[9], ϕ_dot_exp, atol=1e-6)  # ϕ_dot [rad/s]
-        @test isapprox(r[9], ϕ_dot_exp, atol=0.5)  # ϕ_dot [rad/s]
+        @test isapprox(ϕ_dot, ϕ_dot_exp, atol=0.5)  # ϕ_dot [rad/s]
 
-        @test_broken isapprox(r[4], p_dot_exp, atol=0.06)   # p_dot [rad/s]
-        @test isapprox(r[4], p_dot_exp, atol=0.5)   # p_dot [rad/s]
-        @test isapprox(r[5], q_dot_exp, atol=0.005)  # q_dot [rad/s]
-        @test_broken isapprox(r[6], r_dot_exp, atol=0.005)  # r_dot [rad/s]
-        @test isapprox(r[6], r_dot_exp, atol=1.5)   # r_dot [rad/s]
+        @test_broken isapprox(p_dot, p_dot_exp, atol=0.06)   # p_dot [rad/s]
+        @test isapprox(p_dot, p_dot_exp, atol=0.5)   # p_dot [rad/s]
+        @test isapprox(q_dot, q_dot_exp, atol=0.005)  # q_dot [rad/s]
+        @test isapprox(r_dot, r_dot_exp, atol=1.5)   # r_dot [rad/s]
 
-        @test isapprox(r[10]*M2FT, x_dot_exp, atol=1e-4)   # x_dot (ft/s)
-        @test isapprox(r[11]*M2FT, y_dot_exp, atol=1e-4)  # y_dot (ft/s)
-        @test isapprox(-r[12]*M2FT, z_dot_exp, atol=1e-4)   # z_dot (ft/s)
+        @test isapprox(x_dot*M2FT, x_dot_exp, atol=1e-4)   # x_dot (ft/s)
+        @test isapprox(y_dot*M2FT, y_dot_exp, atol=1e-4)  # y_dot (ft/s)
+        @test isapprox(-z_dot*M2FT, z_dot_exp, atol=1e-4)   # z_dot (ft/s)
     end
 end

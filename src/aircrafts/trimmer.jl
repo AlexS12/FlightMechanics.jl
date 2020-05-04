@@ -221,9 +221,11 @@ function evaluate_cost_function(trimmer::Trimmer)
     inertia = mass_props.inertia
 
     # Get dynamic system state x
-    x_ = get_sixdof_euler_fixed_mass_state(trimmer.state)
+    six_dof_euler_fixed_mass_ds = convert(SixDOFEulerFixedMass, trimmer.state)
+    x = get_x(six_dof_euler_fixed_mass_ds)
+    f = get_state_equation(six_dof_euler_fixed_mass_ds)
     # Evaluate x_dot given x, u, parameters
-    x_dot = six_dof_euler_fixed_mass(x_, mass, inertia, pfm.forces, pfm.moments)[1:6]
+    x_dot = f(x, mass, inertia, pfm.forces, pfm.moments)[1:6]
 
     return sum(x_dot.^2)
 end

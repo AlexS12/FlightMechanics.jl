@@ -1,6 +1,6 @@
 module Models
 
-import Base: +, -, *, isapprox, convert, copy
+import Base: +, -, *, isapprox, convert, copy, show
 using LinearAlgebra
 using FlightMechanics
 
@@ -9,6 +9,7 @@ export
 Attitude, get_euler_angles, get_quaternions,
 # Position
 Position, PositionLLH, PositionEarth, PositionECEF,
+LLHPosition, ECEFPosition, EarthPosition,
 get_position, get_llh, get_xyz_earth, get_xyz_ecef, get_height,
 # State
 State,
@@ -17,7 +18,6 @@ get_body_velocity, get_horizon_velocity, get_flight_path_angle,
 get_body_ang_velocity, get_turn_rate,
 get_body_accel, get_horizon_accel,
 get_body_ang_accel,
-get_sixdof_euler_fixed_mass_state,
 # Mass
 RigidSolid, PointMass, get_mass, get_cg, get_inertia,
 # Pont Forces and moments
@@ -60,7 +60,8 @@ Aircraft, get_mass_props, get_pfm, get_aerodynamics, get_propulsion, get_name,
 get_wing_area, get_wing_span, get_chord, get_arp, get_empty_mass_props,
 get_payload_mass_props, calculate_aircraft,
 # DynamicSystem
-SixDOFEulerFixedMass, SixDOFQuaternionFixedMass,
+SixDOFEulerFixedMass, SixDOFQuaternionFixedMass, SixDOFECEFQuaternionFixedMass,
+SixDOFAeroEulerFixedMass,
 get_state_equation, get_state_equation_ode_wrapper, get_x, get_x_count, get_state
 
 include("attitude.jl")

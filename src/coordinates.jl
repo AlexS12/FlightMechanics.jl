@@ -612,7 +612,7 @@ function quaternion2euler(q0, q1, q2, q3)
     theta = asin(-2 * (q1*q3 - q0*q2))
     phi = atan(2 * (q2*q3 + q0*q1), q0*q0 - q1*q1 - q2*q2 + q3*q3)
 
-    return [psi, theta, phi]
+    return [mod2pi(psi), theta, phi]
 end
 
 
