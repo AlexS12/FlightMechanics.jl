@@ -8,8 +8,7 @@ export
 # Attitude
 Attitude, get_euler_angles, get_quaternions,
 # Position
-Position, PositionLLH, PositionEarth, PositionECEF,
-LLHPosition, ECEFPosition, EarthPosition,
+Position, LLHPosition, ECEFPosition, EarthPosition,
 get_position, get_llh, get_xyz_earth, get_xyz_ecef, get_height,
 # State
 State,
