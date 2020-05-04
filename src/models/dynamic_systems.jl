@@ -3,6 +3,14 @@ import Base.convert
 abstract type DynamicSystem end
 
 
+show(io::IO, ds::DynamicSystem) = print(
+    io,
+    """$(typeof(ds))
+    x     = $(get_x(ds))
+    dx/dt = $(get_x_dot(ds))
+    """
+)
+
 get_x(ds::DynamicSystem) = ds.x
 get_x(ds::DynamicSystem, state::State) = get_x(convert(typeof(ds), state))
 get_x_dot(ds::DynamicSystem) = ds.x_dot
