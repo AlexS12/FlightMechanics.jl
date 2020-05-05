@@ -43,6 +43,9 @@ generate_state_aerostate, check_state_aerostate_env_coherence,
 # Controls
 Control, RangeControl, DiscreteControl,
 get_value, get_value_range, get_value_choices, set_value!,
+# Inputs
+Input, ConstantInput, StepInput, RampInput, SinusoidalInput,
+get_value,
 # FCS
 FCS,
 # Engine
@@ -80,4 +83,5 @@ include("propulsion.jl")
 include("aerodynamics.jl")
 include("aircraft.jl")
 include("dynamic_systems.jl")
+include("inputs.jl")
 end
