@@ -17,16 +17,28 @@ get_empty_mass_props(ac::Aircraft) = RigidSolid(0.0, zeros(3), zeros(3, 3))
 get_payload_mass_props(ac::Aircraft) = RigidSolid(0.0, zeros(3), zeros(3, 3))
 
 
-function calculate_aircraft(ac::Aircraft, fcs::FCS, aerostate::AeroState,
-                            state::State, grav::Gravity; consume_fuel=false)
+function set_controls!(ac::Aircraft, c::Controls; allow_out_of_range=false, throw_error=false)
+    fcs = get_fcs(ac)
+    set_controls!(
+        fcs, c::StickPedalsLeverControls; 
+        allow_out_of_range=allow_out_of_range,
+        throw_error=throw_error
+        )
+end
+
+
+function calculate_aircraft(
+    ac::Aircraft, aerostate::AeroState, state::State, grav::Gravity; consume_fuel=false
+    )
     aero = get_aerodynamics(ac)
     prop = get_propulsion(ac)
     mass_props = get_mass_props(ac)
-
+    
+    fcs = get_fcs(ac)
     # Calculate propulsion
     prop = calculate_propulsion(prop, fcs, aerostate, state; consume_fuel=consume_fuel)
     # Calculate aerodynamics
-    aero = calculate_aerodynamics(ac, aero, fcs, aerostate, state)
+    aero = calculate_aerodynamics(ac, aero, aerostate, state)
     # Calculate gravity forces
     grav_force = get_gravity_body(grav, get_attitude(state)) * mass_props.mass
     grav_pfm = PointForcesMoments(mass_props.cg, grav_force, [0, 0, 0])

@@ -52,7 +52,8 @@ FCS,
 set_stick_lon!, set_stick_lat!, set_pedals!, set_thtl!,
 set_controls_trimmer!, get_controls_trimmer, get_controls_ranges_trimmer,
 Controls, StickPedalsLeverControls,
-set_controls!,
+set_controls!, 
+get_controls_array, get_n_controls, get_stick_lon, get_stick_lat, get_pedals, get_thrust_lever,
 ControlsStream, StickPedalsLeverStream,
 get_controls,
 # Engine
@@ -66,7 +67,7 @@ aerodynamics_from_body_total, aerodynamics_from_body_coeff, get_pfm,
 get_wind_pfm, get_wind_adim_pfm, get_body_pfm, get_body_adim_pfm,
 calculate_aerodynamics,
 # Aircraft
-Aircraft, get_mass_props, get_pfm, get_aerodynamics, get_propulsion, get_name,
+Aircraft, get_mass_props, get_pfm, get_aerodynamics, get_propulsion, get_fcs, get_name,
 get_wing_area, get_wing_span, get_chord, get_arp, get_empty_mass_props,
 get_payload_mass_props, calculate_aircraft,
 # DynamicSystem

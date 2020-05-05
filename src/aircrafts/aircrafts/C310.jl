@@ -251,8 +251,9 @@ cnda(aero::C310Aerodynamics, da) = -0.0168 * da
 cndr(aero::C310Aerodynamics, dr) = -0.1152 * dr
 
 # FORCES
-function calculate_aerodynamics(ac::Aircraft, aero::C310Aerodynamics, fcs::FCS,
-    aerostate::AeroState, state::State)
+function calculate_aerodynamics(
+    ac::Aircraft, aero::C310Aerodynamics, aerostate::AeroState, state::State
+    )
 
     ARP = get_arp(ac)
 
@@ -260,6 +261,8 @@ function calculate_aerodynamics(ac::Aircraft, aero::C310Aerodynamics, fcs::FCS,
     Sw = get_wing_area(ac)
     b = get_wing_span(ac)
     c = get_chord(ac)
+
+    fcs = get_fcs(ac)
 
     de = get_value(fcs.de)  # rad
     da = get_value(fcs.da)  # rad
@@ -335,8 +338,7 @@ get_engine_position(prop::C310EngineRight) = [-27.5, 70, 15.5] .* IN2M
 get_engine_orientation(prop::C310Engine) = [0, 0, 0] .* DEG2RAD
 
 
-function calculate_engine_power(eng::C310Engine, fcs::FCS,
-                                aerostate::AeroState, state::State)
+function calculate_engine_power(eng::C310Engine, fcs::FCS, aerostate::AeroState, state::State)
    # Max power at sea level
    Pmax0 = 260 * HP2WAT
    # Power assumed proportional to thrust lever
@@ -348,8 +350,9 @@ function calculate_engine_power(eng::C310Engine, fcs::FCS,
    return Pm, cj
 end
 
-function calculate_propeller_thrust(eng::C310Engine, fcs::FCS,
-    aerostate::AeroState, state::State, Pm::Number)
+function calculate_propeller_thrust(
+    eng::C310Engine, fcs::FCS, aerostate::AeroState, state::State, Pm::Number
+    )
    # Assume constant propulsive efficiency
    ηp = 0.75
    # Calculate thrust
@@ -358,8 +361,9 @@ function calculate_propeller_thrust(eng::C310Engine, fcs::FCS,
 end
 
 
-function calculate_engine(eng::C310Engine, fcs::FCS, aerostate::AeroState,
-                          state::State; consume_fuel=false)
+function calculate_engine(
+    eng::C310Engine, fcs::FCS, aerostate::AeroState, state::State; consume_fuel=false
+    )
     Pm, cj = calculate_engine_power(eng, fcs, aerostate, state)
     thrust, ηp = calculate_propeller_thrust(eng, fcs, aerostate, state, Pm)
 

@@ -8,14 +8,14 @@ mutable struct Trimmer
     aerostate::AeroState
     state::State
     env::Environment
-    fcs::FCS
     turn_rate::Number
     gamma::Number
+    controls::Controls
 end
 
 
 """
-    steady_state_trim(ac::Aircraft, fcs::FCS, env::Environment, tas::Number,
+    steady_state_trim(ac::Aircraft, env::Environment, tas::Number,
         pos::Position, psi::Number, gamma::Number, turn_rate::Number,
         α0::Number, β0::Number; show_trace=false)
 
@@ -46,7 +46,7 @@ show_trace: show trimming information and algorithm trace. Optional, default=tru
 ac: trimmed aircraft.
 aerostate: trimmed aerostate.
 state: trimmed state.
-fcs: trimmed FCS.
+controls: trimmed controls
 
 # References
 
@@ -57,7 +57,7 @@ See section 3.4 in [1] for the algorithm description.
  dynamics, controls design, and autonomous systems. John Wiley & Sons.
  (page 41, formula 1.4-23)
 """
-function steady_state_trim(ac::Aircraft, fcs::FCS, env::Environment,
+function steady_state_trim(ac::Aircraft, controls::Controls, env::Environment,
     tas::Number, pos::Position, psi::Number, gamma::Number, turn_rate::Number,
     α0::Number, β0::Number; show_trace = false, g_tol = 1e-25, max_iters = 5000)
 
@@ -88,22 +88,20 @@ function steady_state_trim(ac::Aircraft, fcs::FCS, env::Environment,
 
     # Ensure that environment is calculated at the position given to the trimmer
     env = calculate_environment(env, get_position(state))
-    fcs = copy(fcs)
+    set_controls!(ac, controls, allow_out_of_range=true)
 
     # Store every necessary variable in the trimmer
-    trimmer = Trimmer(ac, aerostate, state, env, fcs, turn_rate, gamma)
+    trimmer = Trimmer(ac, aerostate, state, env, turn_rate, gamma, controls)
 
     # # Varibles in the trimming loop are alpha, beta, and controls.
     trim_vars0 = [alpha0, beta0] # append not fixed controls
     # lower_bounds = [-15 * DEG2RAD, -15 * DEG2RAD]
     # upper_bounds = [ 15 * DEG2RAD,  15 * DEG2RAD]
-    #
-    for (value, range) = zip(get_controls_trimmer(fcs), get_controls_ranges_trimmer(fcs))
-    #     min, max = range
-        val = value
-        append!(trim_vars0, val)
-    #     append!(lower_bounds, min)
-    #     append!(upper_bounds, max)
+    
+    for value in get_controls_array(controls)
+        append!(trim_vars0, value)
+        # append!(lower_bounds, min)
+        # append!(upper_bounds, max)
     end
 
     # Wrapper for trim_cost_function with trimmer
@@ -112,7 +110,7 @@ function steady_state_trim(ac::Aircraft, fcs::FCS, env::Environment,
     # Calcualte cost function to check if a/c is already trimmed
     # Calcualte aircraft
     grav = env.grav
-    ac = calculate_aircraft(ac, fcs, aerostate, state, grav; consume_fuel = false)
+    ac = calculate_aircraft(ac, aerostate, state, grav; consume_fuel = false)
     trimmer.ac = ac
     cost = evaluate_cost_function(trimmer)
 
@@ -140,7 +138,7 @@ function steady_state_trim(ac::Aircraft, fcs::FCS, env::Environment,
     end
 
     # Return trimmed variables
-    return trimmer.ac, trimmer.aerostate, trimmer.state, trimmer.fcs
+    return trimmer.ac, trimmer.aerostate, trimmer.state, trimmer.controls
 end
 
 """
@@ -159,6 +157,8 @@ function trim_cost_function(x, trimmer::Trimmer)
     # alpha and beta are given by x
     # tas is fixed for the trim
     alpha, beta = x[1:2]
+
+    controls = typeof(trimmer.controls)(x[3:end]...)
 
     tr = trimmer.turn_rate
     tas = get_tas(trimmer.aerostate)
@@ -192,20 +192,19 @@ function trim_cost_function(x, trimmer::Trimmer)
 
     env = calculate_environment(trimmer.env, get_position(trimmer.state))
 
-    fcs = trimmer.fcs
     ac = trimmer.ac
     grav = env.grav
     # Some controls may be fixed and the rest of them are given in x
-    set_controls_trimmer!(fcs, x[3:end]...)
+    set_controls!(ac, controls, allow_out_of_range=true)
     # Calcualte aircraft
-    ac = calculate_aircraft(ac, fcs, aerostate, state, grav; consume_fuel = false)
+    ac = calculate_aircraft(ac, aerostate, state, grav; consume_fuel = false)
 
     # Update trimmer
     trimmer.ac = ac
     trimmer.aerostate = aerostate
     trimmer.state = state
     trimmer.env = env
-    trimmer.fcs = fcs
+    trimmer.controls = controls
     
     # Calculate objective function cost
     cost = evaluate_cost_function(trimmer)

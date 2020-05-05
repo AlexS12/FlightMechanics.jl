@@ -36,10 +36,13 @@ if throw_error is false (otherwise an error will be thrown)
 """
 function set_controls! end
 
+function get_controls_array end
 function get_stick_lon end
 function get_stick_lat end
 function get_pedals end
 function get_thrust_lever end
+
+get_n_controls(c::Controls) = size(get_controls_array)
 
 
 """
@@ -55,6 +58,9 @@ struct StickPedalsLeverControls <: Controls
 end
 
 
+get_controls_array(c::StickPedalsLeverControls) = [
+    get_stick_lon(c), get_stick_lat(c), get_pedals(c), get_thrust_lever(c)
+    ]
 get_stick_lon(c::StickPedalsLeverControls) = c.stick_lon
 get_stick_lat(c::StickPedalsLeverControls) = c.stick_lat
 get_pedals(c::StickPedalsLeverControls) = c.pedals

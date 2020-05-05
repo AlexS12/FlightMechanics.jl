@@ -354,8 +354,9 @@ Cnda(aero::F16Aerodynamics, α, β, da) = Cn_da(aero, α, β) * da
 
 
 
-function calculate_aerodynamics(ac::Aircraft, aero::F16Aerodynamics, fcs::FCS,
-   aerostate::AeroState, state::State)
+function calculate_aerodynamics(
+    ac::Aircraft, aero::F16Aerodynamics, aerostate::AeroState, state::State
+    )
 
    ARP = get_arp(ac)
 
@@ -364,6 +365,7 @@ function calculate_aerodynamics(ac::Aircraft, aero::F16Aerodynamics, fcs::FCS,
    b = get_wing_span(ac)  # m
    c = get_chord(ac)  # m
 
+   fcs = get_fcs(ac)
    de = get_value(fcs.de) * RAD2DEG
    da = get_value(fcs.da) * RAD2DEG
    dr = get_value(fcs.dr) * RAD2DEG
@@ -583,8 +585,9 @@ Reimplemented from:
  and simulation: dynamics, controls design, and autonomous systems. John Wiley
  & Sons. (page 715)
 """
-function calculate_engine(eng::F16Engine, fcs::FCS, aerostate::AeroState,
-                          state::State; consume_fuel=false)
+function calculate_engine(
+    eng::F16Engine, fcs::FCS, aerostate::AeroState, state::State; consume_fuel=false
+    )
 
     pow = get_thrust(fcs)  # Commanded power: between 0 and 100
     Mach = get_mach(aerostate)
