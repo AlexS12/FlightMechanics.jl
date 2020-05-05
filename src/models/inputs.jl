@@ -32,6 +32,28 @@ end
 
 
 """
+    DoubletInput(val, tini, tfin)
+
+Symmetric doublet input with val peak to peak amplitude. First positive.
+"""
+DoubletInput(val, tini, tfin) = vcat(
+    StepInput(0.5*val, tini, 0.5*(tini+tfin)),
+    StepInput(-0.5*val, 0.5*(tini+tfin), tfin)
+)
+
+
+"""
+    InverseDoubletInput(val, tini, tfin)
+
+Symmetric doublet input with val peak to peak amplitude. First negative.
+"""
+InverseDoubletInput(val, tini, tfin) = vcat(
+    StepInput(-0.5*val, tini, 0.5*(tini+tfin)),
+    StepInput(0.5*val, 0.5*(tini+tfin), tfin)
+)
+
+
+"""
     RampInput(val, tini, tend)
 
 Ramp input. Takes value at tend increasing linearly from tini to tend.
