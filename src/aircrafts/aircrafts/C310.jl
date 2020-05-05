@@ -18,7 +18,9 @@ import FlightMechanics.Models:
 # Aircraft Model
 import FlightMechanics.Models:
     get_name, get_wing_area, get_wing_span, get_chord, get_arp,
-    get_empty_mass_props, get_payload_mass_props
+    get_empty_mass_props, get_payload_mass_props,
+    set_stick_lon!, set_stick_lat!, set_pedals!, set_thtl!,
+    set_controls_trimmer!, get_controls_trimmer, get_controls_ranges_trimmer
 
 
 ##----------------------------------------------------------------------------------------------------
@@ -36,10 +38,7 @@ export C310Engine, C310EngineLeft, C310EngineRight,
 
 # FCS
 export C310FCS,
-    set_stick_lon!, set_stick_lat!, set_pedals!,
-    set_thtl1!, set_thtl2!, set_thtl!,
-    set_controls_trimmer!, get_controls_trimmer,
-    get_controls_ranges_trimmer
+    set_thtl1!, set_thtl2!
 
 # Aircraft Model
 export C310,

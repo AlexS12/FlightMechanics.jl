@@ -49,6 +49,8 @@ SinusoidalInput,
 get_value,
 # FCS
 FCS,
+set_stick_lon!, set_stick_lat!, set_pedals!, set_thtl!,
+set_controls_trimmer!, get_controls_trimmer, get_controls_ranges_trimmer,
 # Engine
 Engine, get_engine_position, get_engine_orientation, get_engine_gyro_effects,
 # Propulsion

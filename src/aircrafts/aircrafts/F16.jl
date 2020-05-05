@@ -17,7 +17,9 @@ import FlightMechanics.Models:
 # Aircraft Model
 import FlightMechanics.Models:
     get_name, get_wing_area, get_wing_span, get_chord, get_arp,
-    get_empty_mass_props
+    get_empty_mass_props,
+    set_stick_lon!, set_stick_lat!, set_pedals!, set_thtl!,
+    set_controls_trimmer!, get_controls_trimmer, get_controls_ranges_trimmer
 
 
 ##----------------------------------------------------------------------------------------------------
@@ -33,11 +35,7 @@ export F16Engine,
     calculate_engine
 
 # FCS
-export F16FCS,
-    set_stick_lon!, set_stick_lat!, set_pedals!,
-    set_thtl!,
-    set_controls_trimmer!, get_controls_trimmer,
-    get_controls_ranges_trimmer
+export F16FCS
 
 # Aircraft Model
 export F16,
