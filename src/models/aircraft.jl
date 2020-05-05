@@ -5,6 +5,7 @@ get_mass_props(ac::Aircraft) = ac.mass_props
 get_pfm(ac::Aircraft) = ac.pfm
 get_aerodynamics(ac::Aircraft) = ac.aerodynamics
 get_propulsion(ac::Aircraft) = ac.propulsion
+get_fcs(ac::Aircraft) = ac.fcs
 
 get_name(ac::Aircraft) = "Generic Aricraft"
 get_wing_area(ac::Aircraft) = 0.0  # m²
@@ -44,5 +45,5 @@ function calculate_aircraft(ac::Aircraft, fcs::FCS, aerostate::AeroState,
         get_payload_mass_props(ac)
         )
     # Return aircraft object
-    typeof(ac)(mass_props, pfm, aero, prop)
+    typeof(ac)(mass_props, pfm, aero, prop, fcs)
 end

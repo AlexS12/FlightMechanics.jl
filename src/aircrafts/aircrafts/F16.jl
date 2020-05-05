@@ -90,6 +90,7 @@ struct F16<:Aircraft
     pfm::PointForcesMoments
     aerodynamics::F16Aerodynamics
     propulsion::Propulsion
+    fcs::FCS
 end
 
 
@@ -696,14 +697,16 @@ function F16()
             get_gyro_effects(engine)
             )
 
+    fcs = F16FCS()
     # mass properties cannot be retrieved until ac is created... so:
     ac = F16(RigidSolid(0, zeros(3), zeros(3, 3)),
               pfm0,
               aero0,
-              propulsion0)
+              propulsion0,
+              fcs)
     mass = get_fuel_mass_props(get_propulsion(ac)) + get_empty_mass_props(ac)
             # + get_payload_mass_props(ac)
-    F16(mass, pfm0, aero0, propulsion0)
+    F16(mass, pfm0, aero0, propulsion0, fcs)
 end
 
 

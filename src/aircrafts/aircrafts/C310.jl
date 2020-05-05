@@ -107,6 +107,7 @@ struct C310<:Aircraft
 
     aerodynamics::C310Aerodynamics
     propulsion::Propulsion
+    fcs::FCS
 end
 
 
@@ -476,15 +477,18 @@ function C310()
             [0., 0., 0.]
             )
 
+    fcs = C310FCS()
     # mass properties cannot be retrieved until ac is created... so:
     ac = C310(RigidSolid(0, zeros(3), zeros(3, 3)),
               pfm0,
               aero0,
-              propulsion0)
+              propulsion0,
+              fcs)
     mass = get_fuel_mass_props(get_propulsion(ac)) +
            get_empty_mass_props(ac) +
            get_payload_mass_props(ac)
-    C310(mass, pfm0, aero0, propulsion0)
+
+    C310(mass, pfm0, aero0, propulsion0, fcs)
 end
 
 # Name
