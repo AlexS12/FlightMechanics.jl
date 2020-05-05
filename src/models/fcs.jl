@@ -27,9 +27,12 @@ abstract type Controls end
 
 # Interface that must be implemented
 """
-    set_controls!(fcs, controls)
+    set_controls!(fcs, controls; allow_out_of_range=false, throw_error=false)
 
 Sets a FCS with the given controls.
+If allow_out_of_range values outside the range will be allowed. This is useful in some
+situations such as the trimming process. Otherwise, the values will be set to the limit
+if throw_error is false (otherwise an error will be thrown)
 """
 function set_controls! end
 
@@ -47,11 +50,13 @@ struct StickPedalsLeverControls <: Controls
 end
 
 
-function set_controls!(fcs::FCS, c::StickPedalsLeverControls)
-    set_stick_lon!(fcs, c.stick_lon)
-    set_stick_lat!(fcs, c.stick_lat)
-    set_pedals!(fcs, c.pedals)
-    set_thtl!(fcs, c.thrust_lever)
+function set_controls!(
+    fcs::FCS, c::StickPedalsLeverControls; allow_out_of_range=false, throw_error=false
+    )
+    set_stick_lon!(fcs, c.stick_lon, allow_out_of_range, throw_error)
+    set_stick_lat!(fcs, c.stick_lat, allow_out_of_range, throw_error)
+    set_pedals!(fcs, c.pedals, allow_out_of_range, throw_error)
+    set_thtl!(fcs, c.thrust_lever, allow_out_of_range, throw_error)
 end
 
 
