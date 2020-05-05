@@ -51,6 +51,10 @@ get_value,
 FCS,
 set_stick_lon!, set_stick_lat!, set_pedals!, set_thtl!,
 set_controls_trimmer!, get_controls_trimmer, get_controls_ranges_trimmer,
+Controls, StickPedalsLeverControls,
+set_controls!,
+ControlsStream, StickPedalsLeverStream,
+get_controls,
 # Engine
 Engine, get_engine_position, get_engine_orientation, get_engine_gyro_effects,
 # Propulsion
@@ -81,10 +85,10 @@ include("gravity.jl")
 include("environment.jl")
 include("aero_state.jl")
 include("controls.jl")
+include("inputs.jl")
 include("fcs.jl")
 include("propulsion.jl")
 include("aerodynamics.jl")
 include("aircraft.jl")
 include("dynamic_systems.jl")
-include("inputs.jl")
 end
