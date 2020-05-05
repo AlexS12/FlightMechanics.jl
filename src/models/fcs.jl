@@ -8,8 +8,6 @@ function set_pedals! end
 function set_thtl! end
 
 # Interface to be trimmed
-function set_controls_trimmer! end
-function get_controls_trimmer end
 function get_controls_ranges_trimmer end
 
 

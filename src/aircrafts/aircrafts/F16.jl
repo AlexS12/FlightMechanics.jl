@@ -19,7 +19,7 @@ import FlightMechanics.Models:
     get_name, get_wing_area, get_wing_span, get_chord, get_arp,
     get_empty_mass_props,
     set_stick_lon!, set_stick_lat!, set_pedals!, set_thtl!,
-    set_controls_trimmer!, get_controls_trimmer, get_controls_ranges_trimmer
+    get_controls_ranges_trimmer
 
 
 ##----------------------------------------------------------------------------------------------------
@@ -662,21 +662,6 @@ function set_thtl!(fcs::F16FCS, value, allow_out_of_range=false, throw_error=fal
     range = max - min
     set_value!(fcs.cpl, tgear(value), allow_out_of_range, throw_error)
 end
-
-function set_controls_trimmer!(fcs::F16FCS, slong, slat, ped, thtl,
-    allow_out_of_range=true, throw_error=false)
-    set_stick_lat!(fcs, slong, allow_out_of_range, throw_error)
-    set_stick_lon!(fcs, slat, allow_out_of_range, throw_error)
-    set_pedals!(fcs, ped, allow_out_of_range, throw_error)
-    set_thtl!(fcs, thtl, allow_out_of_range, throw_error)
-end
-
-function get_controls_trimmer(fcs::F16FCS)
-    [get_value(fcs.stick_longitudinal),
-     get_value(fcs.stick_lateral),
-     get_value(fcs.pedals),
-     get_value(fcs.thtl)]
- end
 
 function get_controls_ranges_trimmer(fcs::F16FCS)
     [get_value_range(fcs.stick_longitudinal),

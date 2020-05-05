@@ -50,7 +50,7 @@ get_value,
 # FCS
 FCS,
 set_stick_lon!, set_stick_lat!, set_pedals!, set_thtl!,
-set_controls_trimmer!, get_controls_trimmer, get_controls_ranges_trimmer,
+get_controls_ranges_trimmer,
 Controls, StickPedalsLeverControls,
 set_controls!, 
 get_controls_array, get_n_controls, get_stick_lon, get_stick_lat, get_pedals, get_thrust_lever,
