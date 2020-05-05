@@ -36,6 +36,11 @@ if throw_error is false (otherwise an error will be thrown)
 """
 function set_controls! end
 
+function get_stick_lon end
+function get_stick_lat end
+function get_pedals end
+function get_thrust_lever end
+
 
 """
     StickPedalsLeverControls(stick_lon, stick_lat, pedals, thrust_lever)
@@ -50,13 +55,19 @@ struct StickPedalsLeverControls <: Controls
 end
 
 
+get_stick_lon(c::StickPedalsLeverControls) = c.stick_lon
+get_stick_lat(c::StickPedalsLeverControls) = c.stick_lat
+get_pedals(c::StickPedalsLeverControls) = c.pedals
+get_thrust_lever(c::StickPedalsLeverControls) = c.thrust_lever
+
+
 function set_controls!(
     fcs::FCS, c::StickPedalsLeverControls; allow_out_of_range=false, throw_error=false
     )
-    set_stick_lon!(fcs, c.stick_lon, allow_out_of_range, throw_error)
-    set_stick_lat!(fcs, c.stick_lat, allow_out_of_range, throw_error)
-    set_pedals!(fcs, c.pedals, allow_out_of_range, throw_error)
-    set_thtl!(fcs, c.thrust_lever, allow_out_of_range, throw_error)
+    set_stick_lon!(fcs, get_stick_lon(c), allow_out_of_range, throw_error)
+    set_stick_lat!(fcs, get_stick_lat(c), allow_out_of_range, throw_error)
+    set_pedals!(fcs, get_pedals(c), allow_out_of_range, throw_error)
+    set_thtl!(fcs, get_thrust_lever(c), allow_out_of_range, throw_error)
 end
 
 
