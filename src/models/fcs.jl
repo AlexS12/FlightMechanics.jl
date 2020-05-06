@@ -7,6 +7,38 @@ function set_stick_lat! end
 function set_pedals! end
 function set_thtl! end
 
+"""
+If allow_out_of_range, values outside the range will be allowed. This is useful in some
+situations such as the trimming process. Otherwise, the values will be set to the limit
+if throw_error is false (otherwise an error will be thrown)
+"""
+get_allow_out_of_range_inputs(fcs::FCS) = fcs.allow_out_of_range
+"""
+If allow_out_of_range, values outside the range will be allowed. This is useful in some
+situations such as the trimming process. Otherwise, the values will be set to the limit
+if throw_error is false (otherwise an error will be thrown)
+"""
+get_throw_error_on_out_of_range_inputs(fcs::FCS) = fcs.throw_error_on_out_of_range
+
+"""
+If allow_out_of_range, values outside the range will be allowed. This is useful in some
+situations such as the trimming process. Otherwise, the values will be set to the limit
+if throw_error is false (otherwise an error will be thrown)
+"""
+function set_allow_out_of_range_inputs!(fcs::FCS, val::Bool)
+    fcs.allow_out_of_range = val
+end
+
+"""
+If allow_out_of_range, values outside the range will be allowed. This is useful in some
+situations such as the trimming process. Otherwise, the values will be set to the limit
+if throw_error is false (otherwise an error will be thrown)
+"""
+function set_throw_error_on_out_of_range_inputs!(fcs::FCS, val::Bool)
+    fcs.throw_error_on_out_of_range = val
+end
+
+
 # Interface to be trimmed
 function get_controls_ranges_trimmer end
 
@@ -25,12 +57,9 @@ abstract type Controls end
 
 # Interface that must be implemented
 """
-    set_controls!(fcs, controls; allow_out_of_range=false, throw_error=false)
+    set_controls!(fcs, controls)
 
 Sets a FCS with the given controls.
-If allow_out_of_range values outside the range will be allowed. This is useful in some
-situations such as the trimming process. Otherwise, the values will be set to the limit
-if throw_error is false (otherwise an error will be thrown)
 """
 function set_controls! end
 
@@ -65,13 +94,11 @@ get_pedals(c::StickPedalsLeverControls) = c.pedals
 get_thrust_lever(c::StickPedalsLeverControls) = c.thrust_lever
 
 
-function set_controls!(
-    fcs::FCS, c::StickPedalsLeverControls; allow_out_of_range=false, throw_error=false
-    )
-    set_stick_lon!(fcs, get_stick_lon(c), allow_out_of_range, throw_error)
-    set_stick_lat!(fcs, get_stick_lat(c), allow_out_of_range, throw_error)
-    set_pedals!(fcs, get_pedals(c), allow_out_of_range, throw_error)
-    set_thtl!(fcs, get_thrust_lever(c), allow_out_of_range, throw_error)
+function set_controls!(fcs::FCS, c::StickPedalsLeverControls)
+    set_stick_lon!(fcs, get_stick_lon(c))
+    set_stick_lat!(fcs, get_stick_lat(c))
+    set_pedals!(fcs, get_pedals(c))
+    set_thtl!(fcs, get_thrust_lever(c))
 end
 
 

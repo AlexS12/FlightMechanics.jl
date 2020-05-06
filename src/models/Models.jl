@@ -50,6 +50,8 @@ get_value,
 # FCS
 FCS,
 set_stick_lon!, set_stick_lat!, set_pedals!, set_thtl!,
+get_allow_out_of_range_inputs, get_throw_error_on_out_of_range_inputs,
+set_allow_out_of_range_inputs!, set_throw_error_on_out_of_range_inputs!,
 get_controls_ranges_trimmer,
 Controls, StickPedalsLeverControls,
 set_controls!, 

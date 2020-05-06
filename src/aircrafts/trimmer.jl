@@ -88,7 +88,14 @@ function steady_state_trim(ac::Aircraft, controls::Controls, env::Environment,
 
     # Ensure that environment is calculated at the position given to the trimmer
     env = calculate_environment(env, get_position(state))
-    set_controls!(ac, controls, allow_out_of_range=true)
+    # store fcs configuration
+    fcs = get_fcs(ac)
+    allow_oor_controls = get_allow_out_of_range_inputs(fcs)
+    err_on_oor_controls = get_throw_error_on_out_of_range_inputs(fcs)
+    set_allow_out_of_range_inputs!(fcs, true)
+    set_throw_error_on_out_of_range_inputs!(fcs, false)
+
+    set_controls!(ac, controls)
 
     # Store every necessary variable in the trimmer
     trimmer = Trimmer(ac, aerostate, state, env, turn_rate, gamma, controls)
@@ -136,6 +143,10 @@ function steady_state_trim(ac::Aircraft, controls::Controls, env::Environment,
             println(Optim.minimizer(result))
         end
     end
+    # Reconfigure fcs to initial state
+    fcs = get_fcs(trimmer.ac)
+    set_allow_out_of_range_inputs!(fcs, allow_oor_controls)
+    set_throw_error_on_out_of_range_inputs!(fcs, err_on_oor_controls)
 
     # Return trimmed variables
     return trimmer.ac, trimmer.aerostate, trimmer.state, trimmer.controls
@@ -194,8 +205,7 @@ function trim_cost_function(x, trimmer::Trimmer)
 
     ac = trimmer.ac
     grav = env.grav
-    # Some controls may be fixed and the rest of them are given in x
-    set_controls!(ac, controls, allow_out_of_range=true)
+    set_controls!(ac, controls)
     # Calcualte aircraft
     ac = calculate_aircraft(ac, aerostate, state, grav; consume_fuel = false)
 

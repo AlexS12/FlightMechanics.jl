@@ -17,13 +17,9 @@ get_empty_mass_props(ac::Aircraft) = RigidSolid(0.0, zeros(3), zeros(3, 3))
 get_payload_mass_props(ac::Aircraft) = RigidSolid(0.0, zeros(3), zeros(3, 3))
 
 
-function set_controls!(ac::Aircraft, c::Controls; allow_out_of_range=false, throw_error=false)
+function set_controls!(ac::Aircraft, c::Controls)
     fcs = get_fcs(ac)
-    set_controls!(
-        fcs, c::StickPedalsLeverControls; 
-        allow_out_of_range=allow_out_of_range,
-        throw_error=throw_error
-        )
+    set_controls!(fcs, c::StickPedalsLeverControls)
 end
 
 
