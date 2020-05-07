@@ -15,13 +15,13 @@ end
 
 
 """
-    steady_state_trim(ac::Aircraft, env::Environment, tas::Number,
-        pos::Position, psi::Number, gamma::Number, turn_rate::Number,
-        α0::Number, β0::Number; show_trace=false)
+    steady_state_trim(
+        ac::Aircraft, controls::Controls, env::Environment, tas::Number, pos::Position,
+        psi::Number, gamma::Number, turn_rate::Number, α0::Number, β0::Number;
+        show_trace = false, g_tol = 1e-25, max_iters = 5000
+        )
 
-Find a steady state flight condition. Steady flight is defined as flight where
-the aircraft's linear and angular velocity vectors are constant in a body-fixed
-reference frame (ie. body frame or wind frame).
+Find a steady state flight condition.
 
 Three different conditions can be sought:
 - Steady level longitudinal flight: bank angle μ=0 and flight-path angle γ=0.
@@ -31,10 +31,9 @@ Three different conditions can be sought:
 
 # Inputs
 ac: aircraft to be trimmed.
-fcs: flight control system. Controls given by `get_controls_trimmer` will be
-  used to trim the aircraft while the rest will remain constant.
+controls : controls to be used to trim the aircraft with their initial values.
 env: environment variables (atmospheric values, wind and gravity).
-tas: true airspeed [m/s].
+tas: trimming true airspeed [m/s].
 pos: position of the aircraft.
 psi: heading of the aircraft [rad].
 gamma: aerodynamic rate of climb of the aircraft [rad].
@@ -48,6 +47,13 @@ aerostate: trimmed aerostate.
 state: trimmed state.
 controls: trimmed controls
 
+# Notes
+
+Steady flight is defined as flight where the aircraft's linear and angular velocity vectors
+are constant in a body-fixed reference frame (ie. body frame or wind frame).
+
+SixDOFEulerFixedMass is always used for state derivative calculation during trimming.
+
 # References
 
 See section 2.5 in [1] for the definition of steady-state flight condition.
@@ -57,9 +63,11 @@ See section 3.4 in [1] for the algorithm description.
  dynamics, controls design, and autonomous systems. John Wiley & Sons.
  (page 41, formula 1.4-23)
 """
-function steady_state_trim(ac::Aircraft, controls::Controls, env::Environment,
-    tas::Number, pos::Position, psi::Number, gamma::Number, turn_rate::Number,
-    α0::Number, β0::Number; show_trace = false, g_tol = 1e-25, max_iters = 5000)
+function steady_state_trim(
+    ac::Aircraft, controls::Controls, env::Environment, tas::Number, pos::Position,
+    psi::Number, gamma::Number, turn_rate::Number, α0::Number, β0::Number;
+    show_trace = false, g_tol = 1e-25, max_iters = 5000
+    )
 
     alpha0 = α0
     beta0 = β0
@@ -101,15 +109,10 @@ function steady_state_trim(ac::Aircraft, controls::Controls, env::Environment,
     # Store every necessary variable in the trimmer
     trimmer = Trimmer(ac, aerostate, state, env, turn_rate, gamma, controls)
 
-    # # Varibles in the trimming loop are alpha, beta, and controls.
+    # trim_vars0 contains [α, β, controls_to_be_trimmed...]
     trim_vars0 = [alpha0, beta0] # append not fixed controls
-    # lower_bounds = [-15 * DEG2RAD, -15 * DEG2RAD]
-    # upper_bounds = [ 15 * DEG2RAD,  15 * DEG2RAD]
-    
     for value in get_controls_array(controls)
         append!(trim_vars0, value)
-        # append!(lower_bounds, min)
-        # append!(upper_bounds, max)
     end
 
     # Wrapper for trim_cost_function with trimmer
@@ -144,7 +147,8 @@ function steady_state_trim(ac::Aircraft, controls::Controls, env::Environment,
             println(Optim.minimizer(result))
         end
     end
-    # Reconfigure fcs to initial state
+
+    # Reconfigure fcs to initial configuration
     fcs = get_fcs(trimmer.ac)
     set_allow_out_of_range_inputs!(fcs, allow_oor_controls)
     set_throw_error_on_out_of_range_inputs!(fcs, err_on_oor_controls)
