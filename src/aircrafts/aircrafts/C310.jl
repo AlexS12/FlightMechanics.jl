@@ -18,7 +18,9 @@ import FlightMechanics.Models:
 # Aircraft Model
 import FlightMechanics.Models:
     get_name, get_wing_area, get_wing_span, get_chord, get_arp,
-    get_empty_mass_props, get_payload_mass_props
+    get_empty_mass_props, get_payload_mass_props,
+    set_stick_lon!, set_stick_lat!, set_pedals!, set_thtl!,
+    get_controls_ranges_trimmer
 
 
 ##----------------------------------------------------------------------------------------------------
@@ -36,10 +38,7 @@ export C310Engine, C310EngineLeft, C310EngineRight,
 
 # FCS
 export C310FCS,
-    set_stick_lon!, set_stick_lat!, set_pedals!,
-    set_thtl1!, set_thtl2!, set_thtl!,
-    set_controls_trimmer!, get_controls_trimmer,
-    get_controls_ranges_trimmer
+    set_thtl1!, set_thtl2!
 
 # Aircraft Model
 export C310,
@@ -85,7 +84,7 @@ struct C310EngineRight<:C310Engine
 end
 
 # FCS
-struct C310FCS<:FCS
+mutable struct C310FCS<:FCS
     # Cabin controls
     stick_longitudinal::RangeControl
     stick_lateral::RangeControl
@@ -99,7 +98,12 @@ struct C310FCS<:FCS
     # Engine
     t1::RangeControl
     t2::RangeControl
+    # Configuration
+    allow_out_of_range::Bool
+    throw_error_on_out_of_range::Bool
+
 end
+
 
 # Aircraft Model
 struct C310<:Aircraft
@@ -108,6 +112,7 @@ struct C310<:Aircraft
 
     aerodynamics::C310Aerodynamics
     propulsion::Propulsion
+    fcs::FCS
 end
 
 
@@ -251,8 +256,9 @@ cnda(aero::C310Aerodynamics, da) = -0.0168 * da
 cndr(aero::C310Aerodynamics, dr) = -0.1152 * dr
 
 # FORCES
-function calculate_aerodynamics(ac::Aircraft, aero::C310Aerodynamics, fcs::FCS,
-    aerostate::AeroState, state::State)
+function calculate_aerodynamics(
+    ac::Aircraft, aero::C310Aerodynamics, aerostate::AeroState, state::State
+    )
 
     ARP = get_arp(ac)
 
@@ -260,6 +266,8 @@ function calculate_aerodynamics(ac::Aircraft, aero::C310Aerodynamics, fcs::FCS,
     Sw = get_wing_area(ac)
     b = get_wing_span(ac)
     c = get_chord(ac)
+
+    fcs = get_fcs(ac)
 
     de = get_value(fcs.de)  # rad
     da = get_value(fcs.da)  # rad
@@ -335,8 +343,7 @@ get_engine_position(prop::C310EngineRight) = [-27.5, 70, 15.5] .* IN2M
 get_engine_orientation(prop::C310Engine) = [0, 0, 0] .* DEG2RAD
 
 
-function calculate_engine_power(eng::C310Engine, fcs::FCS,
-                                aerostate::AeroState, state::State)
+function calculate_engine_power(eng::C310Engine, fcs::FCS, aerostate::AeroState, state::State)
    # Max power at sea level
    Pmax0 = 260 * HP2WAT
    # Power assumed proportional to thrust lever
@@ -348,8 +355,9 @@ function calculate_engine_power(eng::C310Engine, fcs::FCS,
    return Pm, cj
 end
 
-function calculate_propeller_thrust(eng::C310Engine, fcs::FCS,
-    aerostate::AeroState, state::State, Pm::Number)
+function calculate_propeller_thrust(
+    eng::C310Engine, fcs::FCS, aerostate::AeroState, state::State, Pm::Number
+    )
    # Assume constant propulsive efficiency
    ηp = 0.75
    # Calculate thrust
@@ -358,8 +366,9 @@ function calculate_propeller_thrust(eng::C310Engine, fcs::FCS,
 end
 
 
-function calculate_engine(eng::C310Engine, fcs::FCS, aerostate::AeroState,
-                          state::State; consume_fuel=false)
+function calculate_engine(
+    eng::C310Engine, fcs::FCS, aerostate::AeroState, state::State; consume_fuel=false
+    )
     Pm, cj = calculate_engine_power(eng, fcs, aerostate, state)
     thrust, ηp = calculate_propeller_thrust(eng, fcs, aerostate, state, Pm)
 
@@ -386,73 +395,74 @@ get_thrust_setting(eng::C310EngineRight, fcs::FCS) = get_value(fcs.t2)
 ##----------------------------------------------------------------------------------------------------
 ## FCS
 
-C310FCS() = C310FCS(# Cabin Inputs
-                    RangeControl(0.0, [0, 1]),  # stick_longitudinal
-                    RangeControl(0.0, [0, 1]),  # stick_lateral
-                    RangeControl(0.0, [0, 1]),  # pedals
-                    RangeControl(0.0, [0, 1]),  # thtl
-                    # Controls
-                    RangeControl(0.0, [-25.0, 35.0] .* DEG2RAD),  # elevator
-                    RangeControl(0.0, [-18.0, 14.0] .* DEG2RAD),  # ailerons
-                    RangeControl(0.0, [-27.0, 27.0] .* DEG2RAD),  # rudder
-                    RangeControl(0.0, [0.0, 1.0]),                # t1
-                    RangeControl(0.0, [0.0, 1.0])                 # t1
-                    )
+C310FCS(stick_lon, stick_lat, pedals, thtl, de, da, dr, t1, t2) = C310FCS(
+    stick_lon, stick_lat, pedals, thtl, de, da, dr, t1, t2, false, false
+    )
 
-function set_stick_lon!(fcs::C310FCS, value, allow_out_of_range=false, throw_error=false)
+C310FCS() = C310FCS(
+    # Cabin Inputs
+    RangeControl(0.0, [0, 1]),  # stick_longitudinal
+    RangeControl(0.0, [0, 1]),  # stick_lateral
+    RangeControl(0.0, [0, 1]),  # pedals
+    RangeControl(0.0, [0, 1]),  # thtl
+    # Controls
+    RangeControl(0.0, [-25.0, 35.0] .* DEG2RAD),  # elevator
+    RangeControl(0.0, [-18.0, 14.0] .* DEG2RAD),  # ailerons
+    RangeControl(0.0, [-27.0, 27.0] .* DEG2RAD),  # rudder
+    RangeControl(0.0, [0.0, 1.0]),                # t1
+    RangeControl(0.0, [0.0, 1.0])                 # t1
+    )
+
+
+function set_stick_lon!(fcs::C310FCS, value)
     set_value!(fcs.stick_longitudinal, value)
     min, max = get_value_range(fcs.de)
     range = max - min
+    allow_out_of_range = get_allow_out_of_range_inputs(fcs)
+    throw_error = get_throw_error_on_out_of_range_inputs(fcs)
     set_value!(fcs.de, min + range * value, allow_out_of_range, throw_error)
 end
 
-function set_stick_lat!(fcs::C310FCS, value, allow_out_of_range=false, throw_error=false)
+function set_stick_lat!(fcs::C310FCS, value)
     set_value!(fcs.stick_lateral, value)
     min, max = get_value_range(fcs.da)
     range = max - min
+    allow_out_of_range = get_allow_out_of_range_inputs(fcs)
+    throw_error = get_throw_error_on_out_of_range_inputs(fcs)
     set_value!(fcs.da, min + range * value, allow_out_of_range, throw_error)
 end
 
-function set_pedals!(fcs::C310FCS, value, allow_out_of_range=false, throw_error=false)
+function set_pedals!(fcs::C310FCS, value)
     set_value!(fcs.pedals, value)
     min, max = get_value_range(fcs.dr)
     range = max - min
+    allow_out_of_range = get_allow_out_of_range_inputs(fcs)
+    throw_error = get_throw_error_on_out_of_range_inputs(fcs)
     set_value!(fcs.dr, min + range * value, allow_out_of_range, throw_error)
 end
 
-function set_thtl1!(fcs::C310FCS, value, allow_out_of_range=false, throw_error=false)
+function set_thtl1!(fcs::C310FCS, value)
     set_value!(fcs.thtl, value)
     min, max = get_value_range(fcs.t1)
     range = max - min
+    allow_out_of_range = get_allow_out_of_range_inputs(fcs)
+    throw_error = get_throw_error_on_out_of_range_inputs(fcs)
     set_value!(fcs.t1, min + range * value, allow_out_of_range, throw_error)
 end
 
-function set_thtl2!(fcs::C310FCS, value, allow_out_of_range=false, throw_error=false)
+function set_thtl2!(fcs::C310FCS, value)
     set_value!(fcs.thtl, value)
     min, max = get_value_range(fcs.t2)
     range = max - min
+    allow_out_of_range = get_allow_out_of_range_inputs(fcs)
+    throw_error = get_throw_error_on_out_of_range_inputs(fcs)
     set_value!(fcs.t2, min + range * value, allow_out_of_range, throw_error)
 end
 
-function set_thtl!(fcs::C310FCS, value, allow_out_of_range=false, throw_error=false)
-    set_thtl1!(fcs, value, allow_out_of_range, throw_error)
-    set_thtl2!(fcs, value, allow_out_of_range, throw_error)
+function set_thtl!(fcs::C310FCS, value)
+    set_thtl1!(fcs, value)
+    set_thtl2!(fcs, value)
 end
-
-function set_controls_trimmer!(fcs::C310FCS, slong, slat, ped, thtl,
-    allow_out_of_range=true, throw_error=false)
-    set_stick_lat!(fcs, slong, allow_out_of_range, throw_error)
-    set_stick_lon!(fcs, slat, allow_out_of_range, throw_error)
-    set_pedals!(fcs, ped, allow_out_of_range, throw_error)
-    set_thtl!(fcs, thtl, allow_out_of_range, throw_error)
-end
-
-function get_controls_trimmer(fcs::C310FCS)
-    [get_value(fcs.stick_longitudinal),
-     get_value(fcs.stick_lateral),
-     get_value(fcs.pedals),
-     get_value(fcs.thtl)]
- end
 
 function get_controls_ranges_trimmer(fcs::C310FCS)
     [get_value_range(fcs.stick_longitudinal),
@@ -460,7 +470,6 @@ function get_controls_ranges_trimmer(fcs::C310FCS)
      get_value_range(fcs.pedals),
      get_value_range(fcs.thtl)]
 end
-
 
 ##----------------------------------------------------------------------------------------------------
 ## Aircraft Model
@@ -477,15 +486,18 @@ function C310()
             [0., 0., 0.]
             )
 
+    fcs = C310FCS()
     # mass properties cannot be retrieved until ac is created... so:
     ac = C310(RigidSolid(0, zeros(3), zeros(3, 3)),
               pfm0,
               aero0,
-              propulsion0)
+              propulsion0,
+              fcs)
     mass = get_fuel_mass_props(get_propulsion(ac)) +
            get_empty_mass_props(ac) +
            get_payload_mass_props(ac)
-    C310(mass, pfm0, aero0, propulsion0)
+
+    C310(mass, pfm0, aero0, propulsion0, fcs)
 end
 
 # Name

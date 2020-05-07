@@ -17,7 +17,9 @@ import FlightMechanics.Models:
 # Aircraft Model
 import FlightMechanics.Models:
     get_name, get_wing_area, get_wing_span, get_chord, get_arp,
-    get_empty_mass_props
+    get_empty_mass_props,
+    set_stick_lon!, set_stick_lat!, set_pedals!, set_thtl!,
+    get_controls_ranges_trimmer
 
 
 ##----------------------------------------------------------------------------------------------------
@@ -33,11 +35,7 @@ export F16Engine,
     calculate_engine
 
 # FCS
-export F16FCS,
-    set_stick_lon!, set_stick_lat!, set_pedals!,
-    set_thtl!,
-    set_controls_trimmer!, get_controls_trimmer,
-    get_controls_ranges_trimmer
+export F16FCS
 
 # Aircraft Model
 export F16,
@@ -71,7 +69,7 @@ struct F16Engine<:Engine
 end
 
 # FCS
-struct F16FCS<:FCS      # TODO: implement also rate limits and time constants
+mutable struct F16FCS<:FCS      # TODO: implement also rate limits and time constants
     # Cabin controls
     stick_longitudinal::RangeControl
     stick_lateral::RangeControl
@@ -84,6 +82,9 @@ struct F16FCS<:FCS      # TODO: implement also rate limits and time constants
     dr::RangeControl
     # Engine
     cpl::RangeControl
+    # Configuration
+    allow_out_of_range::Bool
+    throw_error_on_out_of_range::Bool
 end
 
 # Aircraft Model
@@ -92,6 +93,7 @@ struct F16<:Aircraft
     pfm::PointForcesMoments
     aerodynamics::F16Aerodynamics
     propulsion::Propulsion
+    fcs::FCS
 end
 
 
@@ -355,8 +357,9 @@ Cnda(aero::F16Aerodynamics, α, β, da) = Cn_da(aero, α, β) * da
 
 
 
-function calculate_aerodynamics(ac::Aircraft, aero::F16Aerodynamics, fcs::FCS,
-   aerostate::AeroState, state::State)
+function calculate_aerodynamics(
+    ac::Aircraft, aero::F16Aerodynamics, aerostate::AeroState, state::State
+    )
 
    ARP = get_arp(ac)
 
@@ -365,6 +368,7 @@ function calculate_aerodynamics(ac::Aircraft, aero::F16Aerodynamics, fcs::FCS,
    b = get_wing_span(ac)  # m
    c = get_chord(ac)  # m
 
+   fcs = get_fcs(ac)
    de = get_value(fcs.de) * RAD2DEG
    da = get_value(fcs.da) * RAD2DEG
    dr = get_value(fcs.dr) * RAD2DEG
@@ -584,8 +588,9 @@ Reimplemented from:
  and simulation: dynamics, controls design, and autonomous systems. John Wiley
  & Sons. (page 715)
 """
-function calculate_engine(eng::F16Engine, fcs::FCS, aerostate::AeroState,
-                          state::State; consume_fuel=false)
+function calculate_engine(
+    eng::F16Engine, fcs::FCS, aerostate::AeroState, state::State; consume_fuel=false
+    )
 
     pow = get_thrust(fcs)  # Commanded power: between 0 and 100
     Mach = get_mach(aerostate)
@@ -620,61 +625,59 @@ end
 # TODO: Move to FCS in models
 get_thrust(fcs::F16FCS) = get_value(fcs.cpl)
 
-F16FCS() = F16FCS(# Cabin Inputs
-                    RangeControl(0.0, [0, 1]),  # stick_longitudinal
-                    RangeControl(0.0, [0, 1]),  # stick_lateral
-                    RangeControl(0.0, [0, 1]),  # pedals
-                    RangeControl(0.0, [0, 1]),  # thtl
-                    # Controls
-                    RangeControl(0.0, [-DE_MAX, DE_MAX] .* DEG2RAD),  # elevator
-                    RangeControl(0.0, [-DA_MAX, DA_MAX] .* DEG2RAD),  # ailerons
-                    RangeControl(0.0, [-DR_MAX, DR_MAX] .* DEG2RAD),  # rudder
-                    # Commanded power level
-                    RangeControl(0.0, [0.0, 100.]),                # CPL
-                    )
+F16FCS(stick_lon, stick_lat, pedals, thtl, de, da, dr, cpl) = F16FCS(
+    stick_lon, stick_lat, pedals, thtl, de, da, dr, cpl, false, false
+    )
 
-function set_stick_lon!(fcs::F16FCS, value, allow_out_of_range=false, throw_error=false)
+F16FCS() = F16FCS(
+    # Cabin Inputs
+    RangeControl(0.0, [0, 1]),  # stick_longitudinal
+    RangeControl(0.0, [0, 1]),  # stick_lateral
+    RangeControl(0.0, [0, 1]),  # pedals
+    RangeControl(0.0, [0, 1]),  # thtl
+    # Controls
+    RangeControl(0.0, [-DE_MAX, DE_MAX] .* DEG2RAD),  # elevator
+    RangeControl(0.0, [-DA_MAX, DA_MAX] .* DEG2RAD),  # ailerons
+    RangeControl(0.0, [-DR_MAX, DR_MAX] .* DEG2RAD),  # rudder
+    # Commanded power level
+    RangeControl(0.0, [0.0, 100.]),                # CPL
+    )
+
+function set_stick_lon!(fcs::F16FCS, value)
     set_value!(fcs.stick_longitudinal, value)
     min, max = get_value_range(fcs.de)
     range = max - min
+    allow_out_of_range = get_allow_out_of_range_inputs(fcs)
+    throw_error = get_throw_error_on_out_of_range_inputs(fcs)
     set_value!(fcs.de, min + range * value, allow_out_of_range, throw_error)
 end
 
-function set_stick_lat!(fcs::F16FCS, value, allow_out_of_range=false, throw_error=false)
+function set_stick_lat!(fcs::F16FCS, value)
     set_value!(fcs.stick_lateral, value)
     min, max = get_value_range(fcs.da)
     range = max - min
+    allow_out_of_range = get_allow_out_of_range_inputs(fcs)
+    throw_error = get_throw_error_on_out_of_range_inputs(fcs)
     set_value!(fcs.da, min + range * value, allow_out_of_range, throw_error)
 end
 
-function set_pedals!(fcs::F16FCS, value, allow_out_of_range=false, throw_error=false)
+function set_pedals!(fcs::F16FCS, value)
     set_value!(fcs.pedals, value)
     min, max = get_value_range(fcs.dr)
     range = max - min
+    allow_out_of_range = get_allow_out_of_range_inputs(fcs)
+    throw_error = get_throw_error_on_out_of_range_inputs(fcs)
     set_value!(fcs.dr, min + range * value, allow_out_of_range, throw_error)
 end
 
-function set_thtl!(fcs::F16FCS, value, allow_out_of_range=false, throw_error=false)
+function set_thtl!(fcs::F16FCS, value)
     set_value!(fcs.thtl, value)
     min, max = get_value_range(fcs.thtl)
     range = max - min
+    allow_out_of_range = get_allow_out_of_range_inputs(fcs)
+    throw_error = get_throw_error_on_out_of_range_inputs(fcs)
     set_value!(fcs.cpl, tgear(value), allow_out_of_range, throw_error)
 end
-
-function set_controls_trimmer!(fcs::F16FCS, slong, slat, ped, thtl,
-    allow_out_of_range=true, throw_error=false)
-    set_stick_lat!(fcs, slong, allow_out_of_range, throw_error)
-    set_stick_lon!(fcs, slat, allow_out_of_range, throw_error)
-    set_pedals!(fcs, ped, allow_out_of_range, throw_error)
-    set_thtl!(fcs, thtl, allow_out_of_range, throw_error)
-end
-
-function get_controls_trimmer(fcs::F16FCS)
-    [get_value(fcs.stick_longitudinal),
-     get_value(fcs.stick_lateral),
-     get_value(fcs.pedals),
-     get_value(fcs.thtl)]
- end
 
 function get_controls_ranges_trimmer(fcs::F16FCS)
     [get_value_range(fcs.stick_longitudinal),
@@ -698,14 +701,16 @@ function F16()
             get_gyro_effects(engine)
             )
 
+    fcs = F16FCS()
     # mass properties cannot be retrieved until ac is created... so:
     ac = F16(RigidSolid(0, zeros(3), zeros(3, 3)),
               pfm0,
               aero0,
-              propulsion0)
+              propulsion0,
+              fcs)
     mass = get_fuel_mass_props(get_propulsion(ac)) + get_empty_mass_props(ac)
             # + get_payload_mass_props(ac)
-    F16(mass, pfm0, aero0, propulsion0)
+    F16(mass, pfm0, aero0, propulsion0, fcs)
 end
 
 

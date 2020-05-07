@@ -57,8 +57,9 @@ end
 get_fuel_mass_props(prop::Propulsion) = sum(get_tanks(prop))
 
 
-function calculate_propulsion(prop::Propulsion, fcs::FCS, aerostate::AeroState,
-                              state::State; consume_fuel=false)
+function calculate_propulsion(
+    prop::Propulsion, fcs::FCS, aerostate::AeroState, state::State; consume_fuel=false
+    )
 
     engines = get_engines(prop)
 

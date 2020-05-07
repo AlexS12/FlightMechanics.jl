@@ -7,7 +7,8 @@ using FlightMechanics
 @testset "anemometry" begin include("anemometry.jl") end
 @testset "mechanics" begin include("mechanics.jl") end
 @testset "flight mechanics" begin include("flight_mechanics.jl") end
-
+@testset "inputs" begin include("models/inputs.jl") end
+@testset "fcs" begin include("models/fcs.jl") end
 @testset "pfm" begin include("models/point_forces_moments.jl") end
 @testset "mass" begin include("models/mass.jl") end
 @testset "attitude" begin include("models/attitude.jl") end

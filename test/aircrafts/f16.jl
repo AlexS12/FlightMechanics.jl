@@ -103,7 +103,7 @@ end
     att = Attitude(-1, 1, -1)
     pos = EarthPosition(1000*FT2M, 900*FT2M, -10000*FT2M)
     env = Environment(pos, atmos="ISA1978", wind="NoWind", grav="const")
-    fcs = F16FCS()
+    fcs = get_fcs(ac)
 
 
     @testset "Case $ii" for ii=1:size(input_data, 1)
@@ -118,6 +118,7 @@ end
                       [0., 0., 0.],
                       [0., 0., 0.]
                      )
+        # Act directly on FCS surfaces
         set_value!(fcs.de, de*DEG2RAD)
         set_value!(fcs.da, da*DEG2RAD)
         set_value!(fcs.dr, dr*DEG2RAD)
@@ -126,7 +127,7 @@ end
 
         # Calculate aerodynamics
         aero = get_aerodynamics(ac)
-        aero = calculate_aerodynamics(ac, aero, fcs, aerostate, state)
+        aero = calculate_aerodynamics(ac, aero, aerostate, state)
 
         pfm = get_body_adim_pfm(aero)
 
@@ -160,7 +161,7 @@ end
     att = Attitude(-1, 1, -1)
     pos = EarthPosition(1000*FT2M, 900*FT2M, -10000*FT2M)
     env = Environment(pos, atmos="ISA1978", wind="NoWind", grav="const")
-    fcs = F16FCS()
+    fcs = get_fcs(ac)
 
 
     @testset "Case $ii" for ii=1:size(input_data, 1)
@@ -183,7 +184,7 @@ end
 
         # Calculate aerodynamics
         aero = get_aerodynamics(ac)
-        aero = calculate_aerodynamics(ac, aero, fcs, aerostate, state)
+        aero = calculate_aerodynamics(ac, aero, aerostate, state)
 
         pfm = get_body_adim_pfm(aero)
 
@@ -214,8 +215,9 @@ end
            1.0        10000      500      77931.4105074207
     ]
 
+    ac = F16()
     eng = F16Engine()
-    fcs = F16FCS()
+    fcs = get_fcs(ac)
     att = Attitude(0., 0., 0.)
     pos = EarthPosition(0, 0, 0)
     env = Environment(pos, atmos="ISAF16", wind="NoWind", grav="const")
@@ -242,12 +244,9 @@ end
     # Integration test for aircraft just making sure everything runs
     ac = F16()
 
-
-    fcs = F16FCS()
-    set_stick_lon!(fcs, 0.0)
-    set_stick_lat!(fcs, 0.5)
-    set_pedals!(fcs, 0.5)
-    set_thtl!(fcs, 0.8)
+    fcs = get_fcs(ac)
+    controls = StickPedalsLeverControls(0.0, 0.5, 0.5, 0.8)
+    set_controls!(ac, controls)
 
     h = 0.0 * M2FT
     psi = 0.0  # rad
@@ -290,18 +289,25 @@ end
         exp_de   = trim_test_data[ii, 4]
 
         # Initial conditions for trimmer
-        α0 = exp_α*DEG2RAD + 5*DEG2RAD
+        α0 = 0.5*exp_α*DEG2RAD
         β0 = 0.
-        stick_lon0 = exp_de/25.0 + 0.5
-        thtl0 = exp_thtl + 0.3
+        stick_lon0 = 0.
+        thtl0 = 0.5
 
-        set_stick_lon!(fcs, stick_lon0)
-        set_thtl!(fcs, thtl0)
+        controls = StickPedalsLeverControls(
+            stick_lon0,
+            0.5,
+            0.5,
+            thtl0
+        )
 
-        ac, aerostate, state, fcs = steady_state_trim(
-            ac, fcs, env, tas, pos, psi, gamma, turn_rate, α0, 0.0, show_trace=false
+        set_controls!(ac, controls)
+
+        ac, aerostate, state, controls = steady_state_trim(
+            ac, controls, env, tas, pos, psi, gamma, turn_rate, α0, 0.0, show_trace=false
             )
 
+        fcs = get_fcs(ac)
         @test isapprox(ac.pfm.forces, zeros(3), atol=1e-7)
         @test isapprox(ac.pfm.moments, zeros(3), atol=1e-7)
         @test isapprox(get_tas(aerostate), tas)
@@ -321,17 +327,25 @@ end
         exp_de   = trim_test_data[ii, 4]
 
         # Initial conditions for trimmer
-        α0 = exp_α*DEG2RAD + 5*DEG2RAD
+        α0 = 0.5*exp_α*DEG2RAD
         β0 = 0.
-        stick_lon0 = exp_de/25.0 + 0.5
-        thtl0 = exp_thtl + 0.3
+        stick_lon0 = 0.
+        thtl0 = 0.5
 
-        set_stick_lon!(fcs, stick_lon0)
-        set_thtl!(fcs, thtl0)
+        controls = StickPedalsLeverControls(
+            stick_lon0,
+            0.5,
+            0.5,
+            thtl0
+        )
 
-        ac, aerostate, state, fcs = steady_state_trim(
-            ac, fcs, env, tas, pos, psi, gamma, turn_rate, α0, 0.0, show_trace=false
+        set_controls!(ac, controls)
+
+        ac, aerostate, state, controls = steady_state_trim(
+            ac, controls, env, tas, pos, psi, gamma, turn_rate, α0, 0.0, show_trace=false
             )
+
+        fcs = get_fcs(ac)
 
         @test isapprox(ac.pfm.forces, zeros(3), atol=1e-7)
         @test isapprox(ac.pfm.moments, zeros(3), atol=1e-7)
@@ -352,17 +366,25 @@ end
         exp_de   = trim_test_data[ii, 4]
 
         # Initial conditions for trimmer
-        α0 = exp_α*DEG2RAD + 5*DEG2RAD
+        α0 = 0.5*exp_α*DEG2RAD
         β0 = 0.
-        stick_lon0 = exp_de/25.0 + 0.5
-        thtl0 = exp_thtl + 0.3
+        stick_lon0 = 0.
+        thtl0 = 0.5
 
-        set_stick_lon!(fcs, stick_lon0)
-        set_thtl!(fcs, thtl0)
+        controls = StickPedalsLeverControls(
+            stick_lon0,
+            0.5,
+            0.5,
+            thtl0
+        )
 
-        ac, aerostate, state, fcs = steady_state_trim(
-            ac, fcs, env, tas, pos, psi, gamma, turn_rate, α0, 0.0, show_trace=false
+        set_controls!(ac, controls)
+
+        ac, aerostate, state, controls = steady_state_trim(
+            ac, controls, env, tas, pos, psi, gamma, turn_rate, α0, 0.0, show_trace=false
             )
+
+        fcs = get_fcs(ac)
 
         @test isapprox(ac.pfm.forces, zeros(3), atol=1e-7)
         @test isapprox(ac.pfm.moments, zeros(3), atol=1e-7)
@@ -384,7 +406,6 @@ end
     env = Environment(pos, atmos="ISAF16", wind="NoWind", grav="const")
 
     ac = F16()
-    fcs = F16FCS()
 
     h = 0.0 * M2FT
     psi = 0.234077 # rad
@@ -413,21 +434,27 @@ end
 
 
     # Initial conditions for trimmer
-    α0 = exp_α + 10*DEG2RAD
+    α0 = 0.5*exp_α*DEG2RAD
     β0 = 0.
-    stick_lon0 = exp_de/25.0 + 0.5
-    stick_lat0 = exp_da/21.5 + 0.5
-    pedals0 = exp_dr/30.0 + 0.5
-    thtl0 = exp_thtl + 0.3
+    stick_lon0 = 0.0
+    stick_lat0 = 0.0
+    pedals0 = 0.0
+    thtl0 = 0.5
 
-    set_stick_lon!(fcs, stick_lon0)
-    set_stick_lat!(fcs, stick_lat0)
-    set_pedals!(fcs, pedals0)
-    set_thtl!(fcs, thtl0)
-
-    ac, aerostate, state, fcs = steady_state_trim(
-        ac, fcs, env, tas, pos, psi, gamma, turn_rate, α0, β0, show_trace=false
+    controls = StickPedalsLeverControls(
+            stick_lon0,
+            stick_lat0,
+            pedals0,
+            thtl0
         )
+
+    set_controls!(ac, controls)
+
+    ac, aerostate, state, controls = steady_state_trim(
+        ac, controls, env, tas, pos, psi, gamma, turn_rate, α0, β0, show_trace=false
+        )
+
+    fcs = get_fcs(ac)
 
     @test isapprox(get_tas(aerostate), tas)
     @test isapprox(get_alpha(aerostate), exp_α, atol=5e-4)
@@ -498,17 +525,24 @@ end
                   [0., 0., 0.]
                  )
 
-    fcs = F16FCS()
-    set_value!(fcs.de, 20.0*DEG2RAD)
-    set_value!(fcs.da, -15.0*DEG2RAD)
-    set_value!(fcs.dr, -20*DEG2RAD)
-    set_value!(fcs.cpl, 90.0)
+    # Set controls to obtain the following deflexions
+    # fcs = get_fcs(ac)
+    # set_value!(fcs.de, 20.0*DEG2RAD)
+    # set_value!(fcs.da, -15.0*DEG2RAD)
+    # set_value!(fcs.dr, -20*DEG2RAD)
+    # set_value!(fcs.cpl, 90.0)
+    controls = StickPedalsLeverControls(
+        0.5 * (1 + 20 / 25),  # According to DE_MAX
+        0.5 * (1 - 15 / 20),  # According to DA_MAX
+        0.5 * (1 - 20 / 30),  # According to DR_MAX
+        (90.0 + 117.38) / 217.38  # According to tgear
+    )
 
     env = Environment(pos, atmos="ISAF16", wind="NoWind", grav="const")
     aerostate = AeroState(state, env)
     grav = get_gravity(env)
 
-    ac = calculate_aircraft(ac, fcs, aerostate, state, grav; consume_fuel=false)
+    ac = calculate_aircraft(ac, controls, aerostate, state, grav; consume_fuel=false)
     pfm = ac.pfm
     mass_props = get_mass_props(ac)
     mass = mass_props.mass

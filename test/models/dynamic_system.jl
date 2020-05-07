@@ -50,7 +50,8 @@ end
         [0., 0., 0.]
     )
 
-    fcs = F16FCS()
+    # Modify directly the deflexions of the surfaces on the FCS
+    fcs = get_fcs(ac)
     set_value!(fcs.de, 20.0*DEG2RAD)
     set_value!(fcs.da, -15.0*DEG2RAD)
     set_value!(fcs.dr, -20*DEG2RAD)
@@ -60,7 +61,7 @@ end
     aerostate = AeroState(state, env)
     grav = get_gravity(env)
 
-    ac = calculate_aircraft(ac, fcs, aerostate, state, grav; consume_fuel=false)
+    ac = calculate_aircraft(ac, controls, aerostate, state, grav; consume_fuel=false)
     pfm = ac.pfm
     mass_props = get_mass_props(ac)
     mass = mass_props.mass
