@@ -22,10 +22,9 @@ env = Environment(pos, atmos="ISA1978", wind="NoWind", grav="const")
 aerostate = AeroState(state, env)
 
 controls = StickPedalsLeverControls(0.43, 0.562, 0.5, 0.68)
-set_controls!(ac, controls)
 
 grav = get_gravity(env)
-ac = calculate_aircraft(ac, aerostate, state, grav; consume_fuel=false)
+ac = calculate_aircraft(ac, controls, aerostate, state, grav; consume_fuel=false)
 
 tas = 50  # m/s
 h = 300  # m

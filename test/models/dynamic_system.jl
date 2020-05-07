@@ -61,7 +61,7 @@ end
     aerostate = AeroState(state, env)
     grav = get_gravity(env)
 
-    ac = calculate_aircraft(ac, aerostate, state, grav; consume_fuel=false)
+    ac = calculate_aircraft(ac, controls, aerostate, state, grav; consume_fuel=false)
     pfm = ac.pfm
     mass_props = get_mass_props(ac)
     mass = mass_props.mass

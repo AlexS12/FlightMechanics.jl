@@ -95,6 +95,7 @@ function steady_state_trim(ac::Aircraft, controls::Controls, env::Environment,
     set_allow_out_of_range_inputs!(fcs, true)
     set_throw_error_on_out_of_range_inputs!(fcs, false)
 
+    # Ensure controls are applied to aircraft
     set_controls!(ac, controls)
 
     # Store every necessary variable in the trimmer
@@ -117,7 +118,7 @@ function steady_state_trim(ac::Aircraft, controls::Controls, env::Environment,
     # Calcualte cost function to check if a/c is already trimmed
     # Calcualte aircraft
     grav = env.grav
-    ac = calculate_aircraft(ac, aerostate, state, grav; consume_fuel = false)
+    ac = calculate_aircraft(ac, controls, aerostate, state, grav; consume_fuel = false)
     trimmer.ac = ac
     cost = evaluate_cost_function(trimmer)
 
@@ -205,9 +206,8 @@ function trim_cost_function(x, trimmer::Trimmer)
 
     ac = trimmer.ac
     grav = env.grav
-    set_controls!(ac, controls)
     # Calcualte aircraft
-    ac = calculate_aircraft(ac, aerostate, state, grav; consume_fuel = false)
+    ac = calculate_aircraft(ac, controls, aerostate, state, grav; consume_fuel = false)
 
     # Update trimmer
     trimmer.ac = ac

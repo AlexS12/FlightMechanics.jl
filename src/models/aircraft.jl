@@ -24,12 +24,15 @@ end
 
 
 function calculate_aircraft(
-    ac::Aircraft, aerostate::AeroState, state::State, grav::Gravity; consume_fuel=false
+    ac::Aircraft, controls::Controls, aerostate::AeroState, state::State, grav::Gravity;
+    consume_fuel=false
     )
+
     aero = get_aerodynamics(ac)
     prop = get_propulsion(ac)
     mass_props = get_mass_props(ac)
     
+    set_controls!(ac, controls)
     fcs = get_fcs(ac)
     # Calculate propulsion
     prop = calculate_propulsion(prop, fcs, aerostate, state; consume_fuel=consume_fuel)

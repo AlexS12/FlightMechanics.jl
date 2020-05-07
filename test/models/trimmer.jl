@@ -54,6 +54,7 @@ fcs_trim = get_fcs(ac)
 # are the same.
 ac_calc = calculate_aircraft(
     ac_trim,
+    controls_trim,
     aerostate_trim,
     state_trim,
     get_gravity(env),

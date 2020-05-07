@@ -525,17 +525,24 @@ end
                   [0., 0., 0.]
                  )
 
-    fcs = get_fcs(ac)
-    set_value!(fcs.de, 20.0*DEG2RAD)
-    set_value!(fcs.da, -15.0*DEG2RAD)
-    set_value!(fcs.dr, -20*DEG2RAD)
-    set_value!(fcs.cpl, 90.0)
+    # Set controls to obtain the following deflexions
+    # fcs = get_fcs(ac)
+    # set_value!(fcs.de, 20.0*DEG2RAD)
+    # set_value!(fcs.da, -15.0*DEG2RAD)
+    # set_value!(fcs.dr, -20*DEG2RAD)
+    # set_value!(fcs.cpl, 90.0)
+    controls = StickPedalsLeverControls(
+        0.5 * (1 + 20 / 25),  # According to DE_MAX
+        0.5 * (1 - 15 / 20),  # According to DA_MAX
+        0.5 * (1 - 20 / 30),  # According to DR_MAX
+        (90.0 + 117.38) / 217.38  # According to tgear
+    )
 
     env = Environment(pos, atmos="ISAF16", wind="NoWind", grav="const")
     aerostate = AeroState(state, env)
     grav = get_gravity(env)
 
-    ac = calculate_aircraft(ac, aerostate, state, grav; consume_fuel=false)
+    ac = calculate_aircraft(ac, controls, aerostate, state, grav; consume_fuel=false)
     pfm = ac.pfm
     mass_props = get_mass_props(ac)
     mass = mass_props.mass
