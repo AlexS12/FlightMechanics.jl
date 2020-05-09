@@ -1,6 +1,23 @@
-# TODO: DOC
+"""
+    propagate_timestep(
+        ac, controls, env, state, aerostate, tspan, dynamic_system, solver; 
+        solver_options=Dict(),
+    )
+
+Propagate tspan time step considering that the aircraft and the controls are constant.
+
+# Arguments
+`ac::Aircraft`: aircraft model. Includes engine, aerodynamics, flight control system...
+`controls::Controls`: controls that will be set on aircraft fot the timestep.
+`env::Environment`: environment model. Includes atmosphere, wind and gravity.
+`aerostate::AeroState`: aerodynamic state.
+`tspan`: tuple with tini and tfin (s).
+`dynamic_system::DynamicSystem`: dynamic system model equations to be integrated.
+`solver`: ODE solver from `OrdinaryDiffEq`.
+`solver_options`: options to be passed to the solver.
+"""
 function propagate_timestep(
-    ac, controls, env, state, aerostate, tspan, dynamic_system, solver; 
+    ac, controls, env, state, aerostate, tspan, dynamic_system, solver;
     solver_options=Dict(),
     )
 
@@ -54,7 +71,26 @@ function propagate_timestep(
 end
 
 
+"""
+    propagate(
+        ac, env, state, controls_stream, tini, tfin, dt, dynamic_system, solver;
+        solver_options=Dict()
+    )
 
+Integrate case to obtain aircraft trajectory by calling the solver for each time step.
+Returns a ResultsStore object.
+
+# Arguments
+`ac::Aircraft`: aircraft model. Includes engine, aerodynamics, flight control system...
+`env::Environment`: environment model. Includes atmosphere, wind and gravity.
+`controls_stream::ControlsStream`: defines a getter for each control at time `t`.
+`tini`: initial time (s).
+`tfin`: final time (s).
+`dt`: time step (s).
+`dynamic_system::DynamicSystem`: dynamic system model equations to be integrated.
+`solver`: ODE solver from `OrdinaryDiffEq`.
+`solver_options`: options to be passed to the solver.
+"""
 function propagate(
     ac, env, state, controls_stream, tini, tfin, dt, dynamic_system, solver;
     solver_options=Dict()
