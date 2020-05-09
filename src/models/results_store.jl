@@ -1,3 +1,8 @@
+"""
+    ResultsStore(t, ac, env, state, aerostate)
+
+Store results for different timesteps.
+"""
 struct ResultsStore
     t :: Array{T, 1} where T <: Number
     ac :: Array{T, 1} where T <: Aircraft
@@ -20,10 +25,12 @@ function push!(results::ResultsStore, t, ac, env, state, aerostate)
     push!(results.aerostate, aerostate)
 end
 
+
 # Indexable collection
 function getindex(results::ResultsStore, ii)
     return ResultsStore(results.t[ii], results.ac[ii], results.fcs[ii], results.env[ii], results.state[ii], results.aerostate[ii])
 end
+
 
 function set_index!(results::ResultsStore, value, ii)
     results.t[ii] = value[1]
