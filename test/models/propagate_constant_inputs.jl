@@ -6,8 +6,6 @@ using FlightMechanics.Models
 
 # Choose aircraft
 ac = F16()
-# Choose Flight Control System
-fcs = F16FCS()
 # Choose dynamic system
 dynamic_system = SixDOFEulerFixedMass()
 # Choose solver
