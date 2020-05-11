@@ -18,6 +18,7 @@ using FlightMechanics
 @testset "dynamic system" begin include("models/dynamic_system.jl") end
 @testset "trimmer" begin include("models/trimmer.jl") end
 @testset "propagate_constant_inputs" begin include("models/propagate_constant_inputs.jl") end
+@testset "propagate_coordinated_turn" begin include("models/propagate_coordinated_turn.jl") end
 
 @testset "ac: c310" begin include("aircrafts/c310.jl") end
 @testset "ac: f16" begin include("aircrafts/f16.jl") end
