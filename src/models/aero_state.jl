@@ -65,6 +65,17 @@ function AeroState(tas::Number, alpha::Number, beta::Number, p::Number, ρ::Numb
     AeroState(alpha, beta, 0, tas, eas, cas, ias, qinf, mach)
 end
 
+
+show(io::IO, aerostate::AeroState) = print(
+    io,
+    """AeroState
+    TAS=$(get_tas(aerostate)) m/s, M=$(get_mach(aerostate))
+    α=$(rad2deg(get_alpha(aerostate))) deg, β=$(rad2deg(get_beta(aerostate))) deg
+    qinf=$(get_qinf(aerostate)/1000.) KPa
+    """
+)
+
+
 """
     generate_state_aerostate(pos::Position, att::Attitude, tas::Number, alpha::Number,
                                 beta::Number, env::Environment,
