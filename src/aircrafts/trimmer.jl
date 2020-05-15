@@ -14,6 +14,31 @@ mutable struct Trimmer
 end
 
 
+function Trimmer(ac, controls, env, pos, tas, ψ, γ, ψ_dot, α, β)
+    # Impose constrains
+    att  = trimmer_constrains_attitude(ψ, ψ_dot, α, β, tas, γ)
+    ang_vel = turn_rate_angular_velocity(ψ_dot, att.theta, att.phi)
+
+    # There is no information to set acceleration and angular acceleration at this point.
+    accel = [0., 0., 0.]
+    ang_accel = [0., 0., 0.]
+
+    state, aerostate = generate_state_aerostate(
+        pos,
+        att,
+        tas,
+        α,
+        β,
+        env,
+        ang_vel,
+        accel,
+        ang_accel,
+    )
+
+    return Trimmer(ac, aerostate, state, env, ψ_dot, γ, controls)
+end
+
+
 """
     steady_state_trim(
         ac::Aircraft, controls::Controls, env::Environment, tas::Number, pos::Position,
@@ -77,41 +102,18 @@ function steady_state_trim(
     set_allow_out_of_range_inputs!(fcs, true)
     set_throw_error_on_out_of_range_inputs!(fcs, false)
 
-    # Impose constrains
-    att  = trimmer_constrains_attitude(ψ, ψ_dot, α0, β0, tas, γ)
-    ang_vel = turn_rate_angular_velocity(ψ_dot, att.theta, att.phi)
+    # Initialize trimmer
+    trimmer = Trimmer(ac, controls, env, pos, tas, ψ, γ, ψ_dot, α0, β0)
 
-    accel = [0., 0., 0.]
-    ang_accel = [0., 0., 0.]
-
-    state, aerostate = generate_state_aerostate(
-        pos,
-        att,
-        tas,
-        α0,
-        β0,
-        env,
-        ang_vel,
-        accel,
-        ang_accel,
-    )
-
-    # Ensure that environment is calculated at the position given to the trimmer
-    env = calculate_environment(env, get_position(state))
-
-    # Store every necessary variable in the trimmer
-    trimmer = Trimmer(ac, aerostate, state, env, ψ_dot, γ, controls)
-
-    # trim_vars0 contains [α, β, controls_to_be_trimmed...]
-    trim_vars0 = [α0, β0] # append not fixed controls
-    for value in get_controls_array(controls)
-        append!(trim_vars0, value)
-    end
+    # variables to trim the ac -> x0 = [α, β, controls_to_be_trimmed...]
+    x0 = [α0, β0, get_controls_array(controls)...]
 
     # Calcualte cost function to check if a/c is already trimmed
     # Calcualte aircraft
     grav = env.grav
-    ac = calculate_aircraft(ac, controls, aerostate, state, grav; consume_fuel = false)
+    ac = calculate_aircraft(
+        ac, controls, trimmer.aerostate, trimmer.state, grav; consume_fuel = false
+        )
     trimmer.ac = ac
     cost = evaluate_cost_function(trimmer)
 
@@ -126,7 +128,7 @@ function steady_state_trim(
         # Trim
         result = optimize(
             trimming_function,
-            trim_vars0,
+            x0,
             Optim.Options(
                 g_tol = g_tol,
                 iterations = max_iters,
