@@ -11,7 +11,13 @@ mutable struct Trimmer
     ψ_dot::Number
     γ::Number
     controls::Controls
+    cost_vector::Array{T, 1} where T<:Number
 end
+
+
+Trimmer(ac, aerostate, state, env, ψ_dot, γ, controls) = Trimmer(
+    ac, aerostate, state, env, ψ_dot, γ, controls, fill(NaN, 6)
+    )
 
 
 function Trimmer(ac, controls, env, pos, tas, ψ, γ, ψ_dot, α, β)
@@ -78,7 +84,25 @@ function update_trimmer!(trimmer, α, β, controls)
     trimmer.state = state
     trimmer.env = env
     trimmer.controls = controls
+
+    # Calculate derivatives u_dot, v_dot, w_dot, p_dot, q_dot, r_dot
+    pfm = trimmer.ac.pfm
+    mass_props = get_mass_props(trimmer.ac)
+    mass = mass_props.mass
+    inertia = mass_props.inertia
+
+    # Get dynamic system state x
+    six_dof_euler_fixed_mass_ds = convert(SixDOFEulerFixedMass, trimmer.state)
+    x = get_x(six_dof_euler_fixed_mass_ds)
+    f = get_state_equation(six_dof_euler_fixed_mass_ds)
+    # Evaluate x_dot given x, u, parameters
+    x_dot = f(x, mass, inertia, pfm.forces, pfm.moments)[1:6]
+
+    trimmer.cost_vector = x_dot
 end
+
+
+evaluate_cost_function(trimmer::Trimmer) = sum(trimmer.cost_vector.^2)
 
 
 """
@@ -146,18 +170,11 @@ function steady_state_trim(
 
     # Initialize trimmer
     trimmer = Trimmer(ac, controls, env, pos, tas, ψ, γ, ψ_dot, α0, β0)
+    update_trimmer!(trimmer, α0, β0, controls)
+    cost = evaluate_cost_function(trimmer)
 
     # variables to trim the ac -> x0 = [α, β, controls_to_be_trimmed...]
     x0 = [α0, β0, get_controls_array(controls)...]
-
-    # Calcualte cost function to check if a/c is already trimmed
-    # Calcualte aircraft
-    grav = env.grav
-    ac = calculate_aircraft(
-        ac, controls, trimmer.aerostate, trimmer.state, grav; consume_fuel = false
-        )
-    trimmer.ac = ac
-    cost = evaluate_cost_function(trimmer)
 
     # Wrapper for trim_cost_function with trimmer
     trimming_function(x) = trim_cost_function(x, trimmer)
@@ -223,22 +240,4 @@ function trim_cost_function(x, trimmer::Trimmer)
     # Calculate objective function cost
     cost = evaluate_cost_function(trimmer)
     return cost
-end
-
-
-function evaluate_cost_function(trimmer::Trimmer)
-    # Calculate derivatives u_dot, v_dot, w_dot, p_dot, q_dot, r_dot
-    pfm = trimmer.ac.pfm
-    mass_props = get_mass_props(trimmer.ac)
-    mass = mass_props.mass
-    inertia = mass_props.inertia
-
-    # Get dynamic system state x
-    six_dof_euler_fixed_mass_ds = convert(SixDOFEulerFixedMass, trimmer.state)
-    x = get_x(six_dof_euler_fixed_mass_ds)
-    f = get_state_equation(six_dof_euler_fixed_mass_ds)
-    # Evaluate x_dot given x, u, parameters
-    x_dot = f(x, mass, inertia, pfm.forces, pfm.moments)[1:6]
-
-    return sum(x_dot.^2)
 end
