@@ -25,6 +25,9 @@ function Trimmer(ac, controls, env, pos, tas, ψ, γ, ψ_dot, α, β)
     att  = trimmer_constrains_attitude(ψ, ψ_dot, α, β, tas, γ)
     ang_vel = turn_rate_angular_velocity(ψ_dot, att.theta, att.phi)
 
+    # Ensure env is updated
+    env = calculate_environment(env, pos)
+
     # There is no information to set acceleration and angular acceleration at this point.
     accel = [0., 0., 0.]
     ang_accel = [0., 0., 0.]
@@ -55,53 +58,48 @@ function update_trimmer!(trimmer, α, β, controls)
     # Impose constrains
     att  = trimmer_constrains_attitude(ψ, ψ_dot, α, β, tas, γ)
     ang_vel = turn_rate_angular_velocity(ψ_dot, att.theta, att.phi)
-
-    accel = get_body_accel(trimmer.state)
-    ang_accel = get_body_ang_accel(trimmer.state)
-
-    env = trimmer.env
-
+    # Calculate new state and aerostate
     state, aerostate = generate_state_aerostate(
         get_position(trimmer.state),
         att,
         tas,
         α,
         β,
-        env,
+        trimmer.env,
         ang_vel,
-        accel,
-        ang_accel
+        get_body_accel(trimmer.state),
+        get_body_ang_accel(trimmer.state)
     )
-
     # Calcualte aircraft
     ac = calculate_aircraft(
-        trimmer.ac, controls, aerostate, state, env.grav; consume_fuel = false
+        trimmer.ac, controls, aerostate, state, trimmer.env.grav;
+        consume_fuel = false
         )
+
+    # Evaluate dynamic system to get x_dot
+    ds = convert(SixDOFEulerFixedMass, state)
+    x = get_x(ds)
+    f = get_state_equation(ds)
+
+    # Evaluate x_dot given x, u, parameters
+    x_dot = f(
+        x,
+        get_mass_props(ac).mass,
+        get_mass_props(ac).inertia,
+        ac.pfm.forces,
+        ac.pfm.moments
+        )
+
+        # Transform x, x_dot to State
+    state = convert(state, SixDOFEulerFixedMass(x, x_dot))
 
     # Update trimmer
     trimmer.ac = ac
     trimmer.aerostate = aerostate
     trimmer.state = state
-    trimmer.env = env
     trimmer.controls = controls
-
-    # Calculate derivatives u_dot, v_dot, w_dot, p_dot, q_dot, r_dot
-    pfm = trimmer.ac.pfm
-    mass_props = get_mass_props(trimmer.ac)
-    mass = mass_props.mass
-    inertia = mass_props.inertia
-
-    # Get dynamic system state x
-    six_dof_euler_fixed_mass_ds = convert(SixDOFEulerFixedMass, trimmer.state)
-    x = get_x(six_dof_euler_fixed_mass_ds)
-    f = get_state_equation(six_dof_euler_fixed_mass_ds)
-    # Evaluate x_dot given x, u, parameters
-    x_dot = f(x, mass, inertia, pfm.forces, pfm.moments)[1:6]
-
-    trimmer.cost_vector = x_dot
-
-    state = convert(state, SixDOFEulerFixedMass(x, x_dot))
     trimmer.state = state
+    trimmer.cost_vector = x_dot[1:6]
 end
 
 
