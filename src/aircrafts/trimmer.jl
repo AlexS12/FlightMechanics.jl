@@ -69,6 +69,14 @@ function steady_state_trim(
     show_trace = false, g_tol = 1e-25, max_iters = 5000
     )
 
+    # Store FCS configuration to be restored at the end.
+    # Allow out of range values during trimming.
+    fcs = get_fcs(ac)
+    allow_oor_controls = get_allow_out_of_range_inputs(fcs)
+    err_on_oor_controls = get_throw_error_on_out_of_range_inputs(fcs)
+    set_allow_out_of_range_inputs!(fcs, true)
+    set_throw_error_on_out_of_range_inputs!(fcs, false)
+
     # Impose constrains
     att  = trimmer_constrains_attitude(ψ, ψ_dot, α0, β0, tas, γ)
     ang_vel = turn_rate_angular_velocity(ψ_dot, att.theta, att.phi)
@@ -90,15 +98,6 @@ function steady_state_trim(
 
     # Ensure that environment is calculated at the position given to the trimmer
     env = calculate_environment(env, get_position(state))
-    # store fcs configuration
-    fcs = get_fcs(ac)
-    allow_oor_controls = get_allow_out_of_range_inputs(fcs)
-    err_on_oor_controls = get_throw_error_on_out_of_range_inputs(fcs)
-    set_allow_out_of_range_inputs!(fcs, true)
-    set_throw_error_on_out_of_range_inputs!(fcs, false)
-
-    # Ensure controls are applied to aircraft
-    set_controls!(ac, controls)
 
     # Store every necessary variable in the trimmer
     trimmer = Trimmer(ac, aerostate, state, env, ψ_dot, γ, controls)
@@ -109,15 +108,15 @@ function steady_state_trim(
         append!(trim_vars0, value)
     end
 
-    # Wrapper for trim_cost_function with trimmer
-    trimming_function(x) = trim_cost_function(x, trimmer)
-
     # Calcualte cost function to check if a/c is already trimmed
     # Calcualte aircraft
     grav = env.grav
     ac = calculate_aircraft(ac, controls, aerostate, state, grav; consume_fuel = false)
     trimmer.ac = ac
     cost = evaluate_cost_function(trimmer)
+
+    # Wrapper for trim_cost_function with trimmer
+    trimming_function(x) = trim_cost_function(x, trimmer)
 
     # Trim if not already trimmed
     # XXX: It is observed that sometimes optimization method returns a minimum slightly
@@ -170,11 +169,9 @@ throttle)
 """
 function trim_cost_function(x, trimmer::Trimmer)
 
-    # α, β, tas, height are known so aero can be created
+    # Unpack x with trimming values candidates
     # α and β are given by x
-    # tas is fixed for the trim
     α, β = x[1:2]
-
     controls = typeof(trimmer.controls)(x[3:end]...)
 
     ψ_dot = trimmer.ψ_dot
@@ -206,7 +203,7 @@ function trim_cost_function(x, trimmer::Trimmer)
     )
 
     env = calculate_environment(trimmer.env, get_position(trimmer.state))
-    
+
     ac = trimmer.ac
     grav = env.grav
     # Calcualte aircraft
