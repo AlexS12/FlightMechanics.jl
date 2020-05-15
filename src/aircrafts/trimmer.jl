@@ -39,6 +39,48 @@ function Trimmer(ac, controls, env, pos, tas, ψ, γ, ψ_dot, α, β)
 end
 
 
+function update_trimmer!(trimmer, α, β, controls)
+
+    ψ_dot = trimmer.ψ_dot
+    tas = get_tas(trimmer.aerostate)
+    γ = trimmer.γ
+    ψ = get_euler_angles(trimmer.state)[1]
+
+    # Impose constrains
+    att  = trimmer_constrains_attitude(ψ, ψ_dot, α, β, tas, γ)
+    ang_vel = turn_rate_angular_velocity(ψ_dot, att.theta, att.phi)
+
+    accel = get_body_accel(trimmer.state)
+    ang_accel = get_body_ang_accel(trimmer.state)
+
+    env = trimmer.env
+
+    state, aerostate = generate_state_aerostate(
+        get_position(trimmer.state),
+        att,
+        tas,
+        α,
+        β,
+        env,
+        ang_vel,
+        accel,
+        ang_accel
+    )
+
+    # Calcualte aircraft
+    ac = calculate_aircraft(
+        trimmer.ac, controls, aerostate, state, env.grav; consume_fuel = false
+        )
+
+    # Update trimmer
+    trimmer.ac = ac
+    trimmer.aerostate = aerostate
+    trimmer.state = state
+    trimmer.env = env
+    trimmer.controls = controls
+end
+
+
 """
     steady_state_trim(
         ac::Aircraft, controls::Controls, env::Environment, tas::Number, pos::Position,
@@ -176,47 +218,7 @@ function trim_cost_function(x, trimmer::Trimmer)
     α, β = x[1:2]
     controls = typeof(trimmer.controls)(x[3:end]...)
 
-    ψ_dot = trimmer.ψ_dot
-    tas = get_tas(trimmer.aerostate)
-    γ = trimmer.γ
-    ψ = get_euler_angles(trimmer.state)[1]
-
-    # Impose constrains
-    att  = trimmer_constrains_attitude(ψ, ψ_dot, α, β, tas, γ)
-    ang_vel = turn_rate_angular_velocity(ψ_dot, att.theta, att.phi)
-
-    pos = get_position(trimmer.state)
-    aerostate = trimmer.aerostate
-    accel = [0., 0., 0.]
-    ang_accel = [0., 0., 0.]
-
-    env = trimmer.env
-
-    state, aerostate = generate_state_aerostate(
-        pos,
-        att,
-        tas,
-        α,
-        β,
-        env,
-        ang_vel,
-        accel,
-        ang_accel
-    )
-
-    env = calculate_environment(trimmer.env, get_position(trimmer.state))
-
-    ac = trimmer.ac
-    grav = env.grav
-    # Calcualte aircraft
-    ac = calculate_aircraft(ac, controls, aerostate, state, grav; consume_fuel = false)
-
-    # Update trimmer
-    trimmer.ac = ac
-    trimmer.aerostate = aerostate
-    trimmer.state = state
-    trimmer.env = env
-    trimmer.controls = controls
+    update_trimmer!(trimmer, α, β, controls)
 
     # Calculate objective function cost
     cost = evaluate_cost_function(trimmer)
