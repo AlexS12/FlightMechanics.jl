@@ -5,7 +5,6 @@ using FlightMechanics.Aircrafts
 using FlightMechanics.Models
 
 
-# Integration test for aircraft just making sure everything runs
 ac = F16()
 
 h = 0.0 * M2FT
@@ -31,8 +30,6 @@ stick_lon0 = exp_de / 25.0 + 0.5
 thtl0 = exp_thtl + 0.3
 
 controls = StickPedalsLeverControls(stick_lon0, 0.5, 0.5, thtl0)
-
-fcs_before_trimming = copy(get_fcs(ac))
 
 ac_trim, aerostate_trim, state_trim, controls_trim = steady_state_trim(
     ac, controls, env, tas, pos, psi, gamma, turn_rate, α0, 0.0,
