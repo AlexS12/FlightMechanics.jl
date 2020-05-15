@@ -99,6 +99,9 @@ function update_trimmer!(trimmer, α, β, controls)
     x_dot = f(x, mass, inertia, pfm.forces, pfm.moments)[1:6]
 
     trimmer.cost_vector = x_dot
+
+    state = convert(state, SixDOFEulerFixedMass(x, x_dot))
+    trimmer.state = state
 end
 
 
