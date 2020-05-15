@@ -72,11 +72,9 @@ function steady_state_trim(
     alpha0 = α0
     beta0 = β0
 
-    phi = coordinated_turn_bank(turn_rate, alpha0, beta0, tas, gamma)
-    theta = climb_theta(gamma, alpha0, beta0, phi)
-    att  = Attitude(psi, theta, phi)
+    att  = trimmer_constrains_attitude(psi, turn_rate, α0, β0, tas, gamma)
 
-    p, q, r = turn_rate_angular_velocity(turn_rate, theta, phi)
+    p, q, r = turn_rate_angular_velocity(turn_rate, att.theta, att.phi)
     ang_vel = [p, q, r]
 
     accel = [0., 0., 0.]
@@ -129,7 +127,7 @@ function steady_state_trim(
     # XXX: It is observed that sometimes optimization method returns a minimum slightly
     # above g_tol, so the optmization loop would be entered again in a retrimming.
     # See tests -> trimmer.jl
-    if cost > g_tol*10
+    if cost > g_tol * 10
         # Trim
         result = optimize(
             trimming_function,
@@ -157,6 +155,13 @@ function steady_state_trim(
     return trimmer.ac, trimmer.aerostate, trimmer.state, trimmer.controls
 end
 
+
+function trimmer_constrains_attitude(ψ, ψ_dot, α, β, tas, γ)
+    ϕ = coordinated_turn_bank(ψ_dot, α, β, tas, γ)
+    θ = climb_theta(γ, α, β, ϕ)
+    return Attitude(ψ, θ, ϕ)
+end
+
 """
     trim_cost_function(x, trimmer::Trimmer)
 
@@ -182,10 +187,8 @@ function trim_cost_function(x, trimmer::Trimmer)
     psi = get_euler_angles(trimmer.state)[1]
 
     # Impose constrains
-    phi = coordinated_turn_bank(tr, alpha, beta, tas, gamma)
-    theta = climb_theta(gamma, alpha, beta, phi)
-    att = Attitude(psi, theta, phi)
-    p, q, r = turn_rate_angular_velocity(tr, theta, phi)
+    att  = trimmer_constrains_attitude(psi, tr, alpha, beta, tas, gamma)
+    p, q, r = turn_rate_angular_velocity(tr, att.theta, att.phi)
     ang_vel = [p, q, r]
     pos = get_position(trimmer.state)
     aerostate = trimmer.aerostate
@@ -219,7 +222,7 @@ function trim_cost_function(x, trimmer::Trimmer)
     trimmer.state = state
     trimmer.env = env
     trimmer.controls = controls
-    
+
     # Calculate objective function cost
     cost = evaluate_cost_function(trimmer)
     return cost
