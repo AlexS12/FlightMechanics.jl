@@ -8,8 +8,8 @@ mutable struct Trimmer
     aerostate::AeroState
     state::State
     env::Environment
-    turn_rate::Number
-    gamma::Number
+    ψ_dot::Number
+    γ::Number
     controls::Controls
 end
 
@@ -17,7 +17,7 @@ end
 """
     steady_state_trim(
         ac::Aircraft, controls::Controls, env::Environment, tas::Number, pos::Position,
-        psi::Number, gamma::Number, turn_rate::Number, α0::Number, β0::Number;
+        ψ::Number, γ::Number, ψ_dot::Number, α0::Number, β0::Number;
         show_trace = false, g_tol = 1e-25, max_iters = 5000
         )
 
@@ -35,9 +35,9 @@ controls : controls to be used to trim the aircraft with their initial values.
 env: environment variables (atmospheric values, wind and gravity).
 tas: trimming true airspeed [m/s].
 pos: position of the aircraft.
-psi: heading of the aircraft [rad].
-gamma: aerodynamic rate of climb of the aircraft [rad].
-turn_rate: heading rate of change [rad/s].
+ψ: heading of the aircraft [rad].
+γ: aerodynamic rate of climb of the aircraft [rad].
+ψ_dot: heading rate of change [rad/s].
 α0, β0: Inital AOA and AOS for trimmer algorithm.
 show_trace: show trimming information and algorithm trace. Optional, default=true.
 
@@ -65,17 +65,13 @@ See section 3.4 in [1] for the algorithm description.
 """
 function steady_state_trim(
     ac::Aircraft, controls::Controls, env::Environment, tas::Number, pos::Position,
-    psi::Number, gamma::Number, turn_rate::Number, α0::Number, β0::Number;
+    ψ::Number, γ::Number, ψ_dot::Number, α0::Number, β0::Number;
     show_trace = false, g_tol = 1e-25, max_iters = 5000
     )
 
-    alpha0 = α0
-    beta0 = β0
-
-    att  = trimmer_constrains_attitude(psi, turn_rate, α0, β0, tas, gamma)
-
-    p, q, r = turn_rate_angular_velocity(turn_rate, att.theta, att.phi)
-    ang_vel = [p, q, r]
+    # Impose constrains
+    att  = trimmer_constrains_attitude(ψ, ψ_dot, α0, β0, tas, γ)
+    ang_vel = turn_rate_angular_velocity(ψ_dot, att.theta, att.phi)
 
     accel = [0., 0., 0.]
     ang_accel = [0., 0., 0.]
@@ -84,8 +80,8 @@ function steady_state_trim(
         pos,
         att,
         tas,
-        alpha0,
-        beta0,
+        α0,
+        β0,
         env,
         ang_vel,
         accel,
@@ -105,10 +101,10 @@ function steady_state_trim(
     set_controls!(ac, controls)
 
     # Store every necessary variable in the trimmer
-    trimmer = Trimmer(ac, aerostate, state, env, turn_rate, gamma, controls)
+    trimmer = Trimmer(ac, aerostate, state, env, ψ_dot, γ, controls)
 
     # trim_vars0 contains [α, β, controls_to_be_trimmed...]
-    trim_vars0 = [alpha0, beta0] # append not fixed controls
+    trim_vars0 = [α0, β0] # append not fixed controls
     for value in get_controls_array(controls)
         append!(trim_vars0, value)
     end
@@ -174,22 +170,22 @@ throttle)
 """
 function trim_cost_function(x, trimmer::Trimmer)
 
-    # alpha, beta, tas, height are known so aero can be created
-    # alpha and beta are given by x
+    # α, β, tas, height are known so aero can be created
+    # α and β are given by x
     # tas is fixed for the trim
-    alpha, beta = x[1:2]
+    α, β = x[1:2]
 
     controls = typeof(trimmer.controls)(x[3:end]...)
 
-    tr = trimmer.turn_rate
+    ψ_dot = trimmer.ψ_dot
     tas = get_tas(trimmer.aerostate)
-    gamma = trimmer.gamma
-    psi = get_euler_angles(trimmer.state)[1]
+    γ = trimmer.γ
+    ψ = get_euler_angles(trimmer.state)[1]
 
     # Impose constrains
-    att  = trimmer_constrains_attitude(psi, tr, alpha, beta, tas, gamma)
-    p, q, r = turn_rate_angular_velocity(tr, att.theta, att.phi)
-    ang_vel = [p, q, r]
+    att  = trimmer_constrains_attitude(ψ, ψ_dot, α, β, tas, γ)
+    ang_vel = turn_rate_angular_velocity(ψ_dot, att.theta, att.phi)
+
     pos = get_position(trimmer.state)
     aerostate = trimmer.aerostate
     accel = [0., 0., 0.]
@@ -201,8 +197,8 @@ function trim_cost_function(x, trimmer::Trimmer)
         pos,
         att,
         tas,
-        alpha,
-        beta,
+        α,
+        β,
         env,
         ang_vel,
         accel,
@@ -210,7 +206,7 @@ function trim_cost_function(x, trimmer::Trimmer)
     )
 
     env = calculate_environment(trimmer.env, get_position(trimmer.state))
-
+    
     ac = trimmer.ac
     grav = env.grav
     # Calcualte aircraft
