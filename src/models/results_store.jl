@@ -28,7 +28,7 @@ end
 
 # Indexable collection
 function getindex(results::ResultsStore, ii)
-    return ResultsStore(results.t[ii], results.ac[ii], results.fcs[ii], results.env[ii], results.state[ii], results.aerostate[ii])
+    return ResultsStore(results.t[ii], results.ac[ii], results.env[ii], results.state[ii], results.aerostate[ii])
 end
 
 
