@@ -32,11 +32,11 @@ qdot = body_angular_velocity_to_quaternion_rates(p, q, r, quat...)
 exp_tas = 100  # m/s
 exp_α = 0.01  # rad
 exp_β = 0.005  # rad
-u, v, w = wind2body(tas, 0, 0, exp_α, exp_β)
+u, v, w = wind2body(exp_tas, 0, 0, exp_α, exp_β)
 tas, α, β = uvw_to_tasαβ(u, v, w)
 @test isapprox(tas, exp_tas)
 @test isapprox(α, exp_α)
-@test isapprox(β, exp_β, atol=1e-7)
+@test isapprox(β, exp_β)
 
 
 # Test tas_α_β_dot_from_uvw_dot
@@ -58,4 +58,4 @@ tas = √(u*u + v*v + w*w)
 # tas_α_β_dot_from_uvw_dot <--> uvw_dot_from_tas_α_β
 tas, α, β = uvw_to_tasαβ(u, v, w)
 u_dot_, v_dot_, w_dot_ = uvw_dot_from_tas_α_β(tas, α, β, tas_dot, α_dot, β_dot)
-@test isapprox([u_dot, v_dot, w_dot], [u_dot_, v_dot_, w_dot_], atol=1e-4)
+@test isapprox([u_dot, v_dot, w_dot], [u_dot_, v_dot_, w_dot_])
