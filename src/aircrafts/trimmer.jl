@@ -75,6 +75,7 @@ function update_trimmer!(trimmer, α, β, controls)
         trimmer.ac, controls, aerostate, state, trimmer.env.grav;
         consume_fuel = false
         )
+    h = get_gyro_effects(get_propulsion(ac))
 
     # Evaluate dynamic system to get x_dot
     ds = convert(SixDOFEulerFixedMass, state)
@@ -87,7 +88,8 @@ function update_trimmer!(trimmer, α, β, controls)
         get_mass_props(ac).mass,
         get_mass_props(ac).inertia,
         ac.pfm.forces,
-        ac.pfm.moments
+        ac.pfm.moments,
+        h,
         )
 
         # Transform x, x_dot to State

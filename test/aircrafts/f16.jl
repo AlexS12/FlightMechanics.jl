@@ -457,18 +457,18 @@ end
     fcs = get_fcs(ac)
 
     @test isapprox(get_tas(aerostate), tas)
-    @test isapprox(get_alpha(aerostate), exp_α, atol=5e-4)
-    @test isapprox(get_beta(aerostate), exp_β, atol=5e-5)
+    @test isapprox(get_alpha(aerostate), exp_α, atol=1e-4)
+    @test isapprox(get_beta(aerostate), exp_β, atol=1e-7)
 
-    @test isapprox(get_body_ang_velocity(state), [exp_p, exp_q, exp_r], atol=5e-5)
-    @test isapprox(get_euler_angles(state), [exp_ψ, exp_θ, exp_ϕ], atol=5e-5)
+    @test isapprox(get_body_ang_velocity(state), [exp_p, exp_q, exp_r], atol=1e-4)
+    @test isapprox(get_euler_angles(state), [exp_ψ, exp_θ, exp_ϕ], atol=1e-4)
 
     # TODO: maybe these tolerances are too broad. Take into account that trim in
     # Stevens is only based in the number of iterations.
-    @test isapprox(fcs.thtl.value, exp_thtl, atol=5e-4)
-    @test isapprox(fcs.de.value*RAD2DEG, exp_de, rtol=1e-2)
-    @test isapprox(fcs.da.value*RAD2DEG, exp_da, rtol=1e-2)
-    @test isapprox(fcs.dr.value*RAD2DEG, exp_dr, rtol=1e-1)
+    @test isapprox(fcs.thtl.value, exp_thtl, atol=1e-3)
+    @test isapprox(fcs.de.value*RAD2DEG, exp_de, atol=2e-3)
+    @test isapprox(fcs.da.value*RAD2DEG, exp_da, atol=1e-4)
+    @test isapprox(fcs.dr.value*RAD2DEG, exp_dr, atol=1e-4)
 end
 
 
