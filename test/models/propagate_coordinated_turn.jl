@@ -1,6 +1,7 @@
 using FlightMechanics
 using FlightMechanics.Aircrafts
 using FlightMechanics.Models
+using OrdinaryDiffEq
 
 
 # Stevens, B. L., Lewis, F. L., & Johnson, E. N. (2015). Aircraft control
@@ -27,8 +28,6 @@ pos = EarthPosition(0, 0, -h)
 
 # Initilize environment
 env = Environment(pos, atmos = "ISAF16", wind = "NoWind", grav = "const")
-
-att = Attitude(0.0, 0.1, 0.1)
 
 # Initilize FCS
 controls_0 = StickPedalsLeverControls(0.5, 0.5, 0.5, 0.8)
@@ -58,6 +57,7 @@ results = propagate(
     ac,
     env,
     state,
+    aerostate,
     controls_stream,
     tini,
     tfin,

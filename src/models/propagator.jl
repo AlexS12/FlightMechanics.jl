@@ -92,7 +92,7 @@ Returns a ResultsStore object.
 `solver_options`: options to be passed to the solver.
 """
 function propagate(
-    ac, env, state, controls_stream, tini, tfin, dt, dynamic_system, solver;
+    ac, env, state, aerostate, controls_stream, tini, tfin, dt, dynamic_system, solver;
     solver_options=Dict()
     )
 
@@ -101,7 +101,6 @@ function propagate(
     t1 = t0 + dt
 
     # Create results object
-    aerostate = AeroState(state, env)
     results = ResultsStore(tini, ac, env, state, aerostate)
 
     while t1 < tfin + 0.5*dt

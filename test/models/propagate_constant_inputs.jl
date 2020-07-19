@@ -57,6 +57,7 @@ times_to_test = [0.1, 1.0, 10.0, 100.0]  # seconds
         ac,
         env,
         state,
+        aerostate,
         controls_stream,
         tini,
         tfin,

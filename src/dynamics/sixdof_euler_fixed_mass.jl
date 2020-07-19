@@ -100,5 +100,7 @@ function six_dof_euler_fixed_mass(x, mass, inertia, forces, moments, h=[0.0, 0.0
     ye_dot =  cθ*sψ * u + (sϕ*sθ*sψ + cϕ*cψ) * v + (cϕ*sθ*sψ - sϕ*cψ) * w
     ze_dot = -sθ    * u +  sϕ*cθ             * v +  cϕ*cθ             * w
 
-    [u_dot, v_dot, w_dot, p_dot, q_dot, r_dot, ψ_dot, θ_dot, ϕ_dot, xe_dot, ye_dot, ze_dot]
+    x_dot = [u_dot, v_dot, w_dot, p_dot, q_dot, r_dot, ψ_dot, θ_dot, ϕ_dot, xe_dot, ye_dot, ze_dot]
+
+    return x_dot
 end
