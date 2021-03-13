@@ -1,7 +1,9 @@
 FlightMechanics
 ===============
-.. |travisci| image:: https://travis-ci.org/AlexS12/FlightMechanics.jl.svg?branch=master
-    :target: https://travis-ci.org/AlexS12/FlightMechanics.jl
+
+
+.. |no_maint| image:: http://unmaintained.tech/badge.svg
+    :target: http://unmaintained.tech
 
 .. |license| image:: https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square
    :target: https://github.com/AlexS12/FlightMechanics.jl/blob/master/LICENSE.md
@@ -15,14 +17,22 @@ FlightMechanics
 .. |logo| image:: https://github.com/AlexS12/FlightMechanics.jl/blob/master/docs/src/logo.png
    :target: https://github.com/AlexS12/FlightMechanics.jl/blob/master/docs/src/logo.png
 
-|license| |docs| |travisci| |codecov|
+|license| |docs|
+
+|no_maint|
+
+\:warning: This package has been deprecated in favor of:
+
+- `FlightMechanicsUtils.jl`_: core functionality
+- `FlightMechanicsSimulator.jl`_: simulation
+
+.. _FlightMechanicsUtils.jl: https://github.com/AlexS12/FlightMechanicsUtils.jl
+.. _FlightMechanicsSimulator.jl: https://github.com/AlexS12/FlightMechanicsSimulator.jl
 
 |logo|
 
 Flight Mechanics utils :airplane:
 ---------------------------------
-
-\:warning: This package is in its initial development phase :construction:
 
 This package is intended to provide utils for Flight Mechanics computations. It runs on julia ≥ 1.0
 
@@ -75,14 +85,6 @@ or if you want the dev version::
 and run the tests::
 
   Pkg> test FlightMechanics
-
-
-Contributing :helicopter:
---------------------------
-
-If you used this package and have any suggestion or found a bug, please `open an issue`_
-
-.. _open an issue: https://github.com/AlexS12/FlightMechanics.jl/issues
 
 If this package is useful for you and want to join efforts don't hesitate to `let me know`_.
 
